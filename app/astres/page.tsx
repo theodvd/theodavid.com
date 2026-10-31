@@ -1,20 +1,56 @@
-import type { Metadata } from "next";
-import AstresApp from "@/components/astres/AstresApp";
+import type { Metadata, Viewport } from "next";
+import AstresApp, { type AstresLabels, type AstresProduct } from "@/components/astres/AstresApp";
+import { getContent } from "@/lib/content";
 
 /**
- * /astres — hidden experimental route.
- *
- * The whole portfolio rendered as one full-screen solar system of ridgeline
- * globes. No header, no footer, no scroll: the page IS the scene. Kept out of
- * the index because it is a signature piece, not a navigation entry point.
+ * /astres : l'expérience 3D secondaire, une planète par produit
+ * (content/products, ventures hors scène). Toujours sombre.
+ * Le texte vient de content/ (profile.json, ui.json, products/).
  */
-export const metadata: Metadata = {
-  title: "astres · Théo David",
-  description:
-    "An experimental index: the portfolio as a solar system of ridgeline globes.",
-  robots: { index: false, follow: false },
-};
+
+export function generateMetadata(): Metadata {
+  const { profile, ui } = getContent();
+  return {
+    title: `${profile.explore3d.label} · ${profile.name}`,
+    description: ui.astres.intro,
+  };
+}
+
+export const viewport: Viewport = { themeColor: "#0a0d16" };
 
 export default function AstresPage() {
-  return <AstresApp />;
+  const { products, profile, ui } = getContent();
+  const items: AstresProduct[] = products.map((p) => ({
+    slug: p.slug,
+    n: String(p.index).padStart(2, "0"),
+    name: p.name,
+    status: p.status,
+    statusText: p.statusLabel ?? ui.products.status[p.status],
+    oneLiner: p.oneLiner,
+    proof: p.proof[0],
+    links: p.links,
+  }));
+  const a = ui.astres;
+  const labels: AstresLabels = {
+    back: a.back,
+    backHint: a.backHint,
+    keyHint: a.keyHint,
+    intro: a.intro,
+    howLg: a.howLg,
+    howSm: a.howSm,
+    index: a.index,
+    still: a.still,
+    noGl: a.noGl,
+    noGlHow: a.noGlHow,
+    weakTitle: a.weakTitle,
+    weakNote: a.weakNote,
+    weakHow: a.weakHow,
+    load: a.load,
+    loading: a.loading,
+    renderAlt: a.renderAlt,
+    readOnPage: a.readOnPage,
+    sheet: ui.products.sheet,
+    close: ui.products.close,
+  };
+  return <AstresApp products={items} labels={labels} name={profile.name} contact={profile.contact.primary} />;
 }

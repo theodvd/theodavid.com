@@ -3,15 +3,18 @@ import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import gsap from "gsap";
-import { astresProjects, astresPlanets } from "./astresProjects";
-import { defaultPlanet } from "@/data/planets";
 
 /**
- * /astres — the portfolio rendered as ONE navigable solar system.
+ * /astres: the portfolio rendered as ONE navigable solar system.
+ *
+ * Rebranché le 30/10/2026 sur le contenu (content/products) : une planète par
+ * produit, dans l'ordre de la page, numérotée comme sur la home ; les
+ * ventures restent hors scène. L'aspect des planètes vient de LOOKS, attribué
+ * dans l'ordre (plus de dépendance à data/).
  *
  * Visual language: "ridgeline globes" (Unknown Pleasures). Every body is a
  * stack of constant-latitude rings; each ring is an elevation profile line
- * displaced by 3D simplex noise. No shaded surfaces anywhere — the volume is
+ * displaced by 3D simplex noise. No shaded surfaces anywhere: the volume is
  * implied purely by line density and by an opaque black sphere hidden inside
  * each globe that lets the front rings occlude the back ones. Without that
  * occluder the whole thing reads as wireframe mush, so it is not optional.
@@ -24,21 +27,21 @@ import { defaultPlanet } from "@/data/planets";
  * Everything imperative lives here. React never touches a Three object: it
  * gets four entry points (focusBody / setTimeScale / registerMarkerEl /
  * callbacks) and hands over raw DOM elements for the markers, whose screen
- * positions are written directly each frame — no per-frame React state.
+ * positions are written directly each frame: no per-frame React state.
  */
 
 /* ------------------------------------------------------------------ *
- *  Body table — single source of truth, shared with the React layer   *
+ *  Body table: single source of truth, shared with the React layer   *
  * ------------------------------------------------------------------ */
 
 export const SUN_ID = "sun";
 
 export type AstresBody = {
   id: string; // "sun" or a project slug
-  label: string; // "SUN" / "NEPTUNE" — display name
+  label: string; // "SUN" / "NEPTUNE": display name
   index: string; // "" for the sun, "01".."04" for projects
   title: string; // project title (empty for the sun)
-  accent: string; // "R G B", from planets.ts — tints the marker index
+  accent: string; // "R G B", from LOOKS: tints the marker index
   radius: number;
   isSun: boolean;
   /* orbit */
@@ -50,7 +53,7 @@ export type AstresBody = {
   colorA: string; // high-elevation line color
   colorB: string; // low-elevation line color
   ring: boolean;
-  tilt: number; // axial tilt, rad (from planets.ts)
+  tilt: number; // axial tilt, rad (from LOOKS)
   freq: number; // noise frequency
   amp: number; // noise amplitude
   seed: number;
@@ -62,7 +65,7 @@ export type AstresBody = {
 /**
  * Orbit slots run inner → outer. Periods run ~90s inner to ~6min outer at
  * timeScale 1, which is why the HUD defaults to 10×: at 1× the outer planets
- * barely crawl. Inclinations are deliberately tiny — enough to stop planets
+ * barely crawl. Inclinations are deliberately tiny: enough to stop planets
  * eclipsing each other from a low camera, not enough to break the "flat
  * system" reading.
  */
@@ -75,13 +78,15 @@ const ORBITS = [
   // keep one more slot than there are projects: a new planet must never
   // fall back onto the last orbit and collide with its neighbour
   { radius: 86, period: 640, phase: 3.3, inclination: -0.03, approach: 0.4 },
+  { radius: 102, period: 800, phase: 5.0, inclination: 0.04, approach: -1.2 },
+  { radius: 118, period: 960, phase: 0.9, inclination: -0.05, approach: 2.8 },
 ];
 
 /**
  * Slots are assigned by the planet's REAL solar-system rank, not by project
  * index: Neptune orbiting inside Venus reads as a mistake to anyone who knows
- * the sky. The project numbering (01–04) stays on the markers; only the
- * orbital layout is astronomical. Sizes follow the same logic — gas giants
+ * the sky. The project numbering (01 to 04) stays on the markers; only the
+ * orbital layout is astronomical. Sizes follow the same logic: gas giants
  * bigger than rocky planets.
  */
 const SOLAR_RANK: Record<string, number> = {
@@ -104,81 +109,105 @@ const BODY_RADIUS: Record<string, number> = {
   Neptune: 1.9,
 };
 
-const orbitSlots = new Map(
-  [...astresProjects]
-    .sort(
-      (a, b) =>
-        (SOLAR_RANK[(astresPlanets[a.slug] ?? defaultPlanet).name] ?? 9) -
-        (SOLAR_RANK[(astresPlanets[b.slug] ?? defaultPlanet).name] ?? 9)
-    )
-    .map((p, slot) => [p.slug, slot] as const)
-);
+/** Ce que la scène lit d'un produit : son slug, son numéro (« 01 ») et son nom. */
+export type AstresItem = { slug: string; n: string; name: string };
+
+/** Aspect d'une planète (repris de l'ancien data/planets.ts). */
+type Look = {
+  name: string;
+  colorA: string;
+  colorB: string;
+  ring: boolean;
+  tilt: number;
+  bandFreq: number;
+  accent: string;
+};
+
+/** Une planète par produit, attribuée dans l'ordre de la page, en boucle. */
+const LOOKS: Look[] = [
+  { name: "Neptune", colorA: "#6F9FE8", colorB: "#142C68", ring: true, tilt: 0.49, bandFreq: 7, accent: "111 159 232" },
+  { name: "Saturn", colorA: "#EFC34E", colorB: "#6E4C14", ring: true, tilt: 0.47, bandFreq: 12, accent: "230 190 76" },
+  { name: "Venus", colorA: "#F2A86C", colorB: "#9C4E22", ring: false, tilt: 0.05, bandFreq: 4, accent: "240 158 100" },
+  { name: "Mars", colorA: "#E25638", colorB: "#531405", ring: false, tilt: 0.44, bandFreq: 3, accent: "228 84 54" },
+  { name: "Jupiter", colorA: "#EDB05C", colorB: "#7A4418", ring: false, tilt: 0.05, bandFreq: 10, accent: "237 176 92" },
+  { name: "Mercury", colorA: "#CFC9BC", colorB: "#575044", ring: false, tilt: 0.01, bandFreq: 6, accent: "207 201 188" },
+];
 
 const TAU = Math.PI * 2;
 const SUN_RADIUS = 6;
 const SUN_DIST = 30; // far enough that the two inner orbits stay in frame
 const MAX_DIST = 120; // far enough to frame the outermost orbit
 
-export const ASTRES_BODIES: AstresBody[] = [
-  {
-    id: SUN_ID,
-    label: "Sun",
-    index: "",
-    title: "",
-    accent: "255 178 61", // #FFB23D — the same amber as the site's hero sun
-    radius: SUN_RADIUS,
-    isSun: true,
-    orbitRadius: 0,
-    omega: 0,
-    phase: 0,
-    inclination: 0,
-    colorA: "#FFB23D",
-    colorB: "#A8330A",
-    ring: false,
-    tilt: 0,
-    freq: 2.6,
-    amp: 0.1,
-    seed: 4.2,
-    // below the planets: the sun has 74 dense rings; at full opacity its
-    // centre would over-accumulate into a white blob under bloom
-    opacity: 0.72,
-    approach: 0.55,
-  },
-  ...astresProjects.map((project, i) => {
-    const spec = astresPlanets[project.slug] ?? defaultPlanet;
-    const orbit = ORBITS[orbitSlots.get(project.slug) ?? i] ?? ORBITS[ORBITS.length - 1];
-    return {
-      id: project.slug,
-      label: spec.name,
-      index: project.index,
-      title: project.title,
-      accent: spec.accent,
-      radius: BODY_RADIUS[spec.name] ?? 1.5,
-      isSun: false,
-      orbitRadius: orbit.radius,
-      omega: TAU / orbit.period,
-      phase: orbit.phase,
-      inclination: orbit.inclination,
-      colorA: spec.colorA,
-      colorB: spec.colorB,
-      ring: spec.ring,
-      tilt: spec.tilt,
-      // bandFreq drives the terrain scale, so each planet keeps the
-      // "personality" it already has on its case-study page
-      freq: 2 + spec.bandFreq * 0.4,
-      amp: 0.075,
-      seed: 11.7 + i * 37.13,
-      opacity: 1,
-      approach: orbit.approach,
-    };
-  }),
-];
+const SUN: AstresBody = {
+  id: SUN_ID,
+  label: "Sun",
+  index: "",
+  title: "",
+  accent: "255 178 61",
+  radius: SUN_RADIUS,
+  isSun: true,
+  orbitRadius: 0,
+  omega: 0,
+  phase: 0,
+  inclination: 0,
+  colorA: "#FFB23D",
+  colorB: "#A8330A",
+  ring: false,
+  tilt: 0,
+  freq: 2.6,
+  amp: 0.1,
+  seed: 4.2,
+  // below the planets: the sun has 74 dense rings; at full opacity its
+  // centre would over-accumulate into a white blob under bloom
+  opacity: 0.72,
+  approach: 0.55,
+};
+
+/** Le soleil puis une planète par produit, sur des orbites rangées comme le vrai système. */
+export function buildBodies(items: AstresItem[]): AstresBody[] {
+  const looks = items.map((_, i) => LOOKS[i % LOOKS.length]);
+  const slots = new Map(
+    items
+      .map((it, i) => ({ slug: it.slug, rank: SOLAR_RANK[looks[i].name] ?? 9, i }))
+      .sort((a, b) => a.rank - b.rank || a.i - b.i)
+      .map((x, slot) => [x.slug, slot] as const),
+  );
+  return [
+    SUN,
+    ...items.map((it, i) => {
+      const spec = looks[i];
+      const orbit = ORBITS[slots.get(it.slug) ?? i] ?? ORBITS[ORBITS.length - 1];
+      return {
+        id: it.slug,
+        label: spec.name,
+        index: it.n,
+        title: it.name,
+        accent: spec.accent,
+        radius: BODY_RADIUS[spec.name] ?? 1.5,
+        isSun: false,
+        orbitRadius: orbit.radius,
+        omega: TAU / orbit.period,
+        phase: orbit.phase,
+        inclination: orbit.inclination,
+        colorA: spec.colorA,
+        colorB: spec.colorB,
+        ring: spec.ring,
+        tilt: spec.tilt,
+        freq: 2 + spec.bandFreq * 0.4,
+        amp: 0.075,
+        seed: 11.7 + i * 37.13,
+        opacity: 1,
+        approach: orbit.approach,
+      };
+    }),
+  ];
+}
 
 /* ------------------------------------------------------------------ *
  *  Shaders                                                            *
  * ------------------------------------------------------------------ */
 
-/* Ashima / Stefan Gustavson simplex noise (webgl-noise, MIT) — inlined so
+/* Ashima / Stefan Gustavson simplex noise (webgl-noise, MIT): inlined so
    the page pulls in no extra dependency. */
 const SIMPLEX = /* glsl */ `
   vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
@@ -304,7 +333,7 @@ const FRAGMENT = /* glsl */ `
   void main() {
     // ridges climb from the dark band color to the bright one, and get a
     // brightness boost on top so peaks separate from the mass under additive.
-    // The floor on both mixes keeps valleys visible — pure colorB at low
+    // The floor on both mixes keeps valleys visible: pure colorB at low
     // brightness read as "black on black" on real screens.
     vec3 col = mix(uColorB, uColorA, 0.12 + 0.88 * vElev);
     col *= 0.7 + 0.8 * vElev;
@@ -351,7 +380,7 @@ function buildRidgeGeometry(body: AstresBody, isMobile: boolean) {
   };
 
   for (let j = 0; j < lat; j++) {
-    // (j + 0.5) keeps both poles open — a closed pole is a bright dot artifact
+    // (j + 0.5) keeps both poles open: a closed pole is a bright dot artifact
     const theta = (Math.PI * (j + 0.5)) / lat;
     const y = Math.cos(theta);
     const rr = Math.sin(theta);
@@ -390,6 +419,8 @@ function buildRidgeGeometry(body: AstresBody, isMobile: boolean) {
 
 export type AstresScene = {
   focusBody: (id: string, instant?: boolean) => void;
+  /** Recentre le rendu hors de la fiche ouverte (px masqués à droite et en bas). */
+  setInset: (right: number, bottom: number) => void;
   setTimeScale: (n: number) => void;
   registerMarkerEl: (id: string, el: HTMLElement | null) => void;
   setOnArrive: (cb: (id: string) => void) => void;
@@ -400,6 +431,12 @@ export type AstresScene = {
 export type AstresSceneOptions = {
   reducedMotion: boolean;
   timeScale: number;
+  /** Les produits à mettre en orbite. */
+  items: AstresItem[];
+  /** Arrivée par le calque : la caméra glisse jusqu'au soleil (1,1 s, dur-draw). */
+  intro?: boolean;
+  /** Appelé une fois, au premier rendu. */
+  onReady?: () => void;
 };
 
 const clamp = (x: number, lo: number, hi: number) => Math.min(Math.max(x, lo), hi);
@@ -417,7 +454,7 @@ export function createAstresScene(
 
   try {
     renderer = new THREE.WebGLRenderer({
-      // lines benefit from MSAA far more than particles do — worth it here
+      // lines benefit from MSAA far more than particles do: worth it here
       antialias: !isMobile,
       alpha: false,
       powerPreference: "high-performance",
@@ -446,7 +483,7 @@ export function createAstresScene(
   // each line gets a soft halo instead of staying a dry hairline. The
   // threshold must sit ABOVE the clear color's luminance: at 0 the flat
   // background blooms itself into a washed-out slate (gamma amplifies the
-  // lift on dark values enormously) — lines glow, the sky must not.
+  // lift on dark values enormously): lines glow, the sky must not.
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
   // Strength/radius kept tight: the sun is a huge bright mass, and at wide
@@ -454,7 +491,7 @@ export function createAstresScene(
   const bloomPass = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.6, 0.35, 0.1);
   composer.addPass(bloomPass);
 
-  const bodies = ASTRES_BODIES;
+  const bodies = buildBodies(opts.items);
   const byId = new Map(bodies.map((b) => [b.id, b]));
 
   /* ---- bodies ---------------------------------------------------- */
@@ -470,7 +507,7 @@ export function createAstresScene(
     occGeometry: THREE.SphereGeometry;
   };
 
-  // one shared black material for every occluder — 5 meshes, 1 material
+  // one shared black material for every occluder: 5 meshes, 1 material
   const occluderMaterial = new THREE.MeshBasicMaterial({
     color: 0x000000,
     depthWrite: true,
@@ -502,7 +539,7 @@ export function createAstresScene(
     // The occluder: an opaque black sphere just under the terrain floor
     // (min displaced radius is R * (1 - amp * 0.875), so this never eats the
     // front-facing lines). Three renders opaque before transparent, so the
-    // back half of the globe is depth-rejected — the Joy Division read.
+    // back half of the globe is depth-rejected: the Joy Division read.
     const occGeometry = new THREE.SphereGeometry(
       body.radius * (1 - body.amp) * 0.99,
       32,
@@ -516,7 +553,7 @@ export function createAstresScene(
     spin.add(occluder);
 
     const root = new THREE.Group();
-    root.rotation.z = body.tilt; // axial tilt from planets.ts
+    root.rotation.z = body.tilt; // axial tilt from LOOKS
     root.add(spin);
     scene.add(root);
 
@@ -604,7 +641,7 @@ export function createAstresScene(
   const fromOffset = new THREE.Vector3(); // see focusBody(): interrupt continuity
   let transitioning = false;
 
-  let orbitTime = 0; // advances at dt * timeScale — pausing never jumps a planet
+  let orbitTime = 0; // advances at dt * timeScale: pausing never jumps a planet
   let sunTime = 0;
   let spinTime = 0;
 
@@ -811,7 +848,7 @@ export function createAstresScene(
     const wasDragging = dragging;
     endDrag(e);
     if (!wasDragging) return;
-    // a click is a pointerup that barely moved — anything else was an orbit
+    // a click is a pointerup that barely moved: anything else was an orbit
     if (Math.hypot(e.clientX - downX, e.clientY - downY) > 6) return;
     const id = pick(e.clientX, e.clientY);
     if (!id) return;
@@ -884,7 +921,7 @@ export function createAstresScene(
       if (!body) return;
       bodyPos(body, tmp);
 
-      // camera-space z tells us whether the body is actually behind us —
+      // camera-space z tells us whether the body is actually behind us :
       // NDC alone can't, because the projection wraps points behind the eye
       tmpCam.copy(tmp).applyMatrix4(camera.matrixWorldInverse);
       const behind = tmpCam.z > -0.5;
@@ -920,7 +957,7 @@ export function createAstresScene(
       }
 
       // The transform centres the chip on (sx, sy), so an edge-clamped point
-      // leaves half the chip outside the viewport — re-clamp by its half-size.
+      // leaves half the chip outside the viewport: re-clamp by its half-size.
       const halfW = m.el.offsetWidth / 2 + 4;
       const halfH = m.el.offsetHeight / 2 + 4;
       sx = clamp(sx, halfW, w - halfW);
@@ -961,6 +998,18 @@ export function createAstresScene(
 
   /* ---- resize ---------------------------------------------------- */
 
+  // fiche ouverte : le centre de l'image glisse au milieu de la partie visible
+  const inset = { right: 0, bottom: 0 };
+  const applyInset = () => {
+    const { clientWidth: w, clientHeight: h } = container;
+    if (inset.right || inset.bottom) {
+      camera.setViewOffset(w, h, inset.right / 2, inset.bottom / 2, w, h);
+    } else {
+      camera.clearViewOffset();
+    }
+    camera.updateProjectionMatrix();
+  };
+
   const resize = () => {
     const { clientWidth: w, clientHeight: h } = container;
     const dpr = Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2);
@@ -969,14 +1018,15 @@ export function createAstresScene(
     composer.setPixelRatio(dpr);
     composer.setSize(w, h);
     camera.aspect = w / h || 1;
-    camera.updateProjectionMatrix();
+    applyInset();
   };
   resize();
   window.addEventListener("resize", resize);
 
   /* ---- frame loop ------------------------------------------------ */
 
-  const IDLE_DRIFT = 0.02; // rad/s — the system keeps breathing when idle
+  const IDLE_DRIFT = 0.02; // rad/s: the system keeps breathing when idle
+  let readySent = false;
   let last = performance.now();
 
   renderer.setAnimationLoop(() => {
@@ -1028,13 +1078,30 @@ export function createAstresScene(
     updateMarkers();
 
     composer.render();
+    if (!readySent) {
+      readySent = true;
+      opts.onReady?.();
+    }
   });
 
   // open on the sun, immediately (the landing overlay does the reveal)
   focusBody(SUN_ID, true);
+  // arrivée par le calque : la caméra part de plus loin et glisse en 1,1 s
+  if (opts.intro && !reducedMotion) {
+    const dist = cam.dist;
+    const phi = cam.phi;
+    cam.dist = dist * 1.8;
+    cam.phi = 0.7;
+    gsap.to(cam, { dist, phi, duration: 1.1, ease: "power2.inOut" });
+  }
 
   return {
     focusBody,
+    setInset(right: number, bottom: number) {
+      inset.right = right;
+      inset.bottom = bottom;
+      applyInset();
+    },
     setTimeScale(n: number) {
       timeScale = n;
     },
