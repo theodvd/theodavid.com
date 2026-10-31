@@ -6,7 +6,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { track } from "@vercel/analytics";
 import type { AstresScene } from "./createAstresScene";
 import {
-  BACK_EVENT,
   KEY_ARRIVAL,
   KEY_FROM,
   RENDER_DARK,
@@ -14,7 +13,6 @@ import {
   reducedMotion,
   sceneMode,
   store,
-  type BackDetail,
   type SceneMode,
 } from "./pass";
 
@@ -106,13 +104,10 @@ export default function AstresApp({
 
   /* ---- retour vers la page ---- */
   const goBack = useCallback(() => {
-    if (read(KEY_FROM) && window.history.length > 1) {
-      const detail: BackDetail = {};
-      if (!reducedMotion()) window.dispatchEvent(new CustomEvent(BACK_EVENT, { detail }));
-      if (!detail.handled) router.back();
-      return;
-    }
-    router.push("/");
+    // arrivé par la home : l'historique y revient, et le calque (AstresTransition)
+    // rejoue le passage à l'envers, comme pour le bouton précédent du navigateur
+    if (read(KEY_FROM) && window.history.length > 1) router.back();
+    else router.push("/");
   }, [router]);
 
   /* ---- voyage et fiche ---- */

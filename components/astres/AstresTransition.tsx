@@ -1,74 +1,189 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import "@/app/styles/astres.css";
-import {
-  BACK_EVENT,
-  GO_EVENT,
-  RENDER_DARK,
-  RENDER_GLASS,
-  RENDER_SIZE,
-  type BackDetail,
-  type GoDetail,
-} from "./pass";
+import { GO_EVENT, KEY_FROM, drawingOf, entries, read, reducedMotion, sceneMode, seg, steps, type GoDetail } from "./pass";
 
 /**
- * Calque de transition vers /astres, monté une fois dans le layout racine :
- * il survit au changement de route.
+ * Calque du passage vers /astres, monté une fois dans le layout racine : il
+ * survit au changement de route. Option A choisie le 31/10/2026, C en repli
+ * (maquettes : portfolio-build/travail/explore3d/options.html).
  *
- * Chronologie (composition.md, « Passage vers /astres ») :
+ * A, « plongée dans l'écran », sur un appareil capable (sceneMode « scene ») :
  *   0 à 120 ms     renvoi enfoncé
- *   0 à 360        éclatement du dessin en 3 crans (dur-thunk), notes effacées
- *   360 à 660      calque sombre en 4 bandes, copie du dessin à la craie
- *   660 à 1160     rendu 3D posé sur la vitre en 3 crans, la craie s'efface ;
- *                  router.push(/astres) sous le calque
- *   1160 à 2260    le rendu glisse à sa place (dur-draw, seule courbe douce)
- *   1660 à 2160    le calque s'efface en 3 crans sur la scène et son interface
- * Retour : le calque couvre, router.back(), puis redescend en 4 bandes.
- * Sous prefers-reduced-motion, ExploreLink navigue sans passer par ici.
+ *   0 à 360        l'appareil prend son épaisseur en 3 crans (device3d) ; notes,
+ *                  notice et renvoi s'effacent en 3 crans ; au pied, les pièces
+ *                  de la vue éclatée se rassemblent
+ *   120 à 700      pivot de trois quarts (dur-draw, seule courbe douce)
+ *   700 à 1400     retour de face et plongée dans la vitre
+ *   1150 à 1400    la vague s'éteint sous un voile couleur vitre, en 3 crans
+ *   1400           router.push(/astres), au noir : la vitre a la couleur du fond
+ *                  de /astres, qui allume ensuite sa scène puis sa barre
+ * C, « la vitre s'ouvre », en repli (appareil faible, sans WebGL) : la vitre du
+ *   dessin grandit jusqu'à l'écran en 4 crans (120 à 600), push au noir à 600.
+ * Retour (« ← Back to the page », Échap, précédent du navigateur) : le calque
+ *   couvre au noir dès le popstate, avant que la home se peigne ; la home
+ *   revient sans rejouer son entrée (html.td-return), puis le film à l'envers.
+ * Mouvement réduit : ExploreLink navigue sans passer par ici, coupure nette.
  */
 
+const HREF = "/astres";
+const PARTS = ".as-xs, .as-xp, .as-xc";
+const NOTES = ".as-notes, .as-tech, .t-line, .t-head, .t-text";
+const C = { grow: [120, 600] as const, wave: [120, 480] as const, arrive: 600 };
+
 const wait = (ms: number) => new Promise((r) => window.setTimeout(r, ms));
+const nextFrame = () => new Promise<void>((r) => requestAnimationFrame(() => r()));
+const lerp = (a: number, b: number, p: number) => a + (b - a) * p;
 
 /** Attend que la route affichée soit `path` (8 s au plus). */
 async function arrived(path: string) {
-  for (let t = 0; t < 8000 && window.location.pathname !== path; t += 80) await wait(80);
+  for (let t = 0; t < 8000 && window.location.pathname !== path; t += 40) await wait(40);
 }
 
-/** Le bloc qui porte le dessin du lien : premier ancêtre qui contient un SVG visible. */
-function drawingOf(el: HTMLElement): { host: HTMLElement; svg: SVGSVGElement } | null {
-  let node: HTMLElement | null = el;
-  for (let depth = 0; node && depth < 6; depth++, node = node.parentElement) {
-    const svg = Array.from(node.querySelectorAll<SVGSVGElement>('svg[role="img"]')).find(
-      (s) => s.getBoundingClientRect().width > 0,
-    );
-    if (svg) return { host: node, svg };
+/** Joue fn(t) de `from` à `to` (ms), à l'horloge de l'écran, dans un sens ou dans l'autre. */
+function play(from: number, to: number, fn: (t: number) => void) {
+  return new Promise<void>((done) => {
+    const t0 = performance.now();
+    const tick = (now: number) => {
+      const e = now - t0;
+      const t = to > from ? Math.min(to, from + e) : Math.max(to, from - e);
+      fn(t);
+      if (t === to) done();
+      else requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+}
+
+/** L'écran du dessin (vague découpée par la vitre), en SVG autonome pour la vitre de C. */
+function screenCopy(svg: SVGSVGElement) {
+  const clip = svg.querySelector(".as-xc g[clip-path]");
+  if (!clip) return "";
+  let html = (svg.querySelector("defs")?.outerHTML ?? "") + clip.outerHTML;
+  svg.querySelectorAll("defs [id]").forEach((n) => {
+    html = html.split(`id="${n.id}"`).join(`id="${n.id}-pass"`).split(`#${n.id})`).join(`#${n.id}-pass)`);
+  });
+  return `<svg viewBox="296 314 208 98" preserveAspectRatio="none" aria-hidden="true">${html}</svg>`;
+}
+
+type Stage = { arrive: number; ready: Promise<void>; at: (t: number) => void; done: () => void };
+
+/**
+ * Le film d'une entrée, posable à tout instant t (aller ou retour) : A si
+ * l'appareil fait tourner la scène et que le dessin se laisse construire, sinon C,
+ * sinon (pas de dessin visible) un simple voile en 3 crans.
+ * Rendu tout de suite : renvoi et notes partent dès le clic, pendant que la scène
+ * Three se monte (environ 300 ms) ; le volume prend ensuite le relais à l'instant
+ * où en est le film, sur une face identique au dessin.
+ */
+function stageFor(root: HTMLElement, el: HTMLElement | null, drawing: ReturnType<typeof drawingOf>): Stage {
+  const ov = document.createElement("div");
+  ov.className = "td-pass";
+  ov.setAttribute("aria-hidden", "true");
+  const veil = document.createElement("div");
+  veil.className = "td-pass-veil";
+  ov.append(veil);
+  root.appendChild(ov);
+
+  const notes: (HTMLElement | SVGElement)[] = drawing ? Array.from(drawing.host.querySelectorAll<SVGElement>(NOTES)) : [];
+  if (el && el.getClientRects().length) notes.push(el);
+  const parts = drawing ? Array.from(drawing.svg.querySelectorAll<SVGElement>(PARTS)) : [];
+  const fadeNotes = (t: number) => {
+    const o = String(1 - steps(3)(seg(t, 0, 360)));
+    notes.forEach((n) => (n.style.opacity = o));
+  };
+  const showParts = (on: boolean) => parts.forEach((p) => (on ? p.style.removeProperty("visibility") : (p.style.visibility = "hidden")));
+  let dispose = () => {};
+  const done = () => {
+    dispose();
+    notes.forEach((n) => n.style.removeProperty("opacity"));
+    showParts(true);
+    ov.remove();
+  };
+
+  const g = drawing?.svg.querySelector(".a-glass")?.getBoundingClientRect();
+  const wantA = Boolean(drawing) && sceneMode() === "scene";
+  const arrive = wantA ? 1400 : g && g.width > 0 ? C.arrive : 360;
+  // voile seul, jusqu'au noir à l'arrivée (sans dessin, ou si A échoue)
+  const veilOnly = (t: number) => (veil.style.opacity = String(steps(3)(seg(t, arrive - 360, arrive))));
+  let film: ((t: number) => void) | null = null;
+  let ready = Promise.resolve();
+
+  if (wantA && drawing) {
+    // A : l'appareil en volume
+    ready = (async () => {
+      try {
+        const m = await import("./device3d");
+        const prep = await m.prepare(drawing.svg);
+        const canvas = document.createElement("canvas");
+        canvas.className = "td-pass-gl";
+        ov.insertBefore(canvas, veil);
+        const flight = prep ? m.fly(drawing.svg, prep, canvas) : null;
+        if (!flight) {
+          canvas.remove();
+          film = veilOnly;
+          return;
+        }
+        dispose = flight.dispose;
+        film = (t) => {
+          showParts(t <= 0);
+          canvas.style.visibility = t > 0 ? "visible" : "hidden";
+          flight.pose(t);
+          veil.style.opacity = String(steps(3)(seg(t, m.GO.veil[0], m.GO.veil[1])));
+        };
+      } catch {
+        film = veilOnly; // module ou WebGL indisponible
+      }
+    })();
+  } else if (drawing && g && g.width > 0) {
+    // C : la vitre du dessin s'ouvre jusqu'à l'écran
+    const glass = document.createElement("div");
+    glass.className = "td-pass-glass";
+    glass.innerHTML = screenCopy(drawing.svg);
+    ov.insertBefore(glass, veil);
+    const r0 = (8 * g.width) / 208;
+    film = (t) => {
+      const p = steps(4)(seg(t, C.grow[0], C.grow[1]));
+      glass.style.visibility = t > 0 ? "visible" : "hidden";
+      Object.assign(glass.style, {
+        left: `${lerp(g.left, 0, p)}px`,
+        top: `${lerp(g.top, 0, p)}px`,
+        width: `${lerp(g.width, window.innerWidth, p)}px`,
+        height: `${lerp(g.height, window.innerHeight, p)}px`,
+        borderRadius: `${lerp(r0, 0, p)}px`,
+      });
+      glass.style.setProperty("--wave", String(1 - steps(3)(seg(t, C.wave[0], C.wave[1]))));
+      veil.style.opacity = t >= C.arrive ? "1" : "0";
+    };
+  } else {
+    film = veilOnly;
   }
-  return null;
-}
 
-/** Rendu calé plein écran comme sur /astres (object-fit cover, ancré à droite). */
-function coverRect() {
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  const s = Math.max(vw / RENDER_SIZE.w, vh / RENDER_SIZE.h);
-  const w = RENDER_SIZE.w * s;
-  const h = RENDER_SIZE.h * s;
-  const phone = vw <= 760;
-  return { left: (vw - w) * (phone ? 0.8 : 1), top: (vh - h) * (phone ? 0.34 : 0.5), width: w };
-}
-
-function place(img: HTMLElement, r: { left: number; top: number; width: number }) {
-  img.style.left = `${r.left}px`;
-  img.style.top = `${r.top}px`;
-  img.style.width = `${r.width}px`;
+  return {
+    arrive,
+    ready,
+    at: (t) => {
+      fadeNotes(t);
+      film?.(t);
+    },
+    done,
+  };
 }
 
 export default function AstresTransition() {
   const router = useRouter();
+  const pathname = usePathname();
   const rootRef = useRef<HTMLDivElement>(null);
   const busy = useRef(false);
+  const prev = useRef(pathname);
+
+  // La home revenue sans rejouer son entrée : html.td-return dure jusqu'à ce qu'on la quitte.
+  useEffect(() => {
+    prev.current = pathname;
+    if (pathname !== "/") document.documentElement.classList.remove("td-return");
+  }, [pathname]);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -76,107 +191,67 @@ export default function AstresTransition() {
 
     const go = async (e: Event) => {
       const detail = (e as CustomEvent<GoDetail>).detail;
-      if (busy.current) {
-        detail.handled = true;
-        return;
-      }
-      busy.current = true;
       detail.handled = true;
+      if (busy.current) return;
+      busy.current = true;
       const { el, href } = detail;
-      const drawing = drawingOf(el);
-
-      // T1 : renvoi enfoncé, dessin éclaté en 3 crans
-      el.classList.add("td-press");
-      drawing?.host.classList.add("td-launch");
-
-      // le calque (encore caché sous sa première bande)
-      const ov = document.createElement("div");
-      ov.className = "td-pass";
-      ov.dataset.theme = "dark";
-      ov.setAttribute("aria-hidden", "true");
-      let glass: Element | null = null;
-      if (drawing) {
-        const r = drawing.svg.getBoundingClientRect();
-        const box = document.createElement("div");
-        // la vue éclatée du pied s'écarte moins que le dessin de l'en-tête (astres.css)
-        box.className = `td-pass-plot td-launch${drawing.host.classList.contains("nw-x") ? " is-near" : ""}`;
-        Object.assign(box.style, { left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px` });
-        const copy = drawing.svg.cloneNode(true) as SVGSVGElement;
-        copy.removeAttribute("role");
-        copy.removeAttribute("aria-label");
-        // identifiants uniques : la copie suffixe ses clipPath et filtres
-        copy.querySelectorAll("[id]").forEach((n) => {
-          const id = n.id;
-          n.id = `${id}-pass`;
-          copy.querySelectorAll("*").forEach((m) => {
-            for (const a of ["clip-path", "filter", "mask", "fill", "href"]) {
-              const v = m.getAttribute(a);
-              if (v && v.includes(`#${id}`)) m.setAttribute(a, v.split(`#${id}`).join(`#${id}-pass`));
-            }
-          });
-        });
-        box.appendChild(copy);
-        ov.appendChild(box);
-        glass = copy.querySelector(".a-glass");
+      try {
+        el.closest("details")?.removeAttribute("open"); // le Menu se referme d'un cran
+        el.classList.add("td-press");
+        const stage = stageFor(root, el, drawingOf(el));
+        await play(0, stage.arrive, stage.at);
+        // scène pas encore montée au bout du film (appareil lent) : on attend au noir
+        await stage.ready;
+        stage.at(stage.arrive);
+        router.push(href);
+        await arrived(href);
+        await nextFrame();
+        await nextFrame();
+        stage.done();
+      } finally {
+        el.classList.remove("td-press");
+        busy.current = false;
       }
-      const img = document.createElement("img");
-      img.className = "td-pass-r";
-      img.src = RENDER_DARK;
-      img.alt = "";
-      ov.appendChild(img);
-      root.appendChild(ov);
-
-      // T3 : le rendu se pose sur la vitre de la copie (sinon, directement à sa place)
-      const g = glass?.getBoundingClientRect();
-      if (g && g.width > 0) {
-        const width = g.width / RENDER_GLASS.w;
-        const height = (width * RENDER_SIZE.h) / RENDER_SIZE.w;
-        place(img, {
-          left: g.left + g.width / 2 - RENDER_GLASS.cx * width,
-          top: g.top + g.height / 2 - RENDER_GLASS.cy * height,
-          width,
-        });
-      } else {
-        place(img, coverRect());
-      }
-
-      await wait(660);
-      router.push(href);
-      await wait(500);
-      // T4 : le rendu glisse à sa place plein écran
-      ov.classList.add("is-glide");
-      place(img, coverRect());
-      await wait(500);
-      await arrived(href);
-      ov.classList.add("is-out");
-      await wait(500);
-      ov.remove();
-      el.classList.remove("td-press");
-      drawing?.host.classList.remove("td-launch");
-      busy.current = false;
     };
 
-    const back = async (e: Event) => {
-      const detail = (e as CustomEvent<BackDetail>).detail;
-      detail.handled = true;
-      const ov = document.createElement("div");
-      ov.className = "td-pass is-cover";
-      ov.dataset.theme = "dark";
-      ov.setAttribute("aria-hidden", "true");
-      root.appendChild(ov);
-      router.back();
-      await arrived("/");
-      await wait(60);
-      ov.classList.add("is-down");
-      await wait(320);
-      ov.remove();
+    // Retour depuis /astres (bouton, Échap ou précédent du navigateur) : le popstate
+    // part avant que la home se peigne, le calque la couvre donc dès sa première image.
+    const back = () => {
+      const from = read(KEY_FROM);
+      if (prev.current !== HREF || window.location.pathname !== "/" || !from || busy.current || reducedMotion()) return;
+      busy.current = true;
+      document.documentElement.classList.add("td-return");
+      const cover = document.createElement("div");
+      cover.className = "td-pass";
+      cover.setAttribute("aria-hidden", "true");
+      cover.innerHTML = '<div class="td-pass-veil" style="opacity:1"></div>';
+      root.appendChild(cover);
+      void (async () => {
+        try {
+          await arrived("/");
+          // la home est montée, ExploreLink a rendu la position et le focus
+          await nextFrame();
+          await nextFrame();
+          const { i } = JSON.parse(from) as { i: number };
+          const link = entries(HREF)[i] ?? null;
+          const stage = stageFor(root, link, link ? drawingOf(link) : null);
+          await stage.ready;
+          stage.at(stage.arrive);
+          cover.remove();
+          await play(stage.arrive, 0, stage.at);
+          stage.done();
+        } finally {
+          cover.remove();
+          busy.current = false;
+        }
+      })();
     };
 
     window.addEventListener(GO_EVENT, go);
-    window.addEventListener(BACK_EVENT, back);
+    window.addEventListener("popstate", back);
     return () => {
       window.removeEventListener(GO_EVENT, go);
-      window.removeEventListener(BACK_EVENT, back);
+      window.removeEventListener("popstate", back);
     };
   }, [router]);
 
