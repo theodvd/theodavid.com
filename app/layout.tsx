@@ -61,8 +61,11 @@ export const viewport: Viewport = {
 /* Le thème suit le système (décidé le 30/10, pas d'interrupteur) : posé sur
    <html data-theme> avant le premier affichage, puis suivi en direct.
    La classe js est posée au même moment : les apparitions au scroll restent en
-   pause dès le premier affichage (sans JavaScript, tout s'affiche). */
-const THEME_SCRIPT = `(function(){var d=document.documentElement;d.classList.add('js');try{var m=window.matchMedia('(prefers-color-scheme: dark)');var s=function(){d.setAttribute('data-theme',m.matches?'dark':'light')};s();m.addEventListener('change',s)}catch(e){}})();`;
+   pause dès le premier affichage (sans JavaScript, tout s'affiche).
+   Lien profond (/#founder) : les apparitions de l'écran d'arrivée partent dès
+   que le HTML est lu et que le navigateur a sauté à l'ancre, sans attendre
+   React (même règle que components/home/RevealRoot.tsx). */
+const THEME_SCRIPT = `(function(){var d=document.documentElement;d.classList.add('js');try{var m=window.matchMedia('(prefers-color-scheme: dark)');var s=function(){d.setAttribute('data-theme',m.matches?'dark':'light')};s();m.addEventListener('change',s)}catch(e){}if(location.hash){var r=function(){var h=innerHeight;document.querySelectorAll('[data-reveal]').forEach(function(e){if(e.getBoundingClientRect().top<=h*(+e.getAttribute('data-reveal')||.8))e.classList.add('is-in')})};document.addEventListener('DOMContentLoaded',r);addEventListener('scroll',r,{once:true,passive:true})}})();`;
 
 export default function RootLayout({
   children,

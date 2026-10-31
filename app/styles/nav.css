@@ -23,3 +23,6 @@
 
 /* Section en cours (aria-current) : libellé souligné à l'encre, comme la nav des pages directes (.v6-nl.is-here). */
 .hd-nl[aria-current] .td-navl,.hd-panel a[aria-current] span:last-child{text-decoration:underline;text-decoration-thickness:var(--stroke-nav-underline);text-underline-offset:5px;text-decoration-color:var(--ink)}
+
+/* Lien profond (/#founder) : les apparitions de la section visée partent dès la première peinture, sans attendre JavaScript (td.css les met en pause jusqu'à .is-in). */
+html.js :target [data-reveal]:not(.is-in),html.js :target [data-reveal]:not(.is-in) *,html.js [data-reveal]:target:not(.is-in){animation-play-state:running !important}
