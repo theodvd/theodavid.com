@@ -5,23 +5,20 @@
  * - `sceneMode()` dit si l'appareil fait tourner la scène : « scene », « weak »
  *   (deviceMemory sous 4 ou économie de données : 3D à la demande) ou « nogl ».
  * - Les clés de sessionStorage gardent le lien d'origine (pour lui rendre le
- *   focus au retour) et l'heure du départ (pour l'arrivée chorégraphiée).
+ *   focus au retour et rejouer le passage à l'envers) et l'heure du départ
+ *   (pour l'arrivée chorégraphiée).
+ * - `drawingOf()` trouve le dessin d'une entrée (préparé au survol, animé au clic).
  */
 
 export type SceneMode = "scene" | "weak" | "nogl";
 
 export const RENDER_DARK = "/images/astres/appareil-3d-sombre.jpg";
-/** Taille du rendu, et centre et largeur de sa vitre (fractions), pour le poser sur le dessin. */
-export const RENDER_SIZE = { w: 1600, h: 1195 };
-export const RENDER_GLASS = { cx: 1128 / 1600, cy: 556 / 1195, w: 300 / 1600 };
 
 export const KEY_FROM = "td-astres-from";
 export const KEY_ARRIVAL = "td-astres-arrival";
 
 export const GO_EVENT = "td:astres-go";
-export const BACK_EVENT = "td:astres-back";
 export type GoDetail = { el: HTMLElement; href: string; handled?: boolean };
-export type BackDetail = { handled?: boolean };
 
 let cached: SceneMode | null = null;
 
@@ -68,3 +65,23 @@ export function read(key: string): string | null {
 export function entries(href: string): HTMLAnchorElement[] {
   return Array.from(document.querySelectorAll<HTMLAnchorElement>(`a[href="${href}"]`));
 }
+
+/**
+ * Le dessin d'une entrée : premier ancêtre qui contient un SVG d'appareil visible
+ * (le Menu remonte jusqu'à l'en-tête, dont le dessin est juste dessous).
+ */
+export function drawingOf(el: HTMLElement): { host: HTMLElement; svg: SVGSVGElement } | null {
+  let node: HTMLElement | null = el;
+  for (let depth = 0; node && depth < 6; depth++, node = node.parentElement) {
+    const svg = Array.from(node.querySelectorAll<SVGSVGElement>('svg[role="img"]')).find(
+      (s) => s.querySelector(".as-xs") && s.getBoundingClientRect().width > 0,
+    );
+    if (svg) return { host: node, svg };
+  }
+  return null;
+}
+
+/** steps(n, end) de l'identité (ease-fade : 3 crans, ease-title : 4). */
+export const steps = (n: number) => (p: number) => (p <= 0 ? 0 : p >= 1 ? 1 : Math.floor(p * n) / n);
+/** Avancement de t entre a et b, borné à [0, 1]. */
+export const seg = (t: number, a: number, b: number) => Math.max(0, Math.min(1, (t - a) / (b - a)));

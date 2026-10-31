@@ -11,11 +11,12 @@
 /* le filet qui fend la fenêtre passe au-dessus du rouleau */
 .hd-cell::after{z-index:1}
 
-/* Renvoi « Explore in 3D » : au survol ou au focus, esquisse de l'éclatement (plateau Assemblage-Astres) : bouton latéral enfoncé de 3 px, plaque et organes glissent de 8 et 16 unités en 4 crans. Hors .td-launch, pour laisser le départ vers /astres (astres.css) prendre la main au clic. */
-.hd-plot:not(.td-launch) :is(.as-xp,.as-xc,.hd-side){transition:transform var(--dur-title) var(--ease-title)}
-.hd-plot:not(.td-launch):is(:has(.hd-3d:hover),:has(.hd-3d:focus-visible)) .hd-side{transform:translateX(3px)}
-.hd-plot:not(.td-launch):is(:has(.hd-3d:hover),:has(.hd-3d:focus-visible)) .as-xp{transform:translateX(8px)}
-.hd-plot:not(.td-launch):is(:has(.hd-3d:hover),:has(.hd-3d:focus-visible)) .as-xc{transform:translateX(16px)}
+/* Renvoi « Explore in 3D » : au survol ou au focus, l'appareil se soulève de la feuille (4 px, ombre pleine décalée, comme une touche) et le bouton latéral s'enfonce, en 4 crans. Option A du 31/10/2026 : l'ancien glissement de la plaque et des organes décollait les annotations. */
+.hd-plot :is(.as-dev,.hd-side){transition:transform var(--dur-title) var(--ease-title),filter var(--dur-title) var(--ease-title)}
+.hd-plot:is(:has(.hd-3d:hover),:has(.hd-3d:focus-visible)) .as-dev{transform:translate(-4px,-4px);filter:drop-shadow(4px 4px 0 var(--ink))}
+.hd-plot:is(:has(.hd-3d:hover),:has(.hd-3d:focus-visible)) .hd-side{transform:translateX(3px)}
+/* au doigt, pas de survol : le renvoi garde une cible de tap propre (pas de rectangle bleu du navigateur) */
+.hd-3d,.hd-panel3d,.hd-menu>summary{-webkit-tap-highlight-color:transparent}
 
 /* Palier intermédiaire (30/10/2026), 761 à 1100 px : la composition en trois colonnes (270 | dessin | 270) écrasait le dessin et ses étiquettes.
    Nom, phrase et touches à gauche, dessin agrandi à droite ; les compteurs posent leur libellé sous le chiffre. */

@@ -7,7 +7,7 @@ import {
   GO_EVENT,
   KEY_ARRIVAL,
   KEY_FROM,
-  RENDER_DARK,
+  drawingOf,
   entries,
   read,
   reducedMotion,
@@ -22,11 +22,13 @@ import {
  *
  * - Prefetch après 120 ms de survol, au focus, ou au doigt quand le lien
  *   entre à mi-écran, seulement sur un appareil capable (WebGL, deviceMemory
- *   4 ou plus, pas d'économie de données) : route, rendu 3D, module de la scène.
+ *   4 ou plus, pas d'économie de données) : route, module de la scène, et
+ *   l'appareil 3D du passage, préparé depuis le dessin du lien (device3d).
  * - Clic ou Entrée sans touche de modification : la transition chorégraphiée
  *   du calque (AstresTransition, dans le layout). Ctrl, Cmd ou clic milieu
  *   ouvrent un onglet sans animation ; sous mouvement réduit, coupure nette.
- * - Au retour, le lien d'origine reprend le focus.
+ * - Au retour, le lien d'origine reprend le focus (le bouton Menu si le lien
+ *   est dans le Menu, refermé au départ).
  */
 export default function ExploreLink({
   href,
@@ -48,8 +50,9 @@ export default function ExploreLink({
     if (done.current || sceneMode() !== "scene") return;
     done.current = true;
     router.prefetch(href);
-    new Image().src = RENDER_DARK;
     void import("./createAstresScene");
+    const drawing = ref.current && drawingOf(ref.current);
+    if (drawing) void import("./device3d").then((m) => m.prepare(drawing.svg));
   }, [router, href]);
 
   const cancel = () => {
@@ -67,7 +70,8 @@ export default function ExploreLink({
       if (entries(href).indexOf(el) === i) {
         store(KEY_FROM, null);
         if (Math.abs(window.scrollY - y) > 2) window.scrollTo(0, y);
-        el.focus({ preventScroll: true });
+        const target = el.getClientRects().length ? el : el.closest("details")?.querySelector("summary");
+        target?.focus({ preventScroll: true });
       }
     }
     // au doigt, pas de survol : préchargement quand le lien entre à mi-écran
