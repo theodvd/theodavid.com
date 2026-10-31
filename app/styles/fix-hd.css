@@ -36,3 +36,36 @@
   .hd{min-height:min(var(--layout-header-min),100svh)}
   .hd-plot svg{max-height:calc(100svh - 290px)}
 }
+
+/* Commandes de l'appareil (Commandes.tsx, 31/10/2026) : vrais boutons transparents posés sur les pièces du dessin, 44 px au moins, placés en % du dessin. */
+.hd-ctl{position:absolute;inset:0;pointer-events:none}
+.hd-k{position:absolute;pointer-events:auto;transform:translate(-50%,-50%);aspect-ratio:1;padding:0;border:0;border-radius:50%;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.hd-k:focus-visible{outline:var(--stroke-focus) solid var(--signal);outline-offset:3px}
+.hd-k-spk{border-radius:0}
+/* dessin large (viewBox 0 18 800 624) : centre et diamètre de chaque pièce */
+.hd-ctl-large .hd-k-cust{left:42.5%;top:32.69%;width:max(44px,12%)}
+.hd-ctl-large .hd-k-prod{left:57.5%;top:32.69%;width:max(44px,12%)}
+.hd-ctl-large .hd-k-ship{left:43.25%;top:75%;width:max(44px,11%)}
+.hd-ctl-large .hd-k-spk{left:57.75%;top:75%;width:max(44px,8.5%)}
+/* dessin vertical (viewBox 0 0 360 492, appareil à l'échelle 0,6) */
+.hd-ctl-vertical .hd-k-cust{left:40%;top:43.33%;width:max(44px,16%)}
+.hd-ctl-vertical .hd-k-prod{left:60%;top:43.33%;width:max(44px,16%)}
+.hd-ctl-vertical .hd-k-ship{left:41%;top:75.53%;width:max(44px,14.67%)}
+.hd-ctl-vertical .hd-k-spk{left:60.33%;top:75.53%;width:max(44px,11.33%)}
+/* SHIP (choix S2 du 31/10) : il ne s'enfonce plus au survol du dessin ; soulevé au survol de SHIP seul, enfoncé à la pression ; le socle reste. */
+.hd .hd-plot:hover .td-ship{transform:none}
+.hd-cap{transition:transform .32s cubic-bezier(.3,.7,.4,1)}
+@media (hover:hover) and (pointer:fine){.hd-plot:has(.hd-k-ship:hover):not(.is-down) .hd-cap{transform:translateY(-2px)}}
+.hd-plot.is-down .hd-cap{transform:translateY(5px);transition-duration:.03s}
+/* les aiguilles claquent d'un cran à l'autre */
+.hd-plot .a-needle{transition:transform 80ms steps(2,end)}
+/* haut-parleur allumé : la grille fonce */
+.hd-plot.is-sound g.a-engrave{fill:var(--ink)}
+@media (prefers-reduced-motion:reduce){.hd-cap,.hd-plot .a-needle{transition:none !important}}
+/* Dessin plafonné en hauteur (bloc « Une section par écran ») : le SVG garde toute la largeur et centre le dessin réduit ; --hd-d est la largeur réelle du dessin (rapport 800 / 624), les commandes la suivent. */
+@media (min-width:761px){
+  .hd-plot{--hd-d:min(100%,calc((100svh - 290px) * 800 / 624))}
+  .hd-ctl-large{left:50%;right:auto;width:var(--hd-d);transform:translateX(-50%)}
+}
+/* Renvoi « Explore in 3D » sur le dessin plafonné : son bout droit (69,9 %) est pris sur la largeur réelle du dessin pour rester accroché au bouton latéral ; son début garde la place libre à gauche. */
+@media (min-width:761px){.hd-3d-l{right:calc((100% - var(--hd-d)) / 2 + var(--hd-d) * .699)}}

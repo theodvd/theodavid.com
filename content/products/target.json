@@ -10,6 +10,7 @@
     "builtToGetHired": false
   },
   "problem": "My classmates kept asking how I land internships. With a chatbot they start from zero every time: a generic CV, shallow prep, nothing to show. Each step alone is easy; what changes the outcome is one candidate file reused everywhere, and a method with guardrails.",
+  "problemExcerpt": ["start from zero", "every time"],
   "built": [
     "A candidate file: a short interview turns your experience into an evidence bank, one fact per proof, each one validated by you.",
     "Per application: a targeted CV (\"you sell X, they buy Y\"), a research prompt whose sources get checked, an HR interview kit and a project brief for the manager round.",

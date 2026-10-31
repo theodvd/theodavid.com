@@ -9,6 +9,7 @@
     "builtToGetHired": false
   },
   "problem": "I had automated my own fintech brief, and everyone I showed it to wanted one for their field. The hard part wasn't the automation, it was letting someone who has never seen a workflow describe their world in a sentence and get a system built for them.",
+  "problemExcerpt": ["never seen", "a workflow"],
   "built": [
     "A conversational onboarding: Lia interviews you, finds candidate sources, checks that each one is alive and fresh, and curates your set.",
     "One shared engine for every user, so an improvement ships to everyone at once.",
