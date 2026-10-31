@@ -62,3 +62,8 @@
 /* haut-parleur allumé : la grille fonce */
 .hd-plot.is-sound g.a-engrave{fill:var(--ink)}
 @media (prefers-reduced-motion:reduce){.hd-cap,.hd-plot .a-needle{transition:none !important}}
+/* Dessin plafonné en hauteur (bloc « Une section par écran ») : le SVG garde toute la largeur et centre le dessin réduit ; --hd-d est la largeur réelle du dessin (rapport 800 / 624), les commandes la suivent. */
+@media (min-width:761px){
+  .hd-plot{--hd-d:min(100%,calc((100svh - 290px) * 800 / 624))}
+  .hd-ctl-large{left:50%;right:auto;width:var(--hd-d);transform:translateX(-50%)}
+}
