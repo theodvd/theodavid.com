@@ -10,10 +10,10 @@
 /* tout le bloc (dessin et libellé) est la cible du lien vers /astres */
 .nw-x{position:relative}
 .nw-xa::after{content:"";position:absolute;inset:0}
-/* survol du bloc : les pièces s'écartent de 16 et 32 unités de plus, en 4 crans (plateau Assemblage-Astres 1c) */
-.nw-x .as-xp,.nw-x .as-xc{transition:transform var(--dur-title) var(--ease-title)}
-.nw-x:hover .as-xp,.nw-x:focus-within .as-xp{transform:translateX(16px)}
-.nw-x:hover .as-xc,.nw-x:focus-within .as-xc{transform:translateX(32px)}
+/* survol du bloc : les pièces se soulèvent de la feuille (4 px, ombre pleine décalée), en 4 crans, comme l'appareil de l'en-tête (option A du 31/10/2026) */
+.nw-x :is(.as-xs,.as-xp,.as-xc){transition:transform var(--dur-title) var(--ease-title),filter var(--dur-title) var(--ease-title)}
+.nw-x:is(:hover,:focus-within) :is(.as-xs,.as-xp,.as-xc){transform:translate(-4px,-4px);filter:drop-shadow(4px 4px 0 var(--ink))}
+.nw-xa{-webkit-tap-highlight-color:transparent}
 .nw-x:focus-within .nw-xl{text-decoration:underline;text-decoration-color:var(--signal);text-decoration-thickness:2px;text-underline-offset:5px}
 /* apparition de l'appel (haut à 60 %) : l'adresse en trois crans, la touche et ses liens en dernier */
 .nw-big{animation:td-fade var(--dur-fade) var(--ease-fade) both}
@@ -21,7 +21,7 @@
 .nw-cta>.nw-meta{animation:td-fade var(--dur-fade) var(--ease-fade) var(--dur-fade) both}
 @media (max-width:760px){
   /* au doigt, pas d'esquisse d'éclatement */
-  .nw-x:hover .as-xp,.nw-x:hover .as-xc{transform:none}
+  .nw-x:hover :is(.as-xs,.as-xp,.as-xc){transform:none;filter:none}
   /* cible tactile du libellé : 44 px au moins */
   .nw-xa{min-height:44px}
 }
