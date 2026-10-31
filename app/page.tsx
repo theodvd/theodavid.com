@@ -7,6 +7,7 @@ import Founder from "@/components/home/Founder";
 import Workbench from "@/components/home/Workbench";
 import Now from "@/components/home/Now";
 import RevealRoot from "@/components/home/RevealRoot";
+import NavMotion from "@/components/home/NavMotion";
 import "./styles/home.css";
 import "./styles/fix-hd.css";
 import "./styles/fix-ab.css";
@@ -16,6 +17,7 @@ import "./styles/fix-fo.css";
 import "./styles/fix-wb.css";
 import "./styles/fix-nw.css";
 import "./styles/fix-pg.css";
+import "./styles/nav.css";
 
 /**
  * La home de theodavid.com, composée d'après le canevas « Composition
@@ -39,6 +41,7 @@ export default function Home() {
         <Now c={c} />
       </main>
       <RevealRoot />
+      <NavMotion />
     </>
   );
 }
