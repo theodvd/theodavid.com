@@ -37,3 +37,8 @@
   .hd{min-height:min(var(--layout-header-min),100svh)}
   .hd-plot svg{max-height:calc(100svh - 290px)}
 }
+
+/* Renvoi « Explore in 3D » sur un écran bas (31/10/2026) : le plafond de hauteur ci-dessus rétrécissait le dessin dans une boîte restée large, et le renvoi, placé en pourcentages de la boîte, tombait à côté du bouton latéral (jusqu'à 38 px à 1440 × 720). La boîte suit le dessin : même plafond en largeur, au rapport du viewBox (800 × 624), centrée dans sa colonne. */
+@media (min-width:761px){
+  .hd-plot.td-big{width:100%;max-width:calc((100svh - 290px) * 800 / 624);justify-self:center;margin-inline:auto}
+}
