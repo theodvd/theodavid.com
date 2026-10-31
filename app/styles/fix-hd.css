@@ -30,3 +30,9 @@
 
 /* Menu fermé : le panneau reste mis en page par le navigateur et sa flèche « ↗ » élargissait la page de 6 px à 320 px. Retiré tant que le Menu est fermé (rien ne change à l'œil). */
 .hd-menu:not([open]) .hd-panel{display:none}
+
+/* Une section par écran (31/10/2026) : l'en-tête ne dépasse pas la hauteur de l'écran ; sur un écran bas, l'appareil se réduit en hauteur et les compteurs restent visibles. */
+@media (min-width:761px){
+  .hd{min-height:min(var(--layout-header-min),100svh)}
+  .hd-plot svg{max-height:calc(100svh - 290px)}
+}
