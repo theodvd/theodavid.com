@@ -15,6 +15,7 @@ import "./styles/fix-pr.css";
 import "./styles/fix-fo.css";
 import "./styles/fix-wb.css";
 import "./styles/fix-nw.css";
+import "./styles/fix-pg.css";
 
 /**
  * La home de theodavid.com, composée d'après le canevas « Composition
