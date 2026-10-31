@@ -1,0 +1,51 @@
+{
+  "slug": "fact-checker",
+  "order": 5,
+  "status": "archived",
+  "statusLabel": "Now in production at Finary",
+  "year": "2026",
+  "name": "Multi-Agent Fact-Checker",
+  "oneLiner": "Two AI models argue every claim in a video script, and an arbiter settles it with live sources.",
+  "origin": {
+    "builtToGetHired": true,
+    "company": "Finary",
+    "role": "Growth internship",
+    "outcome": "Got the internship"
+  },
+  "problem": "Fact-checking a long video script took about seven hours of source hunting. One model can't be trusted with it: it hallucinates with confidence and cites nothing. The question was whether two models could keep each other honest.",
+  "built": [
+    "Claim extraction: the script is split into statements that can each be verified.",
+    "Two competing agents check every claim independently, with live web evidence, and score their own confidence.",
+    "An arbiter weighs their confidence and settles disagreements, which is exactly where a human should look."
+  ],
+  "proof": [
+    "Got me the internship, then I rebuilt it in production at Finary: 7 hours → 10 minutes per script."
+  ],
+  "figures": [
+    {
+      "value": "7 h → 10 min",
+      "label": "per script"
+    }
+  ],
+  "cardProof": "Got me the internship, then I rebuilt it in production at Finary.",
+  "stack": [
+    "Claude API",
+    "GPT-4",
+    "Web search API"
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/theodvd/finary-fact-checker"
+    }
+  ],
+  "images": [
+    {
+      "src": "/images/products/fact-checker.jpg",
+      "width": 1200,
+      "height": 750,
+      "alt": "GitHub repository page of the Multi-Agent Fact-Checker",
+      "caption": "Fact-checker, GitHub"
+    }
+  ]
+}

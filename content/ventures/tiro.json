@@ -1,0 +1,41 @@
+{
+  "slug": "tiro",
+  "order": 1,
+  "status": "closed",
+  "statusLabel": "Closed in 2026",
+  "name": "Tiro",
+  "role": "Co-founder & COO",
+  "period": {
+    "start": "2024",
+    "end": "2026"
+  },
+  "story": "Co-founded with a friend. Version one was a marketplace matching design students with young companies; version two, a premium turnkey service run with a small freelance team. I owned prospecting, go-to-market and delivery.",
+  "metrics": [
+    "€15K revenue",
+    "~30 marketplace projects, then ~15 clients"
+  ],
+  "decision": "I chose to close it properly rather than let it drift.",
+  "lessons": [
+    "Demand is not a business: both sides wanted the marketplace, but at around €50 of commission per project it couldn't pay. That's why we went premium.",
+    "Delivering was never the bottleneck, selling was. That's what pushed me to build prospecting machines, and into growth engineering.",
+    "A company run alongside studies and an internship hits a ceiling. I chose to close it properly rather than let it drift."
+  ],
+  "images": [
+    {
+      "src": "/images/ventures/tiro-stand.jpg",
+      "width": 1600,
+      "height": 1066,
+      "alt": "Théo David, right, in a white shirt, with his Tiro co-founder at the Tiro stand at Pépite Day 2025, the Tiro poster on the left",
+      "caption": "Tiro",
+      "credit": "Photo · Charlyne Labarre · Pépite Day 2025",
+      "kind": "photo"
+    },
+    {
+      "src": "/images/ventures/tiro-site.jpg",
+      "width": 1200,
+      "height": 750,
+      "alt": "Tiro Agency website at tiro.framer.website",
+      "caption": "tiro.framer.website"
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "title": "Workbench",
+  "intro": "Tools I built for myself. They're how I work.",
+  "items": [
+    {
+      "slug": "phil",
+      "name": "Phil",
+      "line": "Living project files: Claude Code hooks keep a readable status for each project and bring it back at the start of every new session.",
+      "howItWorks": "Every project is a living file. Claude Code hooks read each session, Claude Haiku updates what's done, decided and waiting, and the file comes back at the start of the next session. When a session isn't linked to a project, Claude asks which one.",
+      "stack": [
+        "Python",
+        "Claude Code hooks",
+        "Claude Haiku",
+        "Markdown",
+        "Next.js"
+      ],
+      "image": {
+        "src": "/images/workbench/phil.jpg",
+        "width": 3024,
+        "height": 1654,
+        "alt": "Phil's dashboard: who is waiting on what on the left, the living project files on the right"
+      }
+    },
+    {
+      "slug": "gbrain",
+      "name": "gbrain",
+      "line": "My second brain: a Postgres and pgvector knowledge base of everything I work on, synced every day, that my agents search first.",
+      "howItWorks": "Everything I work on lands in one knowledge base: project files, meeting notes, voice notes. A routine syncs it every morning and my agents search it before they answer, so they start with context instead of from zero.",
+      "stack": [
+        "PostgreSQL 17",
+        "pgvector",
+        "OpenAI embeddings",
+        "Obsidian vault in Git",
+        "launchd"
+      ],
+      "image": {
+        "src": "/images/workbench/gbrain.jpg",
+        "width": 1348,
+        "height": 1312,
+        "alt": "gbrain in Obsidian's graph view: grey nodes on a dark background"
+      }
+    },
+    {
+      "slug": "nest",
+      "name": "nest",
+      "line": "My Paris apartment hunt on autopilot: listings scored on 24 weighted criteria, a phone alert above 70, scam checks built in.",
+      "howItWorks": "It reads new listings and agency emails, scores each one on 24 weighted criteria (the commute is the only deal breaker), checks for scams, and sends a phone alert with action buttons when a place scores above 70.",
+      "stack": [
+        "Python",
+        "Gmail API",
+        "Claude",
+        "ntfy",
+        "launchd"
+      ],
+      "image": {
+        "src": "/images/workbench/nest.jpg",
+        "width": 923,
+        "height": 372,
+        "alt": "nest alert on my phone: a studio scored 73/100, with the commute"
+      }
+    },
+    {
+      "slug": "tiroflan",
+      "name": "Tiroflan",
+      "line": "A macOS menu bar app that logs freelance hours and keeps two Macs in sync through Google Calendar.",
+      "howItWorks": "Start a timer per client from the menu bar. Every session becomes a calendar event, and each Mac rereads the calendar every minute, so my work Mac and my personal Mac stay in sync without a server.",
+      "stack": [
+        "Swift",
+        "SwiftUI",
+        "EventKit",
+        "Google Calendar"
+      ],
+      "image": {
+        "src": "/images/workbench/tiroflan.jpg",
+        "width": 720,
+        "height": 962,
+        "alt": "Tiroflan open: timer, logged hours and activity"
+      }
+    },
+    {
+      "slug": "security-watch",
+      "name": "Security watch",
+      "line": "A daily security report on my 34 repos: safe fixes merge themselves, only when the build is green.",
+      "howItWorks": "Every morning a script reads the Dependabot alerts on my 34 repos and sends a report to my phone. Security fixes merge on their own only when the Vercel build is green; everything else waits for me.",
+      "stack": [
+        "Python",
+        "GitHub CLI",
+        "Dependabot",
+        "ntfy",
+        "launchd"
+      ],
+      "image": {
+        "src": "/images/workbench/security-watch.jpg",
+        "width": 1200,
+        "height": 750,
+        "alt": "Dependabot pull requests on GitHub"
+      }
+    }
+  ]
+}

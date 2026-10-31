@@ -1,0 +1,60 @@
+{
+  "slug": "newsletter-studio",
+  "order": 4,
+  "status": "live",
+  "year": "2026",
+  "name": "Newsletter Studio",
+  "oneLiner": "Tailored intelligence briefs: tell Lia what you follow in one conversation, get your brief by email or Slack.",
+  "origin": {
+    "builtToGetHired": false
+  },
+  "problem": "I had automated my own fintech brief, and everyone I showed it to wanted one for their field. The hard part wasn't the automation, it was letting someone who has never seen a workflow describe their world in a sentence and get a system built for them.",
+  "built": [
+    "A conversational onboarding: Lia interviews you, finds candidate sources, checks that each one is alive and fresh, and curates your set.",
+    "One shared engine for every user, so an improvement ships to everyone at once.",
+    "Bring your own key: each user plugs in their own AI key, which keeps it free to host and let me open source it.",
+    "Guardrails from day one: an abuse detector, captcha, and briefs that can only go to the account's own address."
+  ],
+  "proof": [
+    "First beta: 12 sign-ups, 3 launched a brief. Activation, not capability, was the problem, and it shaped the next version.",
+    "Runs my own fintech newsletter, twice a week."
+  ],
+  "figures": [
+    {
+      "value": "12",
+      "label": "sign-ups in the first beta"
+    },
+    {
+      "value": "3",
+      "label": "launched a brief"
+    }
+  ],
+  "cardProof": "Runs my own fintech newsletter, twice a week.",
+  "stack": [
+    "Next.js",
+    "TypeScript",
+    "Supabase",
+    "Claude API",
+    "Docker",
+    "Hetzner"
+  ],
+  "links": [
+    {
+      "label": "lia.theodavid.com",
+      "href": "https://lia.theodavid.com"
+    },
+    {
+      "label": "GitHub",
+      "href": "https://github.com/theodvd/newsletter-studio"
+    }
+  ],
+  "images": [
+    {
+      "src": "/images/products/newsletter-studio.jpg",
+      "width": 1483,
+      "height": 812,
+      "alt": "Newsletter Studio home at lia.theodavid.com: Hi Theo. Your briefing, tailored. with Create a digest and My digests",
+      "caption": "Newsletter Studio, home"
+    }
+  ]
+}

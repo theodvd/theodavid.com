@@ -1,0 +1,153 @@
+{
+  "slug": "sirocco",
+  "order": 1,
+  "status": "live",
+  "year": "2026",
+  "name": "Sirocco",
+  "oneLiner": "Product and competitive intelligence for a defense tech team, built in a weekend for my Product Ops interview.",
+  "note": "built in a weekend",
+  "origin": {
+    "builtToGetHired": true,
+    "company": "Harmattan AI",
+    "role": "Product Operations",
+    "outcome": "Got the offer"
+  },
+  "disclaimer": "Independent project built from public sources. Not affiliated with Harmattan AI.",
+  "problem": "A product team in hypergrowth has no time to watch thirty competitors, their hiring, their contracts and the press. A list of signals doesn't help a busy manager: they need to know what to do about it.",
+  "built": [
+    "Collection from public sources only: the job boards of 23 companies, EU, French and UK public tenders, and ten defense news feeds.",
+    "Action cards instead of an inventory: what happened, why it matters to the team, what to do, and who should own it.",
+    "A weekly brief written by Claude, and an ask box over the whole base.",
+    "Every fact checked one by one before going live, so nothing reaches a manager on the model's word alone."
+  ],
+  "proof": [
+    "32 companies and 73 products mapped, 4,072 job posts read",
+    "Shown to my future manager, then opened by the CPO. I got the offer."
+  ],
+  "figures": [
+    {
+      "value": "32",
+      "label": "companies mapped"
+    },
+    {
+      "value": "73",
+      "label": "products mapped"
+    },
+    {
+      "value": "4,072",
+      "label": "job posts read"
+    }
+  ],
+  "proofInFigures": [
+    0
+  ],
+  "cardProof": "Shown to my future manager, then opened by the CPO. I got the offer.",
+  "proofUnderline": "I got the offer.",
+  "stack": [
+    "Python",
+    "Claude API",
+    "Next.js",
+    "Vercel"
+  ],
+  "links": [
+    {
+      "label": "sirocco.theodavid.com",
+      "href": "https://sirocco.theodavid.com"
+    }
+  ],
+  "images": [
+    {
+      "src": "/images/products/sirocco.jpg",
+      "width": 1200,
+      "height": 750,
+      "alt": "Sirocco interface: the weekly brief and its action cards, dark screen with yellow accents",
+      "caption": "Sirocco, live"
+    }
+  ],
+  "caseStudy": {
+    "blocks": [
+      {
+        "kind": "text",
+        "paragraphs": [
+          "The internship post described the tool almost word for word: gather what product managers need, automate market and competitor data, and turn it into dashboards and periodic briefs. I built a first version over the weekend before my second interview.",
+          "The decision it serves: a defense tech team launching new product lines has to know, fast, what competitors ship, hire for and win. Most of it is public, scattered across job boards, tenders and the trade press."
+        ]
+      },
+      {
+        "kind": "choices",
+        "title": "Three ways to organize it",
+        "items": [
+          {
+            "verdict": "Out",
+            "name": "By team",
+            "text": "One inbox per team. It needed the one thing I couldn't see from outside: who owns what."
+          },
+          {
+            "verdict": "Kept as Compare pages",
+            "name": "By product line",
+            "text": "One sheet per product. Competitor specs are rarely public: too many empty cells for a front door."
+          },
+          {
+            "verdict": "Kept",
+            "kept": true,
+            "name": "Monday brief",
+            "text": "Built for one moment: a manager alone on a Monday evening. It rests on the most solid data available: dated, linked job posts."
+          }
+        ]
+      },
+      {
+        "kind": "text",
+        "paragraphs": [
+          "Before the link went out, I fact-checked every claim: 298 facts, 78 wrong, 13 of them seriously. All fixed before the feature freeze. A build check now blocks any card without a source."
+        ]
+      },
+      {
+        "kind": "figures",
+        "images": [
+          {
+            "src": "/images/products/sirocco-brief.jpg",
+            "width": 1200,
+            "height": 750,
+            "alt": "Sirocco home: the brief for the week of 28 September 2026, with three summary lines",
+            "caption": "The Monday brief"
+          },
+          {
+            "src": "/images/products/sirocco-compare.jpg",
+            "width": 1200,
+            "height": 750,
+            "alt": "Sirocco Compare page: where one product is ahead or behind four rivals, from public figures",
+            "caption": "Compare, one product against four rivals"
+          },
+          {
+            "src": "/images/products/sirocco-map.jpg",
+            "width": 1200,
+            "height": 750,
+            "alt": "Sirocco Map page: a globe of contracts, funding rounds and new factories over the last 12 months",
+            "caption": "The map of the market"
+          },
+          {
+            "src": "/images/products/sirocco-ask.jpg",
+            "width": 1200,
+            "height": 750,
+            "alt": "Sirocco Ask box open: answers only from Sirocco's data, with a source for every claim, and five suggested questions",
+            "caption": "Ask, answers with a source"
+          }
+        ]
+      },
+      {
+        "kind": "text",
+        "title": "What they said",
+        "paragraphs": [
+          "My future manager tried it live during the interview and passed it on to the CPO. In the next round, the CPO set the first goal of the role: a regular, automated watch bulletin. When I described a brief tailored to each person, the CPO said: \"That's exactly it.\" I got the offer."
+        ]
+      },
+      {
+        "kind": "text",
+        "title": "What's next",
+        "paragraphs": [
+          "This was version one. During my internship, the watch goes deeper: input from people who know the field, a link to internal data, and a brief tailored to each person who weighs in on a product launch."
+        ]
+      }
+    ]
+  }
+}
