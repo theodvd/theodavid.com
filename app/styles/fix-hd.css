@@ -67,3 +67,5 @@
   .hd-plot{--hd-d:min(100%,calc((100svh - 290px) * 800 / 624))}
   .hd-ctl-large{left:50%;right:auto;width:var(--hd-d);transform:translateX(-50%)}
 }
+/* Renvoi « Explore in 3D » sur le dessin plafonné : son bout droit (69,9 %) est pris sur la largeur réelle du dessin pour rester accroché au bouton latéral ; son début garde la place libre à gauche. */
+@media (min-width:761px){.hd-3d-l{right:calc((100% - var(--hd-d)) / 2 + var(--hd-d) * .699)}}
