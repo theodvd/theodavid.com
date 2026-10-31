@@ -116,6 +116,9 @@ function stageFor(root: HTMLElement, el: HTMLElement | null, drawing: ReturnType
   const copy = drawing ? notesCopy(drawing.svg) : null;
   if (copy) ov.insertBefore(copy, veil);
   const parts = drawing ? Array.from(drawing.svg.querySelectorAll<SVGElement>(PARTS)) : [];
+  // commandes de l'appareil (Commandes.tsx) : ni focalisables ni cliquables pendant le film
+  const controls = drawing ? Array.from(drawing.host.querySelectorAll<HTMLElement>(".hd-ctl")) : [];
+  controls.forEach((c) => (c.inert = true));
   const fadeNotes = (t: number) => {
     const o = String(1 - steps(3)(seg(t, 0, 360)));
     if (link) link.style.opacity = o;
@@ -128,6 +131,7 @@ function stageFor(root: HTMLElement, el: HTMLElement | null, drawing: ReturnType
     dispose();
     notes.forEach((n) => n.style.removeProperty("opacity"));
     link?.style.removeProperty("opacity");
+    controls.forEach((c) => (c.inert = false));
     showParts(true);
     ov.remove();
   };
