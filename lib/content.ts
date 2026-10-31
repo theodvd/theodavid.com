@@ -117,6 +117,8 @@ export type ProductRaw = Dated & {
   origin: Origin;
   disclaimer?: string;
   problem: string;
+  /** Deux bouts de `problem`, copiés mot pour mot : la note « what breaks » de l'appareil quand ce produit est choisi. */
+  problemExcerpt?: [string, string];
   built: string[];
   proof: string[];
   /** Chiffres en grand de la preuve. */
@@ -274,6 +276,11 @@ function buildExperience(raw: ExperienceRaw[]) {
 
 function buildProducts(raw: ProductRaw[], date: string): Product[] {
   const list = raw.filter((p) => isPublished(p, date));
+  // L'extrait remplace une annotation au feutre : il doit exister tel quel dans `problem`.
+  for (const p of list) {
+    const off = p.problemExcerpt?.find((l) => !p.problem.includes(l));
+    if (off) throw new Error(`products/${p.slug}.json : problemExcerpt « ${off} » absent de problem`);
+  }
   return list.map((p, i) => {
     const o = p.origin;
     const masked = o.publishAfter && o.publishAfter > date ? o.untilPublished : undefined;

@@ -13,6 +13,7 @@
     "outcome": "Got the internship"
   },
   "problem": "Fact-checking a long video script took about seven hours of source hunting. One model can't be trusted with it: it hallucinates with confidence and cites nothing. The question was whether two models could keep each other honest.",
+  "problemExcerpt": ["seven hours of", "source hunting"],
   "built": [
     "Claim extraction: the script is split into statements that can each be verified.",
     "Two competing agents check every claim independently, with live web evidence, and score their own confidence.",

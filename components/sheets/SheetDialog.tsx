@@ -13,7 +13,8 @@ import { WearFilter } from "./Marks";
  * - Close, Échap et clic sur le voile : router.back(), ou `fallback`
  *   (/#products, /#workbench) s'il n'y a pas d'historique.
  * - Focus piégé dans la fiche (le reste de la page passe en `inert`), puis rendu
- *   au lien de la fiche d'origine ; page bloquée dessous ; flèches gauche et
+ *   à ce qui l'a ouverte (SHIP de l'en-tête par exemple), sinon au lien de la
+ *   fiche d'origine ; page bloquée dessous ; flèches gauche et
  *   droite pour la fiche précédente et suivante.
  * - Téléphone : glisser la feuille vers le bas la ferme.
  *
@@ -26,6 +27,8 @@ const SheetCtx = createContext<{ close: () => void }>({ close: () => {} });
 
 /** Lien de la carte ou du tiroir d'où la surimpression a été ouverte (gardé à travers Previous / Next). */
 let origin: string | null = null;
+/** Élément qui avait le focus à l'ouverture (bouton SHIP, carte), rendu à la fermeture s'il est encore là. */
+let opener: HTMLElement | null = null;
 /** Titre de l'onglet avant l'ouverture, rendu à la fermeture. */
 let pageTitle = "";
 
@@ -70,6 +73,8 @@ export default function SheetDialog({
     if (!el) return;
     if (origin === null) {
       origin = self;
+      const a = document.activeElement;
+      opener = a instanceof HTMLElement && a !== document.body ? a : null;
       pageTitle = document.title;
     }
     // Next ne pose pas les métadonnées d'un emplacement parallèle : la fiche nomme l'onglet elle-même.
@@ -168,8 +173,11 @@ export default function SheetDialog({
       window.setTimeout(() => {
         if (document.querySelector("[data-sheet-dialog]")) return;
         const back = origin;
+        const by = opener;
         origin = null;
+        opener = null;
         if (pageTitle) document.title = pageTitle;
+        if (by?.isConnected) return by.focus({ preventScroll: true });
         if (!back) return;
         const link = document.querySelector<HTMLElement>(`main a[href="${back}"]`);
         link?.focus({ preventScroll: true });

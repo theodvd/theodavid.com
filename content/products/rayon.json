@@ -13,6 +13,7 @@
     "outcome": "No reply"
   },
   "problem": "A product growth team preparing a launch in a new market wants to know what competitors shipped there, when, and how it landed. That knowledge is public, but scattered across sitemaps, archives, app stores and the local press of eighteen countries.",
+  "problemExcerpt": ["scattered across", "eighteen countries"],
   "built": [
     "Collection from public, authorized sources: sitemaps, web archives, App Store listings and local press feeds, each one checked against robots.txt.",
     "An agent that extracts dated launch events, and a second one that writes sourced hypotheses (\"we think this worked because...\"), never a verdict.",
