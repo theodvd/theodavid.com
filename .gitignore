@@ -1,6 +1,7 @@
 node_modules/
 .next/
-.next-verify/
+# builds de vérification (NEXT_DIST_DIR=.next-xxx)
+.next-*/
 out/
 .env*
 .DS_Store

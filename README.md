@@ -16,7 +16,7 @@ The solar-system concept is a tribute to [astres](https://trucs.ai/astres/) by t
 
 ## Stack
 
-Next.js 14 (App Router) · TypeScript · Three.js · GSAP · Lenis · Tailwind CSS. No CMS, no database: all content lives in `data/projects.ts` and `components/astres/astresProjects.ts`.
+Next.js 15 (App Router) · React 19 · TypeScript · Three.js · GSAP · Lenis · Tailwind CSS. No CMS, no database: all content lives in `data/projects.ts` and `components/astres/astresProjects.ts`.
 
 ## Run locally
 

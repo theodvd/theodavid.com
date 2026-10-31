@@ -1,0 +1,44 @@
+{
+  "slug": "target",
+  "order": 2,
+  "status": "in-test",
+  "statusLabel": "In test with my class",
+  "year": "2026",
+  "name": "Target",
+  "oneLiner": "An internship search copilot for my classmates: build your candidate file once, reuse it at every step.",
+  "origin": {
+    "builtToGetHired": false
+  },
+  "problem": "My classmates kept asking how I land internships. With a chatbot they start from zero every time: a generic CV, shallow prep, nothing to show. Each step alone is easy; what changes the outcome is one candidate file reused everywhere, and a method with guardrails.",
+  "built": [
+    "A candidate file: a short interview turns your experience into an evidence bank, one fact per proof, each one validated by you.",
+    "Per application: a targeted CV (\"you sell X, they buy Y\"), a research prompt whose sources get checked, an HR interview kit and a project brief for the manager round.",
+    "A tracker with CSV import and a Chrome extension to save offers in one click."
+  ],
+  "proof": [
+    "Success rule set before launch: if 2 testers out of 3 land an interview within six weeks, it moves to v2; 1 out of 3, I change one variable; none, I stop and find where it breaks.",
+    "Product rule learned in testing: the code ends the interview, not the model (eight questions, a visible counter), after one session ran to thirty questions."
+  ],
+  "cardProof": "Success rule set before launch: if 2 testers out of 3 land an interview within six weeks, it moves to v2; 1 out of 3, I change one variable; none, I stop and find where it breaks.",
+  "stack": [
+    "Next.js",
+    "Supabase",
+    "Claude, OpenAI or Gemini (bring your own key)",
+    "Vercel"
+  ],
+  "links": [
+    {
+      "label": "target.theodavid.com",
+      "href": "https://target.theodavid.com"
+    }
+  ],
+  "images": [
+    {
+      "src": "/images/products/target.jpg",
+      "width": 1200,
+      "height": 750,
+      "alt": "Target home page: Prepare every application from your real proof",
+      "caption": "Target, home"
+    }
+  ]
+}

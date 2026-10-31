@@ -1,0 +1,25 @@
+/* Retouches de la section (préfixe ex-) par rapport à home.css, posées après elle. */
+
+/* L'onglet coché ouvre le panneau de même rang : règle générique, quelles que soient les entreprises du contenu (home.css nomme les slugs du plateau). */
+.ex-sec:has(.ex-list>li:nth-child(1) input:checked) .ex-panel:nth-child(1),
+.ex-sec:has(.ex-list>li:nth-child(2) input:checked) .ex-panel:nth-child(2),
+.ex-sec:has(.ex-list>li:nth-child(3) input:checked) .ex-panel:nth-child(3),
+.ex-sec:has(.ex-list>li:nth-child(4) input:checked) .ex-panel:nth-child(4),
+.ex-sec:has(.ex-list>li:nth-child(5) input:checked) .ex-panel:nth-child(5),
+.ex-sec:has(.ex-list>li:nth-child(6) input:checked) .ex-panel:nth-child(6),
+.ex-sec:has(.ex-list>li:nth-child(7) input:checked) .ex-panel:nth-child(7),
+.ex-sec:has(.ex-list>li:nth-child(8) input:checked) .ex-panel:nth-child(8){display:block}
+
+/* Le volet qui découvre le chiffre géant rogne à la boîte du texte : la dernière lettre (lettrage serré, contour creux de la date) déborde de quelques pixels et restait coupée une fois l'animation finie. Même mouvement en 4 crans, bord droit élargi. */
+@keyframes ex-wipe{from{clip-path:inset(-20px 100% -30px 0)}to{clip-path:inset(-20px -24px -30px 0)}}
+
+/* Paliers intermédiaires (30/10/2026) : les réalisations en trois colonnes et la paire de paragraphes se tassaient sous 1100 px. */
+@media (min-width:761px) and (max-width:1100px){
+  .ex-tabs{grid-template-columns:300px minmax(0,1fr)}
+  .ex-hl{grid-template-columns:34px minmax(0,1fr);gap:6px 12px}
+  .ex-hlx{grid-column:2}
+}
+@media (min-width:761px) and (max-width:960px){
+  .ex-tabs{grid-template-columns:260px minmax(0,1fr)}
+  .ex-pair{grid-template-columns:minmax(0,1fr);gap:12px}
+}

@@ -1,0 +1,93 @@
+{
+  "name": "Théo David",
+  "roles": [
+    {
+      "title": "Forward Deployed Engineer",
+      "org": "Tamtam"
+    },
+    {
+      "title": "Product Ops",
+      "org": "Harmattan AI",
+      "from": "Feb 2027"
+    }
+  ],
+  "tagline": "I sit between customers and the product: I find what breaks in the field and ship the tool that fixes it.",
+  "counters": [
+    {
+      "value": "~190 h",
+      "label": "A month back to the teams · 10 internal tools at Finary"
+    },
+    {
+      "value": "7 h → 10 min",
+      "label": "Fact-checker"
+    },
+    {
+      "value": "4,072",
+      "label": "Job posts read · Sirocco · got the offer"
+    }
+  ],
+  "availability": "Open to conversations",
+  "founderLine": "Building toward founding my own company.",
+  "bio": [
+    "Today I'm a Forward Deployed Engineer at Tamtam, an AI sales intelligence startup: I work inside customers' setups and turn what keeps coming up there into product. Before that I was the Growth Engineer at Finary, where I built ten internal tools that gave the teams back about 190 hours a month.",
+    "I like to understand a team's problem before I join it: three of the products below were built to get hired, and two of them did the job.",
+    "I'm in the final year of a business and engineering double degree, Audencia × Centrale Nantes (BBA Big Data, AI & Management)."
+  ],
+  "bioLink": {
+    "text": "three of the products below were built to get hired",
+    "href": "#products"
+  },
+  "productsIntro": "I don't send cover letters. I ship the tool.",
+  "now": [
+    {
+      "text": "Forward Deployed Engineer at Tamtam"
+    },
+    {
+      "text": "Product Operations at Harmattan AI from February 2027"
+    },
+    {
+      "text": "Final year at Audencia × Centrale Nantes"
+    },
+    {
+      "text": "Out climbing, or on a long hike"
+    }
+  ],
+  "specs": [
+    [
+      "Education",
+      "BBA Big Data, AI & Management · Audencia × Centrale Nantes, 2027"
+    ],
+    [
+      "Exchanges",
+      "Shenzhen, 5 months · Casablanca, 3 months"
+    ],
+    [
+      "Elsewhere",
+      "Climbing · Long hikes · Gym, 4+ years"
+    ]
+  ],
+  "contact": {
+    "primary": {
+      "label": "Write to me",
+      "href": "mailto:hello@theodavid.com"
+    },
+    "secondary": {
+      "label": "Book 30 min",
+      "href": "https://calendly.com/theodavid/diagnostic-growth"
+    },
+    "links": [
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/theodvd"
+      },
+      {
+        "label": "GitHub",
+        "href": "https://github.com/theodvd"
+      }
+    ]
+  },
+  "explore3d": {
+    "label": "Explore in 3D",
+    "href": "/astres"
+  }
+}

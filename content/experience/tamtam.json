@@ -1,0 +1,33 @@
+{
+  "slug": "tamtam",
+  "order": 1,
+  "status": "current",
+  "company": "Tamtam",
+  "url": "https://tamtam.ai",
+  "role": "Forward Deployed Engineer · freelance",
+  "period": {
+    "start": "2026-10",
+    "end": null
+  },
+  "context": "AI sales intelligence: agents on top of a company's CRM that find who to sell to next.",
+  "summary": "Forward deployed means working inside customers' setups: wiring their CRM, configuring the product for their case, and turning what keeps coming up into features.",
+  "highlights": [
+    {
+      "title": "New opportunity signals",
+      "metric": "3 new detectors in the product",
+      "text": "Added three opportunity detectors to the product: a prospect moving away from a competitor's tool (spotted in their job posts), a new sales leader taking the job, and lookalikes of an existing customer."
+    },
+    {
+      "title": "Data the team can trust",
+      "text": "Synced the customer base with the CRM and the product, then cross-checked all three and sorted every mismatch by type and confidence, so fixes are made on evidence, not gut feel."
+    },
+    {
+      "title": "Feature requests that reach the roadmap",
+      "text": "Rebuilt the product request log out of no-code, with an agent that triages what customers ask for on behalf of customer success."
+    },
+    {
+      "title": "Support agent",
+      "text": "Built an agent that handles bug reports and feature requests, scoped tight for a first version so it does a few things reliably."
+    }
+  ]
+}

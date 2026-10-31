@@ -1,0 +1,21 @@
+{
+  "slug": "solvio",
+  "order": 3,
+  "status": "explored",
+  "statusLabel": "Explored",
+  "year": "2026",
+  "name": "Solvio",
+  "story": "A financial cockpit for French freelancers: business (social charges, invoices, taxes) and personal wealth in one place, answering one question: after charges and taxes, how much can I invest this month?",
+  "wentAsFar": "An MVP pitched with a live demo at Centrale Nantes, a full business plan, and a public simulator in production.",
+  "learned": "Screened honestly, the real competitor was Indy, not Finary, and the effort-to-price ratio didn't hold for a solo founder yet. It grew out of Solen, my own investment tracker, where I learned that centralizing data is the easy part: advice is the value.",
+  "links": [],
+  "images": [
+    {
+      "src": "/images/ventures/solvio.jpg",
+      "width": 1200,
+      "height": 750,
+      "alt": "Solvio public simulator: after social charges and taxes, how much is left to invest",
+      "caption": "Solvio, public simulator"
+    }
+  ]
+}

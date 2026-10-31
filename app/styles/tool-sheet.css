@@ -1,0 +1,95 @@
+/*
+ * Fiche d'outil (components/sheets/ToolSheet.tsx) : une fiche, deux enveloppes
+ * (surimpression depuis la home, page /workbench/<slug> en accès direct).
+ * Portée du plateau Atelier-V6-Play, préfixe w6- gardé. cqi devient vw,
+ * @container td devient @media au même seuil. Chargée par la fiche elle-même ;
+ * la page directe charge aussi product-sheet.css pour la barre, le fil et le
+ * contact. Les retouches pour le site sont regroupées en fin de fichier.
+ */
+
+/* ---------- V6 · fiche d'outil en surimpression ---------- */
+.w6-layer{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;box-sizing:border-box;overflow-y:auto;overscroll-behavior:contain;padding:64px var(--fluid-gutter) 72px}
+.w6-layer::before{content:"";position:fixed;inset:0;z-index:-1;background-color:var(--ground);opacity:.9;animation:td-fade .2s var(--ease-fade) both}
+.w6-sheet{position:relative;box-sizing:border-box;width:100%;max-width:1120px;margin:0 auto;background:var(--surface-card);border:var(--td-rule);box-shadow:var(--shadow-key-secondary);color:var(--ink);font-family:var(--font-display);animation:w6-in .24s steps(3,end) both}
+.w6-sheet.is-noview{max-width:720px}
+@keyframes w6-in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes w6-up{from{transform:translateY(100%)}to{transform:none}}
+.w6-grip{display:none}
+.w6-sheet a:focus-visible,.w6-sheet button:focus-visible{outline:var(--stroke-focus) solid var(--signal);outline-offset:3px}
+/* tête mono */
+.w6-bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px 22px;padding:12px 14px 12px 24px;border-bottom:var(--td-rule);font-family:var(--font-mono);font-size:.62rem;letter-spacing:.07em;text-transform:uppercase;line-height:1.4}
+.w6-bar-id{font-weight:600}
+.w6-pos{margin-left:auto;color:var(--ink-muted)}
+.w6-close{display:inline-flex;align-items:center;gap:12px;padding:9px 14px;background:transparent;color:var(--ink);border:var(--stroke-rule) solid var(--ink);border-radius:0;box-shadow:var(--shadow-key-secondary);font-family:var(--font-mono);font-size:.66rem;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;transition:transform var(--dur-key) var(--ease-key),box-shadow var(--dur-key) var(--ease-key),background-color var(--dur-key) var(--ease-key),color var(--dur-key) var(--ease-key)}
+.w6-close:hover,.w6-close.is-hover{transform:translate(3px,3px);box-shadow:0 0 0 transparent;background:var(--td-k2-hover-bg);color:var(--td-k2-hover-fg);border-color:var(--td-k2-hover-border)}
+.w6-kh{font-family:var(--font-mono);font-weight:400;letter-spacing:.02em;text-transform:none}
+.w6-close .w6-kh{font-size:.66rem}
+/* corps : texte à gauche, visionneuse à droite ; sans capture, une seule colonne étroite */
+.w6-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.55fr)}
+.is-noview .w6-body{grid-template-columns:minmax(0,1fr)}
+.w6-text{display:flex;flex-direction:column;min-width:0;border-right:1px solid var(--rule)}
+.is-noview .w6-text{border-right:0}
+.w6-lead{display:flex;flex-direction:column;gap:18px;padding:30px 28px 28px 24px;border-bottom:1px solid var(--rule)}
+.w6-tag{align-self:flex-start;display:inline-flex;align-items:baseline;gap:12px;max-width:100%;box-sizing:border-box;border:var(--td-rule);background:var(--ground);padding:12px 18px 10px 14px}
+.w6-ref{flex:none;font-family:var(--font-mono);font-size:.66rem;letter-spacing:.05em;color:var(--ink-muted)}
+.w6-title{margin:0;min-width:0;font-family:var(--font-display);font-stretch:var(--stretch-cond);font-size:clamp(2.4rem,4vw,3.6rem);font-weight:800;line-height:.95;letter-spacing:0;overflow-wrap:anywhere}
+.w6-line{margin:0;font-size:var(--fluid-hook);line-height:1.45;font-weight:450;max-width:40ch}
+.w6-sec{display:flex;flex-direction:column;gap:10px;padding:20px 28px 22px 24px;border-bottom:1px solid var(--rule)}
+.w6-text>.w6-sec:last-child{border-bottom:0}
+.w6-k{margin:0;font-family:var(--font-mono);font-size:.62rem;font-weight:400;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-muted)}
+.w6-todo{margin:0;padding:8px 10px;border:1px dashed var(--rule);font-family:var(--font-mono);font-size:.66rem;line-height:1.5;color:var(--ink-muted)}
+/* visionneuse : la photo garde son format (carré, bandeau, portrait, paysage), plafonnée en hauteur */
+.w6-view{--mh:520px;margin:0;display:flex;flex-direction:column;gap:12px;min-width:0;padding:28px}
+.w6-stage{display:flex;align-items:center;justify-content:center;padding:24px;background:var(--ground);border:1px solid var(--rule)}
+.w6-shot{display:block;box-sizing:border-box;width:min(100%,calc(var(--mh) * var(--w) / var(--h)));height:auto;aspect-ratio:var(--w) / var(--h);object-fit:contain;padding:8px;background:var(--device-glass);border:1.5px solid var(--rule-strong);border-radius:var(--radius-screen)}
+.w6-cap{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-family:var(--font-mono);font-size:.58rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-muted)}
+/* pied : outil précédent et suivant */
+.w6-foot{display:grid;grid-template-columns:1fr 1fr;border-top:var(--td-rule)}
+.w6-step{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:16px 24px 18px;color:var(--ink);text-decoration:none;background:none;border:0;font:inherit;text-align:left;cursor:pointer}
+.w6-step-next{border-left:1px solid var(--rule);align-items:flex-end;text-align:right}
+.w6-stepk{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-muted)}
+.w6-stepn{font-family:var(--font-display);font-stretch:var(--stretch-wide);font-size:1.2rem;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.w6-step:hover .td-title,.w6-step.is-hover .td-title,.w6-step:focus-visible .td-title{background-size:100% var(--stroke-title)}
+/* téléphone : la fiche monte du bas comme une feuille */
+@media (max-width:760px){
+  .w6-layer{padding:40px 0 0}
+  /* la bande de voile de 40 px reste voile quand la feuille défile (sinon le texte passait au-dessus de la barre collante) ; un clic dessus ferme */
+  .w6-layer::after{content:"";position:fixed;top:0;left:0;right:0;height:40px;background-color:var(--ground);z-index:10}
+  .w6-sheet,.w6-sheet.is-noview{flex:1 0 auto;display:flex;flex-direction:column;max-width:none;border-left:0;border-right:0;border-bottom:0;box-shadow:none;animation:w6-up .28s var(--ease-draw) both}
+  .w6-grip{display:block;width:44px;height:4px;margin:0 auto;background:var(--ink-muted);position:sticky;top:0;z-index:4}
+  .w6-bar{position:sticky;top:0;z-index:3;background:var(--surface-card);gap:6px 14px;padding:12px 12px 10px 16px}
+  .w6-close{padding:8px 12px}
+  .w6-body{flex:1 0 auto;display:flex;flex-direction:column}
+  .w6-text{display:contents}
+  .w6-lead{order:1;gap:14px;padding:22px 16px}
+  .w6-view{--mh:380px;order:2;padding:18px 16px;border-bottom:1px solid var(--rule)}
+  .w6-stage{padding:14px}
+  .w6-shot{padding:6px;border-radius:10px}
+  .w6-sec{order:3;padding:18px 16px}
+  .w6-title{font-size:2.4rem}
+  .w6-line{font-size:1.1rem}
+  .w6-foot{position:sticky;bottom:0;margin-top:auto;background:var(--surface-card)}
+  .w6-step{padding:12px 16px 14px}
+  .w6-stepn{font-size:1rem}
+}
+
+/* ===== Site : retouches par rapport au plateau ===== */
+/* textes réels de How it works et Stack (le plateau n'avait que des emplacements) */
+.w6-p{margin:0;font-size:1.02rem;line-height:1.56;max-width:56ch}
+.w6-stack{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:4px 18px;font-family:var(--font-mono);font-size:.7rem;line-height:1.6}
+/* page directe : pas d'apparition, pas de Close, la fiche suit le fil */
+.as-page .w6-sheet{animation:none}
+@media (max-width:760px){
+  /* la feuille prend la hauteur sous les 40 px de voile */
+  .w6-layer .w6-sheet{min-height:calc(100dvh - 40px)}
+  .w6-sheet.is-drag{animation:none;transition:none}
+  .w6-sheet.is-back{transition:transform .2s var(--ease-key)}
+  .w6-grip{touch-action:none}
+  .as-page .w6-sheet{border:var(--td-rule);border-left:0;border-right:0}
+}
+@media (prefers-reduced-motion:reduce){
+  .w6-layer::before,.w6-sheet{animation:none !important}
+}
+/* page directe : le fil et le contact s'alignent sur la largeur de la fiche d'outil (1120, 720 sans photo) */
+.as-page:has(.w6-sheet) :is(.as-crumbs,.as-contact){max-width:1120px}
+.as-page:has(.w6-sheet.is-noview) :is(.as-crumbs,.as-contact){max-width:720px}

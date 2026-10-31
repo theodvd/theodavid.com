@@ -1,0 +1,26 @@
+{
+  "slug": "etabli",
+  "order": 2,
+  "status": "explored",
+  "statusLabel": "Explored",
+  "year": "2026",
+  "name": "Établi",
+  "story": "AI project scoping as a product: a guided interview that ends in an honest go/no-go, so non-technical teams can scope their own AI projects without hiring consultants.",
+  "wentAsFar": "A method tested by hand with colleagues at Finary, a full brand system, a live landing page and a first engine tested on a real case.",
+  "learned": "The engine worked, but the interview ran long and the AI lacked business context. Generic scoping isn't enough: it needs a vertical.",
+  "links": [
+    {
+      "label": "etabli.ai",
+      "href": "https://etabli.ai"
+    }
+  ],
+  "images": [
+    {
+      "src": "/images/ventures/etabli.jpg",
+      "width": 1200,
+      "height": 750,
+      "alt": "Établi landing page at etabli.ai: AI project scoping as a product",
+      "caption": "Établi, etabli.ai"
+    }
+  ]
+}

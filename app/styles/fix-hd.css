@@ -1,0 +1,32 @@
+/* Retouches de la section (préfixe hd-) par rapport à home.css, posées après elle. */
+
+/* Compteurs : chaque fenêtre porte un rouleau de chiffres (0 à 9 puis 0 à la valeur) ; il défile en steps() jusqu'à sa valeur quand la bande entre (data-reveal 0.8). */
+.hd-win{display:block;height:1em;overflow:hidden}
+.hd-reel{display:flex;flex-direction:column;align-items:center;transform:translateY(calc(var(--n) * -1em));animation:hd-roll .9s steps(var(--n),end) .15s both}
+.hd-reel>span{display:block;height:1em;line-height:1}
+.hd-dial:nth-child(2) .hd-reel{animation-delay:.27s}
+.hd-dial:nth-child(3) .hd-reel{animation-delay:.39s}
+.hd-dial:nth-child(4) .hd-reel{animation-delay:.51s}
+@keyframes hd-roll{from{transform:translateY(0)}}
+/* le filet qui fend la fenêtre passe au-dessus du rouleau */
+.hd-cell::after{z-index:1}
+
+/* Renvoi « Explore in 3D » : au survol ou au focus, esquisse de l'éclatement (plateau Assemblage-Astres) : bouton latéral enfoncé de 3 px, plaque et organes glissent de 8 et 16 unités en 4 crans. Hors .td-launch, pour laisser le départ vers /astres (astres.css) prendre la main au clic. */
+.hd-plot:not(.td-launch) :is(.as-xp,.as-xc,.hd-side){transition:transform var(--dur-title) var(--ease-title)}
+.hd-plot:not(.td-launch):is(:has(.hd-3d:hover),:has(.hd-3d:focus-visible)) .hd-side{transform:translateX(3px)}
+.hd-plot:not(.td-launch):is(:has(.hd-3d:hover),:has(.hd-3d:focus-visible)) .as-xp{transform:translateX(8px)}
+.hd-plot:not(.td-launch):is(:has(.hd-3d:hover),:has(.hd-3d:focus-visible)) .as-xc{transform:translateX(16px)}
+
+/* Palier intermédiaire (30/10/2026), 761 à 1100 px : la composition en trois colonnes (270 | dessin | 270) écrasait le dessin et ses étiquettes.
+   Nom, phrase et touches à gauche, dessin agrandi à droite ; les compteurs posent leur libellé sous le chiffre. */
+@media (min-width:761px) and (max-width:1100px){
+  .hd-main{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);column-gap:32px;row-gap:28px}
+  .hd-left{grid-column:1;grid-row:1}
+  .hd-right{grid-column:1;grid-row:2;align-self:start;padding-bottom:0}
+  .hd-plot{grid-column:2;grid-row:1 / span 2;align-self:center}
+  .hd-dial{flex-direction:column;align-items:flex-start;gap:10px}
+  .hd-dial dt{order:2;max-width:none;text-align:left}
+}
+
+/* Menu fermé : le panneau reste mis en page par le navigateur et sa flèche « ↗ » élargissait la page de 6 px à 320 px. Retiré tant que le Menu est fermé (rien ne change à l'œil). */
+.hd-menu:not([open]) .hd-panel{display:none}

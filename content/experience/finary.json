@@ -1,0 +1,38 @@
+{
+  "slug": "finary",
+  "order": 2,
+  "status": "past",
+  "company": "Finary",
+  "url": "https://finary.com",
+  "role": "Growth Engineer · internship",
+  "period": {
+    "start": "2026-04",
+    "end": "2026-08"
+  },
+  "context": "Personal finance app with about 1M users in Europe.",
+  "summary": "Solo owner of Growth Data & Automation: I found where the teams lost time, built the tool, and handed it over documented, with a named owner for each system.",
+  "highlights": [
+    {
+      "title": "Ten internal tools",
+      "metric": "~190 h a month back to the teams",
+      "text": "Ten tools built, adopted and handed over, giving the Growth and Media teams back about 190 hours a month: more than one full-time role."
+    },
+    {
+      "title": "Outbound engine",
+      "metric": "20+ qualified meetings",
+      "text": "Segmented a base of about 1M users and scored ~3,500 prospects, which turned into 20+ qualified meetings for the advisors. The Care team now runs it."
+    },
+    {
+      "title": "Editorial pipeline",
+      "metric": "1 article a day",
+      "text": "An expert-gated content engine: one standard built to be cited by AI assistants (GEO), a sourced knowledge base, and one article a day, with tax experts approving every new piece."
+    },
+    {
+      "title": "Fact-checker in production",
+      "metric": "7 h → 10 min",
+      "metricLabel": "to check a video script",
+      "text": "Rebuilt my application project inside Finary: checking a video script went from seven hours to ten minutes."
+    }
+  ],
+  "recognition": "Rated \"Exceeds expectations\" at all three reviews."
+}

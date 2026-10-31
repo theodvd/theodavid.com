@@ -1,0 +1,54 @@
+/* Retouches de la section (préfixe pr-) par rapport à home.css, posées après elle. */
+
+/* l'intro est désormais le vrai texte de Théo (le plateau n'avait qu'un emplacement en pointillé) */
+.pr-intro{margin:-12px 0 0;border:0;padding:0;font-family:var(--font-display);font-size:1.12rem;line-height:1.45;font-weight:500;color:var(--ink);max-width:52ch}
+/* apparition à 80 % : la fiche monte de 12 px, puis sa capture sort de 20 px et rentre (backwards : le survol reprend la main ensuite) */
+.pr-s{animation:td-rise .5s var(--ease-draw) backwards}
+.pr-tuck{animation:pr-peek .64s var(--ease-key) .4s backwards}
+@keyframes pr-peek{0%,100%{transform:rotate(3deg)}45%{transform:translateX(20px) rotate(3deg)}}
+/* le focus clavier sur le titre sort aussi la capture, comme le survol */
+.pr-s:focus-within{transform:translate(-3px,-3px);z-index:5}
+.pr-s:focus-within::before{box-shadow:var(--shadow-card-hover)}
+.pr-s:focus-within .pr-tuck{transform:translateX(324px) rotate(0deg)}
+.pr-s:focus-within .pr-tcap{opacity:1}
+@media (max-width:760px){
+  /* capture à plat sous le texte : élément de grille, son z-index -2 la cachait derrière le fond de la fiche (aussi dans le plateau) */
+  .pr-tuck{animation:none;z-index:0}
+  .pr-intro{margin-top:-6px;font-size:1.02rem}
+  .pr-s:focus-within{transform:none}
+  .pr-s:focus-within::before{box-shadow:none}
+  .pr-s:focus-within .pr-tuck{transform:none}
+}
+/* les captures portent width et height (place réservée au chargement) : la hauteur suit le format imposé par home.css */
+.pr-glass img{height:auto}
+/* « [ ↵ ] » ne se coupe pas au milieu dans la colonne de 96 px */
+.pr-kh{white-space:nowrap}
+
+/* Paliers intermédiaires (30/10/2026) : entre le téléphone (760) et 1240 px, la fiche ne garde plus 380 px pour la capture glissée.
+   961 à 1240 : numéro | texte | chiffres, capture posée à plat sous le texte et les chiffres.
+   761 à 960 : numéro | une colonne (texte, capture, chiffres), comme le téléphone mais avec le numéro à gauche. */
+@media (min-width:761px) and (max-width:1240px){
+  .pr-s{width:auto;grid-template-columns:80px minmax(0,1fr) minmax(220px,34%);gap:0 24px}
+  .pr-no{grid-column:1;grid-row:1 / span 3}
+  .pr-main{grid-column:2;grid-row:1}
+  .pr-side{grid-column:3;grid-row:1}
+  .pr-tuck,.pr-s:hover .pr-tuck,.pr-s.is-hover .pr-tuck,.pr-s:focus-within .pr-tuck{position:static;grid-column:2 / -1;grid-row:2;width:auto;max-width:520px;margin-top:22px;transform:none;z-index:0;animation:none}
+  .pr-tcap{opacity:1}
+  .pr-tuck-fan,.pr-s:hover .pr-tuck-fan,.pr-s.is-hover .pr-tuck-fan{max-width:none;height:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+  .pr-tk,.pr-tk0,.pr-tk1,.pr-tk2,.pr-tk3,.pr-s:hover .pr-tk0,.pr-s:hover .pr-tk1,.pr-s:hover .pr-tk2,.pr-s:hover .pr-tk3,.pr-s.is-hover .pr-tk0,.pr-s.is-hover .pr-tk1,.pr-s.is-hover .pr-tk2,.pr-s.is-hover .pr-tk3{position:static;width:auto;transform:none}
+  .pr-tkl{opacity:1}
+}
+@media (min-width:761px) and (max-width:960px){
+  .pr-s{grid-template-columns:72px minmax(0,1fr);gap:0 20px}
+  .pr-big{font-size:3.4rem}
+  .pr-side{grid-column:2;grid-row:3;border-left:0;padding-left:0;border-top:1px solid var(--rule);padding-top:14px;margin-top:22px}
+  .pr-tuck-fan,.pr-s:hover .pr-tuck-fan,.pr-s.is-hover .pr-tuck-fan{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+/* Légende de l'éventail (arbitrage 3A, 31/10/2026) : un seul « Fig. n » pour les quatre versions.
+   Ordinateur : sous la grille 2 × 2 que forme l'éventail au survol, visible au survol comme les autres légendes.
+   Tablette et téléphone : ligne pleine largeur sous les captures, toujours visible. */
+.pr-tuck-fan .pr-tcap{position:absolute;left:0;top:276px;margin:0;white-space:nowrap}
+@media (max-width:1240px){
+  .pr-tuck-fan .pr-tcap{position:static;grid-column:1 / -1;white-space:normal;opacity:1}
+}

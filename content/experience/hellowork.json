@@ -1,0 +1,24 @@
+{
+  "slug": "hellowork",
+  "order": 3,
+  "status": "past",
+  "company": "HelloWork",
+  "url": "https://www.hellowork.com",
+  "role": "Data Analyst · internship",
+  "period": {
+    "start": "2024-05",
+    "end": "2024-08"
+  },
+  "context": "French online recruitment and training platform (Télégramme group).",
+  "summary": "Rotated between the Sales Analysis and Web Analysis teams, on real commercial questions: SQL, Salesforce, BigQuery, Looker Studio.",
+  "highlights": [
+    {
+      "title": "Sales forecasts",
+      "text": "Analysed what drives the forecasts sales reps enter in Salesforce and correlated quotes with opportunity win rates, then turned the findings into recommendations for the sales team."
+    },
+    {
+      "title": "Web data you can trust",
+      "text": "Checked Piano Analytics data against server logs, fixed the filters and rebuilt the Looker Studio dashboards that track conversion and visits."
+    }
+  ]
+}

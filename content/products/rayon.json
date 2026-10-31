@@ -1,0 +1,102 @@
+{
+  "slug": "rayon",
+  "order": 3,
+  "status": "live",
+  "statusNote": "Data as of September 2026",
+  "year": "2026",
+  "name": "Rayon",
+  "oneLiner": "Market intelligence on European neobrokers: every launch, in every market, from public data.",
+  "origin": {
+    "builtToGetHired": true,
+    "company": "Trade Republic",
+    "role": "Product Growth Manager",
+    "outcome": "No reply"
+  },
+  "problem": "A product growth team preparing a launch in a new market wants to know what competitors shipped there, when, and how it landed. That knowledge is public, but scattered across sitemaps, archives, app stores and the local press of eighteen countries.",
+  "built": [
+    "Collection from public, authorized sources: sitemaps, web archives, App Store listings and local press feeds, each one checked against robots.txt.",
+    "An agent that extracts dated launch events, and a second one that writes sourced hypotheses (\"we think this worked because...\"), never a verdict.",
+    "Screens built for the job: a radar, market pages, a feature matrix and a \"prepare a launch\" view.",
+    "One engine, four branded tools: the same base re-skinned for Trade Republic, Scalable Capital, eToro and Revolut."
+  ],
+  "proof": [
+    "778 launches across 6 brokers and 18 markets",
+    "About $51 of AI for the whole base",
+    "4 branded versions from one engine"
+  ],
+  "figures": [
+    {
+      "value": "778",
+      "label": "launches · 6 brokers · 18 markets"
+    },
+    {
+      "value": "~$51",
+      "label": "of AI for the whole base"
+    },
+    {
+      "value": "4",
+      "label": "branded versions from one engine"
+    }
+  ],
+  "proofInFigures": [
+    0,
+    1,
+    2
+  ],
+  "stack": [
+    "Python",
+    "Claude (Batches API)",
+    "SQLite",
+    "Next.js",
+    "Vercel"
+  ],
+  "links": [
+    {
+      "label": "Trade Republic",
+      "href": "https://trade-republic.theodavid.com"
+    },
+    {
+      "label": "Scalable Capital",
+      "href": "https://scalable-capital.theodavid.com"
+    },
+    {
+      "label": "eToro",
+      "href": "https://etoro.theodavid.com"
+    },
+    {
+      "label": "Revolut",
+      "href": "https://revolut.theodavid.com"
+    }
+  ],
+  "images": [
+    {
+      "src": "/images/products/rayon-trade-republic.jpg",
+      "width": 1200,
+      "height": 750,
+      "alt": "Rayon, Trade Republic version: brands page comparing six brokers",
+      "caption": "Rayon, Trade Republic"
+    },
+    {
+      "src": "/images/products/rayon-scalable.jpg",
+      "width": 1200,
+      "height": 750,
+      "alt": "Rayon, Scalable Capital version: brands page comparing six brokers",
+      "caption": "Rayon, Scalable Capital"
+    },
+    {
+      "src": "/images/products/rayon-etoro.jpg",
+      "width": 1200,
+      "height": 750,
+      "alt": "Rayon, eToro version: brands page comparing six brokers",
+      "caption": "Rayon, eToro"
+    },
+    {
+      "src": "/images/products/rayon-revolut.jpg",
+      "width": 1200,
+      "height": 750,
+      "alt": "Rayon, Revolut version: brands page comparing six brokers",
+      "caption": "Rayon, Revolut"
+    }
+  ],
+  "imagesCaption": "Rayon, four branded versions"
+}
