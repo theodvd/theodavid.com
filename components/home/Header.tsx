@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import type { Content } from "@/lib/content";
 import ExploreLink from "@/components/astres/ExploreLink";
 import { AppareilLarge, AppareilVertical } from "@/components/home/Appareil";
+import Commandes from "@/components/home/Commandes";
 
 /**
  * En-tête V6 « Panneau de commande » (préfixe hd-), hors de main.pg :
@@ -57,6 +58,8 @@ export default function Header({ c }: { c: Content }) {
   const [first, ...rest] = p.name.split(" ");
   const status = `${p.availability} · ${p.founderLine}`;
   const [exploreFirst, ...exploreRest] = p.explore3d.label.split(" ");
+  // Ce que la molette PRODUCT fait défiler : nom, ordre et extrait de chaque produit publié.
+  const dial = c.products.map((x) => ({ slug: x.slug, index: x.index, name: x.name, excerpt: x.problemExcerpt }));
 
   return (
     <div className="hd td-header" id="top">
@@ -114,12 +117,14 @@ export default function Header({ c }: { c: Content }) {
 
         <div className="hd-plot td-plot td-big">
           <AppareilLarge labels={h.drawing} callout={p.availability} />
+          <Commandes kind="large" labels={h.controls} breaks={h.drawing.breaks} products={dial} />
           <ExploreLink href={p.explore3d.href} className="hd-3d hd-3d-l">
             <span className="hd-go">{p.explore3d.label}</span> <span aria-hidden="true">↗</span>
           </ExploreLink>
         </div>
         <div className="hd-plot td-plot td-small">
           <AppareilVertical labels={h.drawing} />
+          <Commandes kind="vertical" labels={h.controls} breaks={h.drawing.breaks} products={dial} />
           <ExploreLink href={p.explore3d.href} className="hd-3d hd-3d-s">
             <span className="hd-go">
               {exploreFirst}

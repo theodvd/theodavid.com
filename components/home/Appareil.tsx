@@ -10,6 +10,9 @@ import { useId } from "react";
  * as-xp (plaque), as-xc (organes), as-side (bouton latéral), as-notes.
  * Les mots du dessin viennent de content/ui.json (header.drawing) ; le renvoi
  * OPEN TO CONVERSATIONS reprend profile.availability.
+ * Points d'accroche des commandes (Commandes.tsx), sans effet au repos : hd-cap
+ * (capuchon de SHIP), hd-read (nom du produit à l'écran, vide), hd-n-* (feutre :
+ * cust, circle, breaks, btext, ship, stext, sketch).
  *
  * Exemple : <AppareilLarge labels={c.ui.header.drawing} callout="Open to conversations" />
  */
@@ -106,9 +109,10 @@ function Device({ gid, l }: { gid: string; l: AppareilLabels }) {
       </g></g>
       <circle className="td-blink a-recdot" cx="470" cy="325" r="2.6" />
       <text className="a-rec" x="478" y="328" style={F.mono} fontSize="7">{l.rec}</text>
+      <text className="a-rec hd-read" x="306" y="406" style={F.mono} fontSize="7" letterSpacing=".6" />
       <g className="td-ship"><circle className="a-shipbase" cx="346" cy="488" r="44" />
-      <circle className="a-ship" cx="346" cy="484" r="38" />
-      <text className="a-shiplabel" x="346" y="489" textAnchor="middle" style={F.display} fontSize="14" fontWeight="800" letterSpacing="1">{l.ship}</text></g>
+      <g className="hd-cap"><circle className="a-ship" cx="346" cy="484" r="38" />
+      <text className="a-shiplabel" x="346" y="489" textAnchor="middle" style={F.display} fontSize="14" fontWeight="800" letterSpacing="1">{l.ship}</text></g></g>
       <circle className="a-ledring" cx="506" cy="160" r="8" />
       <circle className="td-blink a-led" cx="506" cy="160" r="4.5" />
       </g></g>
@@ -138,20 +142,20 @@ export function AppareilLarge({ labels: l, callout }: { labels: AppareilLabels; 
       <path className="td-draw" pathLength="1" d="M58,168 C56,156 66,148 76,150 C86,152 88,164 82,172 C76,180 62,178 58,168 Z M44,204 C46,188 58,182 70,184 C82,186 92,194 92,206" />
       <path className="td-draw" pathLength="1" d="M98,160 C96,147 106,140 117,142 C128,144 131,157 124,165 C117,172 101,170 98,160 Z M86,200 C88,184 100,176 112,178 C124,180 134,188 134,202" />
       <path className="td-draw" pathLength="1" d="M140,170 C138,159 147,152 157,154 C166,156 168,168 162,175 C155,182 142,179 140,170 Z M130,208 C131,194 142,188 152,189 C163,190 171,198 171,210" />
-      <path className="td-draw td-d1" pathLength="1" d="M178,236 C214,214 254,212 292,222 M277,211 L293,222 L276,229" />
-      <path className="td-draw td-d3" pathLength="1" d="M618,438 C652,434 700,432 738,436 C742,460 742,488 738,512 C700,516 656,516 620,512 C616,488 615,462 618,438 Z M632,454 L664,454 M632,472 L716,470 M632,490 L700,490" />
+      <path className="td-draw td-d1 hd-n-cust" pathLength="1" d="M178,236 C214,214 254,212 292,222 M277,211 L293,222 L276,229" />
+      <path className="td-draw td-d3 hd-n-sketch" pathLength="1" d="M618,438 C652,434 700,432 738,436 C742,460 742,488 738,512 C700,516 656,516 620,512 C616,488 615,462 618,438 Z M632,454 L664,454 M632,472 L716,470 M632,490 L700,490" />
       </g>
       <g className="h-ember">
-      <path className="td-draw td-d1" pathLength="1" d="M348,346 C336,326 350,306 374,306 C398,306 410,324 402,344 C394,362 362,366 348,352 C342,344 344,334 352,326" />
-      <path className="td-draw td-d2" pathLength="1" d="M168,392 C220,384 286,372 336,358 M321,352 L338,357 L326,370" />
-      <path className="td-draw td-d3" pathLength="1" d="M386,520 C420,578 520,580 608,486 M590,488 L609,485 L606,503" />
+      <path className="td-draw td-d1 hd-n-circle" pathLength="1" d="M348,346 C336,326 350,306 374,306 C398,306 410,324 402,344 C394,362 362,366 348,352 C342,344 344,334 352,326" />
+      <path className="td-draw td-d2 hd-n-breaks" pathLength="1" d="M168,392 C220,384 286,372 336,358 M321,352 L338,357 L326,370" />
+      <path className="td-draw td-d3 hd-n-ship" pathLength="1" d="M386,520 C420,578 520,580 608,486 M590,488 L609,485 L606,503" />
       </g>
       <g style={F.hand}>
       <text className="td-fade h-t-ink" x="40" y="250" fontSize="25" fontWeight="500">{l.customers}</text>
-      <text className="td-fade td-f2 h-t-ember" x="30" y="400" fontSize="21">{l.breaks[0]}</text>
-      <text className="td-fade td-f2 h-t-ember" x="30" y="427" fontSize="21">{l.breaks[1]}</text>
-      <text className="td-fade td-f3 h-t-ember" x="590" y="390" fontSize="21">{l.ship2[0]}</text>
-      <text className="td-fade td-f3 h-t-ember" x="590" y="416" fontSize="21">{l.ship2[1]}</text>
+      <text className="td-fade td-f2 h-t-ember hd-n-btext" x="30" y="400" fontSize="21">{l.breaks[0]}</text>
+      <text className="td-fade td-f2 h-t-ember hd-n-btext" x="30" y="427" fontSize="21">{l.breaks[1]}</text>
+      <text className="td-fade td-f3 h-t-ember hd-n-stext" x="590" y="390" fontSize="21">{l.ship2[0]}</text>
+      <text className="td-fade td-f3 h-t-ember hd-n-stext" x="590" y="416" fontSize="21">{l.ship2[1]}</text>
       <text className="td-fade td-f3 h-t-ink" x="634" y="548" fontSize="25" fontWeight="500">{l.product}</text>
       </g>
       </g>
@@ -171,20 +175,20 @@ export function AppareilVertical({ labels: l }: { labels: AppareilLabels }) {
         <g className="h-ink-sm">
         <path className="td-draw" pathLength="1" d="M20,22 C19,14 25,9 31,10 C38,11 39,19 35,24 C31,29 22,28 20,22 Z M12,46 C13,36 21,32 28,33 C36,34 42,39 42,48" />
         <path className="td-draw" pathLength="1" d="M46,18 C45,10 52,6 58,7 C65,8 66,16 62,21 C57,26 48,25 46,18 Z M38,44 C39,34 47,30 54,31 C62,32 68,37 68,46" />
-        <path className="td-draw td-d1" pathLength="1" d="M50,82 C58,140 80,190 116,208 M101,207 L117,209 L109,195" />
-        <path className="td-draw td-d3" pathLength="1" d="M282,420 C302,418 334,418 352,420 C354,436 354,452 352,466 C332,468 302,468 283,466 C281,452 281,436 282,420 Z M292,432 L310,432 M292,444 L340,443 M292,456 L328,456" />
+        <path className="td-draw td-d1 hd-n-cust" pathLength="1" d="M50,82 C58,140 80,190 116,208 M101,207 L117,209 L109,195" />
+        <path className="td-draw td-d3 hd-n-sketch" pathLength="1" d="M282,420 C302,418 334,418 352,420 C354,436 354,452 352,466 C332,468 302,468 283,466 C281,452 281,436 282,420 Z M292,432 L310,432 M292,444 L340,443 M292,456 L328,456" />
         </g>
         <g className="h-ember-sm">
-        <path className="td-draw td-d1" pathLength="1" d="M151,288 C142,276 150,262 164,262 C178,262 186,272 182,284 C177,296 158,298 151,290 C147,285 148,278 153,273" />
-        <path className="td-draw td-d2" pathLength="1" d="M300,58 C324,150 320,262 192,282 M206,273 L191,282 L205,291" />
-        <path className="td-draw td-d3" pathLength="1" d="M166,390 C186,440 230,452 276,442 M262,434 L277,442 L264,452" />
+        <path className="td-draw td-d1 hd-n-circle" pathLength="1" d="M151,288 C142,276 150,262 164,262 C178,262 186,272 182,284 C177,296 158,298 151,290 C147,285 148,278 153,273" />
+        <path className="td-draw td-d2 hd-n-breaks" pathLength="1" d="M300,58 C324,150 320,262 192,282 M206,273 L191,282 L205,291" />
+        <path className="td-draw td-d3 hd-n-ship" pathLength="1" d="M166,390 C186,440 230,452 276,442 M262,434 L277,442 L264,452" />
         </g>
         <g style={F.hand}>
         <text className="td-fade h-t-ink" x="8" y="70" fontSize="18" fontWeight="500">{l.customers}</text>
-        <text className="td-fade td-f2 h-t-ember" x="226" y="24" fontSize="15">{l.breaks[0]}</text>
-        <text className="td-fade td-f2 h-t-ember" x="226" y="43" fontSize="15">{l.breaks[1]}</text>
-        <text className="td-fade td-f3 h-t-ember" x="8" y="458" fontSize="15">{l.ship2[0]}</text>
-        <text className="td-fade td-f3 h-t-ember" x="8" y="477" fontSize="15">{l.ship2[1]}</text>
+        <text className="td-fade td-f2 h-t-ember hd-n-btext" x="226" y="24" fontSize="15">{l.breaks[0]}</text>
+        <text className="td-fade td-f2 h-t-ember hd-n-btext" x="226" y="43" fontSize="15">{l.breaks[1]}</text>
+        <text className="td-fade td-f3 h-t-ember hd-n-stext" x="8" y="458" fontSize="15">{l.ship2[0]}</text>
+        <text className="td-fade td-f3 h-t-ember hd-n-stext" x="8" y="477" fontSize="15">{l.ship2[1]}</text>
         <text className="td-fade td-f3 h-t-ink" x="288" y="488" fontSize="16" fontWeight="500">{l.product}</text>
         </g>
       </g>
