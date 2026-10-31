@@ -23,6 +23,12 @@ const nextConfig = {
     ];
   },
   reactStrictMode: true,
+  // Le texte du site est lu dans content/ au moment du rendu (lib/content.ts,
+  // chemin calculé) : le traçage de Vercel ne le voit pas. Sans cette ligne,
+  // une route rendue à la visite (la 404) n'a pas content/ et rend une page vide.
+  outputFileTracingIncludes: {
+    "/**": ["./content/**/*.json"],
+  },
   // Verification builds (NEXT_DIST_DIR=.next-verify) use a separate output
   // dir so they never corrupt the dev server's .next cache. Vercel and
   // `npm run dev` use the default.
