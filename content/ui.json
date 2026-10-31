@@ -151,6 +151,17 @@
         "ship the tool",
         "that fixes it"
       ]
+    },
+    "controls": {
+      "customers": "Customers dial",
+      "product": "Product dial",
+      "step": "step {n} of {total}",
+      "ship": "Ship",
+      "shipProduct": "Ship {name}, then open its sheet",
+      "sound": "Sound",
+      "productSaid": "{name}: {excerpt}",
+      "shipped": "Shipped.",
+      "opening": "Shipped. Opening the {name} sheet."
     }
   },
   "notFound": {

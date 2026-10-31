@@ -14,6 +14,7 @@
   },
   "disclaimer": "Independent project built from public sources. Not affiliated with Harmattan AI.",
   "problem": "A product team in hypergrowth has no time to watch thirty competitors, their hiring, their contracts and the press. A list of signals doesn't help a busy manager: they need to know what to do about it.",
+  "problemExcerpt": ["no time to watch", "thirty competitors"],
   "built": [
     "Collection from public sources only: the job boards of 23 companies, EU, French and UK public tenders, and ten defense news feeds.",
     "Action cards instead of an inventory: what happened, why it matters to the team, what to do, and who should own it.",
