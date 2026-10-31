@@ -68,6 +68,28 @@ function screenCopy(svg: SVGSVGElement) {
   return `<svg viewBox="296 314 208 98" preserveAspectRatio="none" aria-hidden="true">${html}</svg>`;
 }
 
+/** Copie des annotations au feutre du dessin, calée sur lui, pour le calque (au-dessus du volume). */
+function notesCopy(svg: SVGSVGElement) {
+  const r = svg.getBoundingClientRect();
+  if (!r.width) return null;
+  const copy = svg.cloneNode(true) as SVGSVGElement;
+  // seules les annotations au feutre sont dessinées au-dessus de l'appareil ; la notice reste dessous, dans la page
+  copy.querySelectorAll(`${PARTS}, .as-tech, .t-line, .t-head, .t-text`).forEach((n) => n.remove());
+  copy.removeAttribute("role");
+  copy.removeAttribute("aria-label");
+  // même boîte que l'original (plafond de hauteur compris) : le viewBox refait le même centrage
+  copy.setAttribute("style", "display:block;width:100%;height:100%;overflow:visible");
+  let html = copy.outerHTML;
+  svg.querySelectorAll("[id]").forEach((n) => {
+    html = html.split(`id="${n.id}"`).join(`id="${n.id}-pass"`).split(`#${n.id})`).join(`#${n.id}-pass)`);
+  });
+  const box = document.createElement("div");
+  box.className = "td-pass-notes";
+  Object.assign(box.style, { left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px` });
+  box.innerHTML = html;
+  return box;
+}
+
 type Stage = { arrive: number; ready: Promise<void>; at: (t: number) => void; done: () => void };
 
 /**
@@ -87,18 +109,25 @@ function stageFor(root: HTMLElement, el: HTMLElement | null, drawing: ReturnType
   ov.append(veil);
   root.appendChild(ov);
 
+  // Les annotations passent sur l'appareil (cercle du pic, pointes des flèches) : une copie
+  // posée au-dessus du volume s'efface à leur place ; la notice, dessous, s'efface dans la page.
   const notes: (HTMLElement | SVGElement)[] = drawing ? Array.from(drawing.host.querySelectorAll<SVGElement>(NOTES)) : [];
-  if (el && el.getClientRects().length) notes.push(el);
+  const link = el && el.getClientRects().length ? el : null;
+  const copy = drawing ? notesCopy(drawing.svg) : null;
+  if (copy) ov.insertBefore(copy, veil);
   const parts = drawing ? Array.from(drawing.svg.querySelectorAll<SVGElement>(PARTS)) : [];
   const fadeNotes = (t: number) => {
     const o = String(1 - steps(3)(seg(t, 0, 360)));
-    notes.forEach((n) => (n.style.opacity = o));
+    if (link) link.style.opacity = o;
+    if (copy) copy.style.opacity = o;
+    notes.forEach((n) => (n.style.opacity = copy && t > 0 && n.matches(".as-notes") ? "0" : o));
   };
   const showParts = (on: boolean) => parts.forEach((p) => (on ? p.style.removeProperty("visibility") : (p.style.visibility = "hidden")));
   let dispose = () => {};
   const done = () => {
     dispose();
     notes.forEach((n) => n.style.removeProperty("opacity"));
+    link?.style.removeProperty("opacity");
     showParts(true);
     ov.remove();
   };
@@ -119,7 +148,7 @@ function stageFor(root: HTMLElement, el: HTMLElement | null, drawing: ReturnType
         const prep = await m.prepare(drawing.svg);
         const canvas = document.createElement("canvas");
         canvas.className = "td-pass-gl";
-        ov.insertBefore(canvas, veil);
+        ov.insertBefore(canvas, copy ?? veil);
         const flight = prep ? m.fly(drawing.svg, prep, canvas) : null;
         if (!flight) {
           canvas.remove();
@@ -142,7 +171,7 @@ function stageFor(root: HTMLElement, el: HTMLElement | null, drawing: ReturnType
     const glass = document.createElement("div");
     glass.className = "td-pass-glass";
     glass.innerHTML = screenCopy(drawing.svg);
-    ov.insertBefore(glass, veil);
+    ov.insertBefore(glass, copy ?? veil);
     const r0 = (8 * g.width) / 208;
     film = (t) => {
       const p = steps(4)(seg(t, C.grow[0], C.grow[1]));

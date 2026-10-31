@@ -17,6 +17,10 @@
 /* C : la vitre du dessin grandit jusqu'à l'écran, sa vague s'éteint */
 .td-pass-glass{position:fixed;overflow:hidden;background:var(--device-glass);visibility:hidden}
 .td-pass-glass svg{position:absolute;inset:0;width:100%;height:100%;opacity:var(--wave,1)}
+/* copie des annotations au-dessus du volume, dans leur état final (tracés finis) */
+.td-pass-notes{position:fixed}
+.td-pass-notes svg{display:block;width:100%;height:100%;overflow:visible}
+.td-pass-notes *{animation-delay:-10s !important}
 /* retour depuis /astres : la home revient à son état final, sans rejouer son entrée (animations finies d'avance, les continues gardent leur cycle) */
 html.td-return *,html.td-return *::before,html.td-return *::after{animation-delay:-10s !important}
 @media (prefers-reduced-motion:reduce){.td-pass{display:none}}
