@@ -1,0 +1,25 @@
+/* Navigation de la home (31/10/2026) : barre collante, arrivée sous la barre, section en cours.
+   Le mouvement est dans components/home/NavMotion.tsx. */
+
+/* Hauteur de la barre (nav 49 + règle 9, 46 + 9 au téléphone) et écart titre / barre à l'arrivée. */
+:root{--td-bar-h:58px;--td-arrive:28px}
+/* au téléphone, l'arrivée tombe pile sur la place du titre collant (fix-pg.css : 12 px de rembourrage haut) */
+@media (max-width:760px){:root{--td-bar-h:55px;--td-arrive:12px}}
+
+/* Barre collante : nav et règle graduée restent en haut ; fond de la couverture, calque compris en sombre. */
+.hd.hd-bar{position:sticky;top:0;z-index:20;display:block;min-height:0;background-color:var(--ground);background-image:var(--td-ground-pattern);background-size:var(--td-ground-size)}
+/* le bloc d'en-tête garde sa hauteur d'écran et la phase de sa maille, barre déduite */
+.hd.td-header{min-height:calc(var(--layout-header-min) - var(--td-bar-h));background-position:0 calc(-1 * var(--td-bar-h))}
+/* sur ordinateur, barre comprise, l'en-tête ne dépasse pas l'écran (fix-hd.css, une section par écran) */
+@media (min-width:761px){.hd.td-header{min-height:calc(min(var(--layout-header-min),100svh) - var(--td-bar-h))}}
+
+/* Arrivée : le titre de section se pose à --td-arrive sous la barre (marge haute de section : 88 px, 56 au téléphone). */
+.pg-sec{scroll-margin-top:calc(var(--td-bar-h) + var(--td-arrive) - 88px)}
+@media (max-width:760px){.pg-sec{scroll-margin-top:calc(var(--td-bar-h) + var(--td-arrive) - 56px)}}
+/* au téléphone, le titre de section collant (fix-pg.css) se range sous la barre au lieu de passer dessous */
+@media (max-width:760px){.pg-head{top:var(--td-bar-h)}}
+/* le focus posé sur la section d'arrivée sert au clavier et aux lecteurs d'écran, pas à l'œil */
+.pg-sec:focus{outline:none}
+
+/* Section en cours (aria-current) : libellé souligné à l'encre, comme la nav des pages directes (.v6-nl.is-here). */
+.hd-nl[aria-current] .td-navl,.hd-panel a[aria-current] span:last-child{text-decoration:underline;text-decoration-thickness:var(--stroke-nav-underline);text-underline-offset:5px;text-decoration-color:var(--ink)}

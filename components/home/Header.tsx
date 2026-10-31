@@ -62,111 +62,117 @@ export default function Header({ c }: { c: Content }) {
   const dial = c.products.map((x) => ({ slug: x.slug, index: x.index, name: x.name, excerpt: x.problemExcerpt }));
 
   return (
-    <div className="hd td-header" id="top">
-      <header className="td-nav hd-nav">
-        <a className="hd-logo" href="#top">
-          <span>{p.name}</span>
-        </a>
-        <nav aria-label={h.navLabel} className="hd-links">
-          {NAV.map((id, i) => (
-            <a className="hd-nl" href={`#${id}`} key={id}>
-              <span className="hd-num">{pad(i + 1)}</span>
-              <span className="td-navl hd-navl">{ui.sections[id]}</span>
-            </a>
-          ))}
-        </nav>
-        <details className="hd-menu">
-          <summary>{ui.nav.menu}</summary>
-          <nav aria-label={h.navLabel} className="hd-panel">
+    <>
+      {/* Barre collante (nav et règle graduée), sortie du bloc d'en-tête pour rester en haut
+        pendant tout le défilement ; NavMotion y pose la section en cours. */}
+      <div className="hd hd-bar">
+        <header className="td-nav hd-nav">
+          <a className="hd-logo" href="#top">
+            <span>{p.name}</span>
+          </a>
+          <nav aria-label={h.navLabel} className="hd-links">
             {NAV.map((id, i) => (
-              <a href={`#${id}`} key={id}>
+              <a className="hd-nl" href={`#${id}`} key={id}>
                 <span className="hd-num">{pad(i + 1)}</span>
-                <span>{ui.sections[id]}</span>
+                <span className="td-navl hd-navl">{ui.sections[id]}</span>
               </a>
             ))}
-            <ExploreLink href={p.explore3d.href} className="hd-panel3d">
-              <span>{p.explore3d.label}</span>
-              <span aria-hidden="true">↗</span>
-            </ExploreLink>
           </nav>
-        </details>
-      </header>
-      <div className="td-ruler hd-ruler" aria-hidden="true" />
-
-      <div className="hd-main">
-        <div className="hd-left">
-          <p className="hd-role">
-            {p.roles.map((r, i) => (
-              <span className={i ? "hd-next" : undefined} key={i}>
-                {i ? " · " : ""}
-                {r.title} {h.roleAt}
-                {r.org}
-                {r.from ? ` ${h.roleFrom} ${r.from}` : ""}
-              </span>
-            ))}
-          </p>
-          <h1 className="hd-name">
-            <span className="td-first">{first}</span>
-            <span>{rest.join(" ")}</span>
-          </h1>
-          <p className="hd-meta">
-            <span aria-hidden="true" className="td-blink hd-led" />
-            <span>{status}</span>
-          </p>
-        </div>
-
-        <div className="hd-plot td-plot td-big">
-          <AppareilLarge labels={h.drawing} callout={p.availability} />
-          <Commandes kind="large" labels={h.controls} breaks={h.drawing.breaks} products={dial} />
-          <ExploreLink href={p.explore3d.href} className="hd-3d hd-3d-l">
-            <span className="hd-go">{p.explore3d.label}</span> <span aria-hidden="true">↗</span>
-          </ExploreLink>
-        </div>
-        <div className="hd-plot td-plot td-small">
-          <AppareilVertical labels={h.drawing} />
-          <Commandes kind="vertical" labels={h.controls} breaks={h.drawing.breaks} products={dial} />
-          <ExploreLink href={p.explore3d.href} className="hd-3d hd-3d-s">
-            <span className="hd-go">
-              {exploreFirst}
-              <br />
-              {exploreRest.join(" ")}
-            </span>{" "}
-            <span aria-hidden="true">↗</span>
-          </ExploreLink>
-        </div>
-
-        <div className="hd-right">
-          <p className="hd-hook">{p.tagline}</p>
-          <div className="hd-keys">
-            <a className="td-key td-key-primary" href={p.contact.primary.href}>
-              <span>{p.contact.primary.label}</span>
-              <span className="hd-hint" aria-hidden="true">
-                {h.hintPrimary}
-              </span>
-            </a>
-            {p.contact.secondary && (
-              <a className="td-key td-key-secondary" href={p.contact.secondary.href}>
-                <span>{p.contact.secondary.label}</span>
-                <span className="hd-hint" aria-hidden="true">
-                  {h.hintSecondary}
-                </span>
-              </a>
-            )}
-          </div>
-        </div>
+          <details className="hd-menu">
+            <summary>{ui.nav.menu}</summary>
+            <nav aria-label={h.navLabel} className="hd-panel">
+              {NAV.map((id, i) => (
+                <a href={`#${id}`} key={id}>
+                  <span className="hd-num">{pad(i + 1)}</span>
+                  <span>{ui.sections[id]}</span>
+                </a>
+              ))}
+              <ExploreLink href={p.explore3d.href} className="hd-panel3d">
+                <span>{p.explore3d.label}</span>
+                <span aria-hidden="true">↗</span>
+              </ExploreLink>
+            </nav>
+          </details>
+        </header>
+        <div className="td-ruler hd-ruler" aria-hidden="true" />
       </div>
 
-      <dl className="hd-dials" data-reveal="0.8">
-        {p.counters.map((k) => (
-          <div className="hd-dial" key={k.label}>
-            <dt>{k.label}</dt>
-            <dd>
-              <span className="hd-sr">{k.value}</span>
-              <Drum value={k.value} />
-            </dd>
+      <div className="hd td-header" id="top">
+        <div className="hd-main">
+          <div className="hd-left">
+            <p className="hd-role">
+              {p.roles.map((r, i) => (
+                <span className={i ? "hd-next" : undefined} key={i}>
+                  {i ? " · " : ""}
+                  {r.title} {h.roleAt}
+                  {r.org}
+                  {r.from ? ` ${h.roleFrom} ${r.from}` : ""}
+                </span>
+              ))}
+            </p>
+            <h1 className="hd-name">
+              <span className="td-first">{first}</span>
+              <span>{rest.join(" ")}</span>
+            </h1>
+            <p className="hd-meta">
+              <span aria-hidden="true" className="td-blink hd-led" />
+              <span>{status}</span>
+            </p>
           </div>
-        ))}
-      </dl>
-    </div>
+
+          <div className="hd-plot td-plot td-big">
+            <AppareilLarge labels={h.drawing} callout={p.availability} />
+            <Commandes kind="large" labels={h.controls} breaks={h.drawing.breaks} products={dial} />
+            <ExploreLink href={p.explore3d.href} className="hd-3d hd-3d-l">
+              <span className="hd-go">{p.explore3d.label}</span> <span aria-hidden="true">↗</span>
+            </ExploreLink>
+          </div>
+          <div className="hd-plot td-plot td-small">
+            <AppareilVertical labels={h.drawing} />
+            <Commandes kind="vertical" labels={h.controls} breaks={h.drawing.breaks} products={dial} />
+            <ExploreLink href={p.explore3d.href} className="hd-3d hd-3d-s">
+              <span className="hd-go">
+                {exploreFirst}
+                <br />
+                {exploreRest.join(" ")}
+              </span>{" "}
+              <span aria-hidden="true">↗</span>
+            </ExploreLink>
+          </div>
+
+          <div className="hd-right">
+            <p className="hd-hook">{p.tagline}</p>
+            <div className="hd-keys">
+              <a className="td-key td-key-primary" href={p.contact.primary.href}>
+                <span>{p.contact.primary.label}</span>
+                <span className="hd-hint" aria-hidden="true">
+                  {h.hintPrimary}
+                </span>
+              </a>
+              {p.contact.secondary && (
+                <a className="td-key td-key-secondary" href={p.contact.secondary.href}>
+                  <span>{p.contact.secondary.label}</span>
+                  <span className="hd-hint" aria-hidden="true">
+                    {h.hintSecondary}
+                  </span>
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <dl className="hd-dials" data-reveal="0.8">
+          {p.counters.map((k) => (
+            <div className="hd-dial" key={k.label}>
+              <dt>{k.label}</dt>
+              <dd>
+                <span className="hd-sr">{k.value}</span>
+                <Drum value={k.value} />
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </>
   );
 }
