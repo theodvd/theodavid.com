@@ -10,6 +10,8 @@ import type { Content, Image, Venture } from "@/lib/content";
  * `founderLine`. Jusqu'à 3 ventures sur une volée ; à partir de 4, une
  * seconde volée repart dessous. Les figures suivent la numérotation commune
  * de la page, après celles des produits (lib/content.ts, `figures`).
+ * « What I learned » et « How far it went » se replient sur leur étiquette
+ * (<details>, sans script) pour que l'escalier tienne dans un écran.
  */
 
 type Ui = Content["ui"];
@@ -51,6 +53,16 @@ function periodOf(v: Venture, ui: Ui) {
     return `${v.period.start} ${ui.founder.periodTo} ${v.period.end ?? ui.founder.present}`;
   }
   return v.year ?? "";
+}
+
+/** En-tête d'un repli : l'étiquette mono et le signe d'ouverture dessiné. */
+function Fold({ label }: { label: string }) {
+  return (
+    <summary className="td-sum">
+      <span className="fo-lab">{label}</span>
+      <span className="td-plus" aria-hidden="true" />
+    </summary>
+  );
 }
 
 /** Capture dans son cadre d'écran à deux coins de repère. */
@@ -129,8 +141,8 @@ function FirstSheet({ v, ui, fig0 }: { v: Venture; ui: Ui; fig0: number }) {
           </div>
         )}
         {v.lessons && v.lessons.length > 0 && (
-          <>
-            <span className="fo-lab">{ui.founder.learned}</span>
+          <details className="fo-hd">
+            <Fold label={ui.founder.learned} />
             <ol className="fo-ls">
               {v.lessons.map((l, i) => {
                 const { head, rest } = splitLesson(l);
@@ -146,7 +158,7 @@ function FirstSheet({ v, ui, fig0 }: { v: Venture; ui: Ui; fig0: number }) {
                 );
               })}
             </ol>
-          </>
+          </details>
         )}
       </div>
       {link && (
@@ -181,20 +193,20 @@ function Sheet({ v, ui, fig0 }: { v: Venture; ui: Ui; fig0: number }) {
         {img && <Shot img={img} fig={figs()} ui={ui} dims />}
         <p className="fo-body">{v.story}</p>
         {(v.wentAsFar || v.learned) && (
-          <dl className="fo-dl">
+          <div className="fo-dl">
             {v.wentAsFar && (
-              <div>
-                <dt className="fo-lab">{ui.founder.howFar}</dt>
-                <dd>{v.wentAsFar}</dd>
-              </div>
+              <details className="fo-hd">
+                <Fold label={ui.founder.howFar} />
+                <p className="fo-dd">{v.wentAsFar}</p>
+              </details>
             )}
             {v.learned && (
-              <div>
-                <dt className="fo-lab">{ui.founder.learned}</dt>
-                <dd>{withDecision(v.learned, v.decision)}</dd>
-              </div>
+              <details className="fo-hd">
+                <Fold label={ui.founder.learned} />
+                <p className="fo-dd">{withDecision(v.learned, v.decision)}</p>
+              </details>
             )}
-          </dl>
+          </div>
         )}
       </div>
       {link && (

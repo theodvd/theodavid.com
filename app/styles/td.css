@@ -360,3 +360,11 @@ html.js [data-reveal]:not(.is-in),html.js [data-reveal]:not(.is-in) *{animation-
 .td-stamp>div>span:last-child{white-space:normal;text-wrap:balance;overflow-wrap:normal}
 .td-stamp>div>span:first-child{font-size:clamp(1.05rem,.7rem + 1.1vw,1.55rem)}
 .td-stamp.is-sm>div>span:first-child{font-size:clamp(.9rem,.7rem + .5vw,1.05rem)}
+
+/* Replis (31/10/2026, une section par écran) : en-tête de <details> sans marqueur natif, signe d'ouverture dessiné (deux traits, pas un caractère) qui pivote en croix une fois ouvert. */
+.td-sum{list-style:none;cursor:pointer}
+.td-sum::-webkit-details-marker{display:none}
+.td-sum:focus-visible{outline:var(--stroke-focus) solid var(--signal);outline-offset:3px}
+.td-plus{flex:none;display:inline-block;width:11px;height:11px;color:var(--ink-muted);background:linear-gradient(currentColor,currentColor) center/100% 1.5px no-repeat,linear-gradient(currentColor,currentColor) center/1.5px 100% no-repeat;transition:transform var(--dur-key) var(--ease-key)}
+details[open]>.td-sum .td-plus{transform:rotate(45deg)}
+.td-sum:hover .td-plus{color:var(--ink)}

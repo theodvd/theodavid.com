@@ -1,0 +1,6 @@
+/* Retouches communes aux en-têtes de section (préfixe pg-) par rapport à home.css, posées après elle. */
+
+/* Une section par écran (31/10/2026) · au téléphone, le titre de section reste collé en haut pendant sa lecture : on sait toujours où on est. */
+@media (max-width:760px){
+  .pg-head{position:sticky;top:0;z-index:6;background-color:var(--ground);padding-top:12px;margin-top:-12px}
+}
