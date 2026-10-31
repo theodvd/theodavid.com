@@ -7,7 +7,10 @@ import type { Content, Experience as Entry, Highlight, Ui } from "@/lib/content"
  * (règles génériques dans fix-ex.css). Onglet `current` coché au chargement.
  * Chaque panneau s'ouvre sur son chiffre clé ; une entrée sans chiffre (à
  * venir) montre sa date de début en contour creux. Les entrées Earlier ont un
- * intercalaire réduit et un panneau sobre. Au téléphone, fiches empilées.
+ * intercalaire réduit et un panneau sobre. Les réalisations se replient sur
+ * leur numéro et leur titre ; un chiffre secondaire s'affiche sur la ligne de
+ * sa réalisation. Au téléphone, fiches empilées : celle de l'onglet coché est
+ * ouverte, les autres repliées sur leur tête (second label du même radio).
  */
 
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -83,7 +86,7 @@ function Tab({ e, name, checked, t }: { e: Entry; name: string; checked: boolean
   const key = e.keyFigure ? split(e.keyFigure) : null;
   return (
     <label className={e.isEarlier ? "ex-tab is-sm" : "ex-tab"}>
-      <input type="radio" name={name} value={e.slug} defaultChecked={checked} />
+      <input type="radio" name={name} id={`${name}-${e.slug}`} value={e.slug} defaultChecked={checked} />
       <span className="ex-tco">
         <span className="ex-tname">{e.company}</span>
       </span>
@@ -110,10 +113,15 @@ function Tab({ e, name, checked, t }: { e: Entry; name: string; checked: boolean
   );
 }
 
-function Panel({ e, t }: { e: Entry; t: Ui["experience"] }) {
+function Panel({ e, t, rid }: { e: Entry; t: Ui["experience"]; rid: string }) {
   const key = e.keyFigure ? split(e.keyFigure) : null;
+  const figAt = new Map(e.figures.map((f) => [f.n, split(f)]));
   return (
     <article className={e.isEarlier ? "ex-panel is-sm" : "ex-panel"} data-co={e.slug}>
+      {/* téléphone : toute la tête d'une fiche repliée coche son onglet (le radio garde le clavier) */}
+      <label className="ex-open" htmlFor={rid} aria-hidden="true">
+        <span className="td-plus" />
+      </label>
       {e.isEarlier && <p className="ex-kick">{t.earlier}</p>}
       <div className="ex-top">
         <div>
@@ -166,23 +174,6 @@ function Panel({ e, t }: { e: Entry; t: Ui["experience"] }) {
         </div>
       )}
 
-      {!e.isEarlier && e.figures.length > 0 && (
-        <ul className="ex-figs" aria-label={t.otherFigures}>
-          {e.figures.map((f) => {
-            const s = split(f);
-            return (
-              <li className="ex-fig" key={f.n}>
-                <b>{s.figure}</b>
-                <span className="ex-cap">{s.label}</span>
-                <span className="ex-fref">
-                  {pad(f.n)} · {f.title}
-                </span>
-              </li>
-            );
-          })}
-        </ul>
-      )}
-
       <div className="ex-pair">
         <p className="ex-ctx">{e.context}</p>
         <p className="ex-sum">{e.summary}</p>
@@ -192,29 +183,43 @@ function Panel({ e, t }: { e: Entry; t: Ui["experience"] }) {
         <ol className="ex-hls">
           {e.highlights.map((h, i) => (
             <li className={h.metric ? "ex-hl has-fig" : "ex-hl"} key={i}>
-              <span className="ex-idx" aria-hidden="true">
-                {pad(i + 1)}
-              </span>
-              <h4 className="ex-hlt">{h.title}</h4>
-              <p className="ex-hlx">{h.text}</p>
+              <details className="ex-hd">
+                <summary className="td-sum">
+                  <span className="ex-idx" aria-hidden="true">
+                    {pad(i + 1)}
+                  </span>
+                  <h4 className="ex-hlt">{h.title}</h4>
+                  {figAt.has(i + 1) && (
+                    <span className="ex-hfig">
+                      <b>{figAt.get(i + 1)!.figure}</b>
+                      <span className="ex-cap">{figAt.get(i + 1)!.label}</span>
+                    </span>
+                  )}
+                  <span className="td-plus" aria-hidden="true" />
+                </summary>
+                <p className="ex-hlx">{h.text}</p>
+              </details>
             </li>
           ))}
         </ol>
       )}
 
-      {e.recognition && (
-        <div className="ex-rec">
-          <span className="ex-cap">{t.recognition}</span>
-          <p>{e.recognition}</p>
+      {(e.recognition || e.url) && (
+        <div className="ex-foot">
+          {e.recognition && (
+            <div className="ex-rec">
+              <span className="ex-cap">{t.recognition}</span>
+              <p>{e.recognition}</p>
+            </div>
+          )}
+          {e.url && (
+            <p className="ex-link">
+              <a className="td-link" href={e.url}>
+                {host(e.url)} <span aria-hidden="true">↗</span>
+              </a>
+            </p>
+          )}
         </div>
-      )}
-
-      {e.url && (
-        <p className="ex-link">
-          <a className="td-link" href={e.url}>
-            {host(e.url)} <span aria-hidden="true">↗</span>
-          </a>
-        </p>
       )}
     </article>
   );
@@ -253,7 +258,7 @@ export default function Experience({ c }: { c: Content }) {
           </ul>
           <div className="ex-panels">
             {all.map((e) => (
-              <Panel e={e} t={t} key={e.slug} />
+              <Panel e={e} t={t} rid={`${name}-${e.slug}`} key={e.slug} />
             ))}
           </div>
         </div>

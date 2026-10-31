@@ -23,3 +23,91 @@
   .ex-tabs{grid-template-columns:260px minmax(0,1fr)}
   .ex-pair{grid-template-columns:minmax(0,1fr);gap:12px}
 }
+
+/* Une section par écran (31/10/2026) · le panneau tient dans la hauteur d'un écran de portable.
+   Chiffre géant plafonné aussi par la hauteur d'écran, respirations du panneau resserrées. */
+@media (min-width:761px){
+  .ex-panel{padding-top:24px;padding-bottom:28px}
+  .ex-giant{font-size:clamp(5rem,min(13vw,15svh),12.5rem)}
+  .ex-hero{padding:18px 0}
+  .ex-pair{margin-top:18px}
+  .ex-hls{margin-top:18px}
+}
+/* Réalisations repliées : numéro, titre et chiffre éventuel visibles, description à l'ouverture (le bandeau de chiffres n'existe plus) */
+.ex-hl{display:block;padding:0}
+.ex-hd>summary{display:grid;grid-template-columns:44px minmax(0,1fr) auto 11px;gap:4px 24px;align-items:baseline;padding:13px 0}
+.ex-hd .ex-hfig{grid-column:3}
+.ex-hd .td-plus{grid-column:4;align-self:center}
+.ex-hd>summary:hover .ex-hlt{text-decoration:underline;text-decoration-color:var(--signal);text-decoration-thickness:2px;text-underline-offset:4px}
+.ex-hd .ex-hlx{padding:0 40px 16px 68px}
+.ex-hfig{display:flex;align-items:baseline;gap:8px;justify-self:end;text-align:right}
+.ex-hfig b{font-family:var(--font-display);font-stretch:var(--stretch-cond);font-size:1.5rem;font-weight:800;line-height:.9;letter-spacing:-.01em;white-space:nowrap}
+.ex-hfig .ex-cap{white-space:nowrap}
+/* Recognition et lien sur une même ligne */
+.ex-foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:10px 24px;margin-top:18px}
+.ex-foot .ex-rec,.ex-foot .ex-link{margin:0}
+/* Panneau étroit : le chiffre passe sous le titre */
+@media (max-width:1100px){
+  .ex-hd>summary{grid-template-columns:34px minmax(0,1fr) 11px;gap:4px 12px}
+  .ex-hd .ex-hfig{grid-column:2;grid-row:2;justify-self:start;text-align:left}
+  .ex-hd .td-plus{grid-column:3;grid-row:1}
+  .ex-hd .ex-hlx{padding:0 0 16px 46px}
+}
+/* Label d'ouverture des fiches repliées : téléphone seulement */
+.ex-open{display:none}
+@media (max-width:760px){
+  .ex-hd>summary{grid-template-columns:30px minmax(0,1fr) 11px;gap:4px 10px}
+  .ex-hd .ex-hlx{padding:0 0 14px 40px}
+  /* les onglets restent au clavier et aux lecteurs d'écran, hors de la vue : c'est leur radio qui ouvre une fiche */
+  .ex-tabs{position:relative}
+  .ex-list{display:block;position:absolute;top:0;left:0;right:0;clip-path:inset(50%);pointer-events:none}
+  .ex-panel{position:relative}
+  .ex-open{display:block;position:absolute;inset:0;z-index:2;cursor:pointer}
+  .ex-open .td-plus{position:absolute;right:18px;top:24px}
+  .ex-open:hover .td-plus{color:var(--ink)}
+  /* fiche de l'onglet coché : ouverte, sans label ; les autres : la tête seule */
+  .ex-sec:has(.ex-list>li:nth-child(1) input:checked) .ex-panel:nth-child(1)>.ex-open,
+  .ex-sec:has(.ex-list>li:nth-child(2) input:checked) .ex-panel:nth-child(2)>.ex-open,
+  .ex-sec:has(.ex-list>li:nth-child(3) input:checked) .ex-panel:nth-child(3)>.ex-open,
+  .ex-sec:has(.ex-list>li:nth-child(4) input:checked) .ex-panel:nth-child(4)>.ex-open,
+  .ex-sec:has(.ex-list>li:nth-child(5) input:checked) .ex-panel:nth-child(5)>.ex-open,
+  .ex-sec:has(.ex-list>li:nth-child(6) input:checked) .ex-panel:nth-child(6)>.ex-open,
+  .ex-sec:has(.ex-list>li:nth-child(7) input:checked) .ex-panel:nth-child(7)>.ex-open,
+  .ex-sec:has(.ex-list>li:nth-child(8) input:checked) .ex-panel:nth-child(8)>.ex-open,
+  .ex-sec:not(:has(.ex-list>li:nth-child(1) input:checked)) .ex-panel:nth-child(1)>:not(.ex-top,.ex-open,.ex-kick),
+  .ex-sec:not(:has(.ex-list>li:nth-child(2) input:checked)) .ex-panel:nth-child(2)>:not(.ex-top,.ex-open,.ex-kick),
+  .ex-sec:not(:has(.ex-list>li:nth-child(3) input:checked)) .ex-panel:nth-child(3)>:not(.ex-top,.ex-open,.ex-kick),
+  .ex-sec:not(:has(.ex-list>li:nth-child(4) input:checked)) .ex-panel:nth-child(4)>:not(.ex-top,.ex-open,.ex-kick),
+  .ex-sec:not(:has(.ex-list>li:nth-child(5) input:checked)) .ex-panel:nth-child(5)>:not(.ex-top,.ex-open,.ex-kick),
+  .ex-sec:not(:has(.ex-list>li:nth-child(6) input:checked)) .ex-panel:nth-child(6)>:not(.ex-top,.ex-open,.ex-kick),
+  .ex-sec:not(:has(.ex-list>li:nth-child(7) input:checked)) .ex-panel:nth-child(7)>:not(.ex-top,.ex-open,.ex-kick),
+  .ex-sec:not(:has(.ex-list>li:nth-child(8) input:checked)) .ex-panel:nth-child(8)>:not(.ex-top,.ex-open,.ex-kick){display:none}
+  .ex-panel>.ex-top{border-bottom-color:transparent;padding-bottom:0}
+  .ex-sec:has(.ex-list>li:nth-child(1) input:checked) .ex-panel:nth-child(1)>.ex-top,
+  .ex-sec:has(.ex-list>li:nth-child(2) input:checked) .ex-panel:nth-child(2)>.ex-top,
+  .ex-sec:has(.ex-list>li:nth-child(3) input:checked) .ex-panel:nth-child(3)>.ex-top,
+  .ex-sec:has(.ex-list>li:nth-child(4) input:checked) .ex-panel:nth-child(4)>.ex-top,
+  .ex-sec:has(.ex-list>li:nth-child(5) input:checked) .ex-panel:nth-child(5)>.ex-top,
+  .ex-sec:has(.ex-list>li:nth-child(6) input:checked) .ex-panel:nth-child(6)>.ex-top,
+  .ex-sec:has(.ex-list>li:nth-child(7) input:checked) .ex-panel:nth-child(7)>.ex-top,
+  .ex-sec:has(.ex-list>li:nth-child(8) input:checked) .ex-panel:nth-child(8)>.ex-top{border-bottom-color:var(--rule);padding-bottom:16px}
+  /* focus clavier sur un radio : la fiche correspondante porte l'anneau */
+  .ex-sec:has(.ex-list>li:nth-child(1) input:focus-visible) .ex-panel:nth-child(1),
+  .ex-sec:has(.ex-list>li:nth-child(2) input:focus-visible) .ex-panel:nth-child(2),
+  .ex-sec:has(.ex-list>li:nth-child(3) input:focus-visible) .ex-panel:nth-child(3),
+  .ex-sec:has(.ex-list>li:nth-child(4) input:focus-visible) .ex-panel:nth-child(4),
+  .ex-sec:has(.ex-list>li:nth-child(5) input:focus-visible) .ex-panel:nth-child(5),
+  .ex-sec:has(.ex-list>li:nth-child(6) input:focus-visible) .ex-panel:nth-child(6),
+  .ex-sec:has(.ex-list>li:nth-child(7) input:focus-visible) .ex-panel:nth-child(7),
+  .ex-sec:has(.ex-list>li:nth-child(8) input:focus-visible) .ex-panel:nth-child(8){outline:var(--stroke-focus) solid var(--signal);outline-offset:3px}
+}
+/* Écrans bas (portable, tablette en paysage) : quelques pixels de moins pour que Finary, le panneau le plus long, tienne aussi */
+@media (max-width:1100px){.ex-hd>summary{padding:11px 0}.ex-foot{margin-top:14px}}
+@media (min-width:761px) and (max-height:820px){
+  .ex-panel{padding-top:20px;padding-bottom:22px}
+  .ex-co{font-size:1.85rem}
+  .ex-top{padding-bottom:12px}
+  .ex-giant{font-size:clamp(5rem,min(13vw,13svh),12.5rem)}
+  .ex-hero{padding:14px 0}
+  .ex-hd>summary{padding:9px 0}
+}

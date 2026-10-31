@@ -28,3 +28,10 @@
 
 /* Mot-signature : le plancher de 3rem l'emportait sous 390 px et le nom débordait de 6 px à 320 (30/10/2026). La taille suit la largeur jusqu'au bout. */
 .nw-word{font-size:clamp(2rem,12.2vw,11.6rem)}
+
+/* Une section par écran (31/10/2026, option 5B) : l'appel prend sa hauteur naturelle, sans le vide d'un écran entier ; la vue éclatée est plafonnée pour que mot-signature, vue et pied tiennent sur un écran. */
+@media (min-width:761px){
+  .nw-cta{min-height:0;margin-top:64px;padding:56px 0 64px}
+  .nw-x{padding:28px 0 24px}
+  .nw-x svg{max-height:calc(100svh - 360px)}
+}

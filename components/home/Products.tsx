@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element -- captures servies telles quelles, à leur taille, comme dans la maquette */
+import { useId } from "react";
 import Link from "next/link";
 import type { Content, Product } from "@/lib/content";
 import { fill, figNo, shots, stampSub, statusText, two } from "@/components/sheets/lib";
@@ -11,12 +12,16 @@ import { Note, Stamp, StatusMark, Underlined, WearFilter } from "@/components/sh
  * entière ouvre /products/<slug> (surimpression depuis la home), les liens
  * externes restent cliquables au-dessus. Au téléphone : une colonne, capture
  * à plat sous le texte (home.css).
+ * Une seule fiche ouverte à la fois, comme les onglets d'Experience : un radio
+ * par fiche (nommé par le produit), sans script ; les autres fiches se replient
+ * sur leur tête et un clic sur la tête les ouvre (fix-pr.css).
  */
 export default function Products({ c }: { c: Content }) {
   const { products, ui, profile } = c;
   const u = ui.products;
   const hired = products.filter((p) => p.origin.builtToGetHired).length;
   const aside = fill(u.aside, { n: products.length, k: hired });
+  const name = `pr-pick${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
   return (
     <section id="products" className="pr pr-list pg-sec" aria-label={ui.sections.products}>
       <WearFilter />
@@ -28,8 +33,8 @@ export default function Products({ c }: { c: Content }) {
         </header>
         {profile.productsIntro && <p className="pr-intro">{profile.productsIntro}</p>}
         <div className="pr-pile">
-          {products.map((p) => (
-            <Card key={p.slug} p={p} c={c} />
+          {products.map((p, i) => (
+            <Card key={p.slug} p={p} c={c} name={name} open={i === 0} />
           ))}
         </div>
       </div>
@@ -37,13 +42,17 @@ export default function Products({ c }: { c: Content }) {
   );
 }
 
-function Card({ p, c }: { p: Product; c: Content }) {
+function Card({ p, c, name, open }: { p: Product; c: Content; name: string; open: boolean }) {
   const u = c.ui.products;
   const sub = stampSub(p);
   const list = shots(p);
   const figures = p.figures ?? [];
   return (
     <article className={`pr-s pr-hov${list.length ? " has-tuck" : ""}`} data-reveal="0.8">
+      <input className="pr-r" type="radio" name={name} id={`${name}-${p.slug}`} defaultChecked={open} aria-label={p.name} />
+      <label className="pr-open" htmlFor={`${name}-${p.slug}`} aria-hidden="true">
+        <span className="td-plus" />
+      </label>
       <div className="pr-no">
         <span className="pr-big td-cond">{two(p.index)}</span>
         <span className="pr-sheet">{u.sheet}</span>
