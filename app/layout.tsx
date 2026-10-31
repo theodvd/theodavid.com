@@ -1,94 +1,89 @@
 import type { Metadata, Viewport } from "next";
-import localFont from "next/font/local";
-import { JetBrains_Mono } from "next/font/google";
+import { Archivo, Martian_Mono, Shantell_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { PostHogInit } from "@/components/PostHogInit";
-import "./globals.css";
+import AstresTransition from "@/components/astres/AstresTransition";
+import { getContent } from "@/lib/content";
+import "./styles/td.css";
 
-/* Self-hosted variable fonts (Fontshare) — zero external requests. */
-const clash = localFont({
-  src: "../fonts/ClashDisplay-Variable.woff2",
-  variable: "--font-clash",
-  weight: "200 700",
-  display: "swap",
-});
-
-const satoshi = localFont({
-  src: "../fonts/Satoshi-Variable.woff2",
-  variable: "--font-satoshi",
-  weight: "300 900",
-  display: "swap",
-});
-
-const jetbrains = JetBrains_Mono({
+/* Les trois familles de l'identité, auto-hébergées par next/font (aucune
+   requête vers Google au chargement). Archivo et Martian Mono gardent leur
+   axe de largeur : le nom et les titres sont en Archivo élargi (125 %), les
+   chiffres en Archivo condensé (62 %). */
+const archivo = Archivo({
   subsets: ["latin"],
-  variable: "--font-jetbrains",
-  weight: ["400", "500"],
+  axes: ["wdth"],
+  variable: "--font-archivo",
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://theodavid.com"),
-  title: "Théo David · Growth, Data & Systems",
-  description:
-    "Freelance Growth Engineer. I build acquisition machines: outbound, data pipelines and AI systems, shipped as working products. Previously Growth Data & Automation at Finary.",
-  openGraph: {
-    title: "Théo David · Growth, Data & Systems",
-    description:
-      "I build growth systems for fintech. Data pipelines, AI automation and working products, shipped.",
-    url: "https://theodavid.com",
-    siteName: "Théo David",
-    locale: "en_US",
-    type: "website",
-    images: [
-      {
-        url: "/og.png",
-        width: 1200,
-        height: 630,
-        alt: "The portfolio as a solar system: ridgeline sun and planets, one per project.",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Théo David · Growth, Data & Systems",
-    description: "I build acquisition machines: outbound, data and AI.",
-    images: ["/og.png"],
-  },
-};
+const martian = Martian_Mono({
+  subsets: ["latin"],
+  axes: ["wdth"],
+  variable: "--font-martian",
+  display: "swap",
+});
+
+const shantell = Shantell_Sans({
+  subsets: ["latin"],
+  variable: "--font-shantell",
+  display: "swap",
+});
+
+export function generateMetadata(): Metadata {
+  const { profile } = getContent();
+  const role = profile.roles[0];
+  const title = `${profile.name} · ${role.title}`;
+  return {
+    metadataBase: new URL("https://theodavid.com"),
+    title,
+    description: profile.tagline,
+    openGraph: {
+      title,
+      description: profile.tagline,
+      url: "https://theodavid.com",
+      siteName: profile.name,
+      locale: "en_US",
+      type: "website",
+    },
+    twitter: { card: "summary_large_image", title, description: profile.tagline },
+  };
+}
 
 export const viewport: Viewport = {
-  // the astres sky color: Safari tints its chrome with this, so the browser
-  // bars blend into the scene instead of reading as black bands
-  themeColor: "#0a0d16",
-  // let the canvas paint under the notch and home indicator: without this,
-  // tall iPhones show black bars above and below the astres scene
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ece9e1" },
+    { media: "(prefers-color-scheme: dark)", color: "#14202e" },
+  ],
   viewportFit: "cover",
 };
 
-/* Film grain — inline SVG turbulence, tiled over every page. */
-const GRAIN =
-  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='128' height='128' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E\")";
+/* Le thème suit le système (décidé le 30/10, pas d'interrupteur) : posé sur
+   <html data-theme> avant le premier affichage, puis suivi en direct.
+   La classe js est posée au même moment : les apparitions au scroll restent en
+   pause dès le premier affichage (sans JavaScript, tout s'affiche). */
+const THEME_SCRIPT = `(function(){var d=document.documentElement;d.classList.add('js');try{var m=window.matchMedia('(prefers-color-scheme: dark)');var s=function(){d.setAttribute('data-theme',m.matches?'dark':'light')};s();m.addEventListener('change',s)}catch(e){}})();`;
 
 export default function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+  modal,
+}: Readonly<{ children: React.ReactNode; modal: React.ReactNode }>) {
   return (
     <html
       lang="en"
-      className={`${clash.variable} ${satoshi.variable} ${jetbrains.variable}`}
-      // the astres gate stamps data-astres on <html> before hydration
+      data-theme="light"
+      className={`${archivo.variable} ${martian.variable} ${shantell.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body>
         {children}
+        {modal}
+        <AstresTransition />
         <Analytics />
         <PostHogInit />
-        <div
-          className="pointer-events-none fixed inset-0 z-40 opacity-[0.05]"
-          style={{ backgroundImage: GRAIN, backgroundSize: "128px 128px" }}
-          aria-hidden="true"
-        />
       </body>
     </html>
   );

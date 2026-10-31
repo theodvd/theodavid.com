@@ -1,0 +1,33 @@
+/* Retouches de la section (préfixe fo-) par rapport à home.css, posées après elle. */
+
+/* figure de capture : le plateau la pose en style en ligne, reprise ici */
+.fo-fig-w{margin:0;display:flex;flex-direction:column;gap:9px}
+/* capture ou chiffres seuls sous l'histoire : une colonne */
+.fo-solo{display:flex;flex-direction:column;gap:16px}
+/* gabarit calculé selon le nombre de ventures de la volée (1 à 3), marche vide comprise sur la dernière */
+.fo-stairs{grid-template-columns:var(--fo-cols)}
+/* seconde volée : repart sous la première */
+.fo-stairs.is-cont{margin-top:56px}
+/* une volée sans marche vide garde un giron plein à sa dernière marche */
+.fo-step:last-child:not(.is-next) .fo-tread{border-top-style:solid}
+/* les attributs width et height des images (contre le décalage au chargement) ne doivent pas fixer leur hauteur */
+.fo-photo img,.fo-shot img{height:auto}
+/* apparition : marches une à une de gauche à droite, 120 ms d'écart, la vide en dernier (escalier à 75 %) */
+.fo-step{animation:td-rise var(--dur-fade) var(--ease-draw) calc(var(--o, 0) * 120ms) both}
+@media (max-width:760px){
+  .fo-stairs{grid-template-columns:minmax(0,1fr)}
+  .fo-stairs.is-cont{margin-top:30px}
+}
+
+/* Palier intermédiaire (30/10/2026), 761 à 1080 px : l’escalier en quatre marches se tassait.
+   Forme du téléphone (une colonne, marches décalées), limitée à 680 px pour garder des lignes lisibles. */
+@media (min-width:761px) and (max-width:1080px){
+  .fo-stairs{grid-template-columns:minmax(0,1fr);max-width:680px;margin-top:28px;gap:0}
+  .fo-stairs.is-cont{margin-top:30px}
+  .fo-step{flex-direction:column-reverse;margin-left:min(calc(var(--i) * 14px),56px)}
+  .fo-tread{height:auto;border-left:0;padding:8px 0 10px}
+  .fo-sheet,.fo-step:first-child .fo-sheet{margin:0 0 30px}
+  .fo-next{margin:0 0 4px}
+}
+/* « Building toward founding my own company » suit la largeur de sa marche */
+.fo-nl{font-size:clamp(1.05rem,.5rem + 1vw,1.45rem);overflow-wrap:normal}

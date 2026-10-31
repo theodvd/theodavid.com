@@ -1,0 +1,28 @@
+/* Retouches de la section (préfixe wb-) par rapport à home.css, posées après elle. */
+
+/* vignette (Atelier V6) : la photo sort du haut du tiroir au survol, à son format, dans une boîte de 200 × 120 */
+.wb-peek{position:absolute;right:72px;bottom:calc(100% - 12px);z-index:3;display:block;padding:5px;background:var(--device-glass);border:1.5px solid var(--rule-strong);border-radius:8px;opacity:0;transform:translateY(14px) rotate(2deg);transform-origin:100% 100%;transition:opacity .2s var(--ease-key),transform .2s var(--ease-key);pointer-events:none}
+.wb-peek img{display:block;object-fit:contain;border-radius:3px}
+.wb-dr:hover .wb-peek,.wb-dr:focus-within .wb-peek{opacity:1;transform:translateY(0) rotate(2deg)}
+/* au clavier, le tiroir sort comme au survol et passe devant ses voisins */
+.wb-dr:not(.is-empty):focus-within{transform:translate(-3px,-3px);box-shadow:var(--shadow-card-hover);z-index:1}
+/* jamais de vignette sans souris ni au téléphone ; Open reste visible sans souris */
+@media (hover:none){.wb-peek{display:none}.wb-oh{opacity:1}}
+/* apparition à 80 % : les tiroirs un à un en steps() (backwards : le survol reprend la main ensuite) */
+.wb-dr{animation:wb-in .3s steps(3,end) calc(var(--i,0) * 110ms) backwards}
+@keyframes wb-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (max-width:760px){
+  .wb-peek{display:none}
+  .wb-dr:not(.is-empty):focus-within{transform:none;box-shadow:none}
+}
+
+/* Paliers intermédiaires (30/10/2026) : la colonne d'intro fixe écrasait les tiroirs et les noms se coupaient lettre par lettre.
+   Sous 1180 px, l'intro passe au-dessus ; sous 960 px, deux tiroirs par rangée. Un nom ne se coupe jamais en plein mot. */
+.wb-name{overflow-wrap:normal}
+@media (min-width:761px) and (max-width:1180px){
+  .wb-grid{grid-template-columns:minmax(0,1fr);row-gap:24px}
+  .wb-intro{max-width:52ch}
+}
+@media (min-width:761px) and (max-width:960px){
+  .wb-cab{grid-template-columns:repeat(2,minmax(0,1fr))}
+}

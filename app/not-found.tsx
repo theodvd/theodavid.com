@@ -1,26 +1,30 @@
 import Link from "next/link";
+import { getContent } from "@/lib/content";
 
 /**
- * Branded 404 — on-theme with the solar identity.
- * Static, no WebGL: just type, the grain overlay from the layout, and a way home.
+ * Page 404 dans l'identité : en-tête de section numéroté (code en ember-text),
+ * titre en Archivo élargi, une ligne mono, la touche de retour, une règle
+ * graduée. Styles dans app/styles/astres.css (préfixe nf-), texte dans
+ * content/ui.json (clé notFound).
  */
 export default function NotFound() {
+  const { ui, profile } = getContent();
+  const t = ui.notFound;
   return (
-    <main className="relative z-10 flex min-h-[100svh] flex-col items-center justify-center px-6 text-center">
-      <p className="label">
-        <span className="text-accent">404</span> · Signal lost
-      </p>
-      <h1 className="display mt-6 text-5xl md:text-8xl">
-        This page drifted
-        <br />
-        out of orbit.
-      </h1>
-      <Link
-        href="/"
-        className="draw-link label mt-12 !text-ink transition-colors duration-300 hover:!text-glow"
-      >
-        ← Back to the sun
-      </Link>
+    <main className="nf">
+      <header className="nf-head">
+        <span className="nf-num">{t.code}</span>
+        <span className="nf-lab">{t.label}</span>
+      </header>
+      <h1 className="nf-h">{t.title}</h1>
+      <p className="nf-p">{t.text}</p>
+      <div className="nf-keys">
+        <Link className="td-key td-key-primary" href="/">
+          ← {t.back}
+        </Link>
+      </div>
+      <div className="td-ruler nf-ruler" aria-hidden="true" />
+      <p className="nf-p">{profile.name}</p>
     </main>
   );
 }
