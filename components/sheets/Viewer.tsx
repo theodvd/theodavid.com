@@ -8,7 +8,9 @@ import { dims, fill, ratioVars, type Shot } from "./lib";
  * Visionneuse de la fiche produit : chaque capture garde son format, plafonnée
  * à 520 px de haut (380 au téléphone) et à la largeur de la colonne, dans un
  * cadre `radius-screen` à deux coins de repère ; rien n'est recadré. Plusieurs
- * captures (Rayon) : une à la fois, vignettes-boutons en `aria-pressed`.
+ * captures : une à la fois, vignettes-boutons en `aria-pressed` ; versions de
+ * marque (Rayon) légendées « <nom>, <version> version », écrans d'un même
+ * produit (Outbound agent) légendés par leur propre légende.
  *
  * Exemple : <Viewer shots={shots(p)} name="Rayon" fig={4} labels={ui.products} />
  */
@@ -23,14 +25,15 @@ export default function Viewer({
   shots: Shot[];
   name: string;
   fig: number;
-  labels: { fig: string; version: string; showVersion: string; versions: string };
+  labels: { fig: string; version: string; showVersion: string; versions: string; screens: string; showScreen: string };
   className?: string;
   eager?: boolean;
 }) {
   const [k, setK] = useState(0);
   const multi = shots.length > 1;
   const s = shots[Math.min(k, shots.length - 1)];
-  const caption = multi ? `${name}, ${fill(labels.version, { label: s.label })}` : (s.caption ?? name);
+  const versions = multi && s.version;
+  const caption = versions ? `${name}, ${fill(labels.version, { label: s.label })}` : (s.caption ?? name);
   const img = (
     <span className="v6-glass">
       <Pic
@@ -59,14 +62,14 @@ export default function Viewer({
         <span>{multi ? `${k + 1} / ${shots.length} · ${dims(s)}` : dims(s)}</span>
       </figcaption>
       {multi && (
-        <div className="v7-thumbs" role="group" aria-label={labels.versions}>
+        <div className="v7-thumbs" role="group" aria-label={versions ? labels.versions : labels.screens}>
           {shots.map((t, j) => (
             <button
               key={t.src}
               type="button"
               className="v7-th"
               aria-pressed={j === k}
-              aria-label={fill(labels.showVersion, { label: t.label })}
+              aria-label={fill(t.version ? labels.showVersion : labels.showScreen, { label: t.label })}
               onClick={() => setK(j)}
             >
               <span className="v6-glass v6-glass-sm" style={ratioVars(t)}>

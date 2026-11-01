@@ -45,7 +45,8 @@ export function proofLines(p: Product): string[] {
   return p.proof.filter((_, i) => !said.has(i));
 }
 
-export type Shot = Image & { label: string; href?: string };
+/** `version` : capture d'une version de marque, appariée à son lien (Rayon) ; sinon un écran du produit. */
+export type Shot = Image & { label: string; href?: string; version: boolean };
 
 /**
  * Captures de la visionneuse. Avec autant de liens que de captures (Rayon),
@@ -54,9 +55,12 @@ export type Shot = Image & { label: string; href?: string };
 export function shots(p: Product): Shot[] {
   const images = p.images ?? [];
   const paired = images.length > 1 && p.links.length === images.length;
+  // dans l'éventail, la légende commune « Fig. n » nomme déjà le produit : « Outbound agent, Monday call sheet » devient « Monday call sheet »
+  const short = (c: string) => (images.length > 1 ? c.replace(`${p.name}, `, "") : c);
   return images.map((im, j) => ({
     ...im,
-    label: paired ? p.links[j].label : (im.caption ?? p.name),
+    label: paired ? p.links[j].label : short(im.caption ?? p.name),
+    version: paired,
     href: (paired ? p.links[j] : p.links[0])?.href,
   }));
 }

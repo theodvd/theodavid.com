@@ -219,7 +219,7 @@ function CaseTeaser({ p, blocks, u }: { p: Product; blocks: CaseBlock[]; u: Cont
 
 function viewerLabels(c: Content) {
   const u = c.ui.products;
-  return { fig: u.fig, version: u.version, showVersion: u.showVersion, versions: u.versions };
+  return { fig: u.fig, version: u.version, showVersion: u.showVersion, versions: u.versions, screens: u.screens, showScreen: u.showScreen };
 }
 
 /* ---------- surimpression ---------- */

@@ -166,6 +166,13 @@ export type ToolRaw = Dated & {
   image?: Image;
 };
 
+/**
+ * Lune de /astres (content/moons.json) : un petit projet accroché à un corps
+ * de la scène. `parent` est le slug d'un produit ou d'une venture publiés ;
+ * `href` est la page où la lune est déjà racontée.
+ */
+export type Moon = Dated & { slug: string; name: string; parent: string; text: string; href: string };
+
 /* ---------- Types dérivés (ce que lisent les composants) ---------- */
 
 export type Experience = ExperienceRaw & {
@@ -196,6 +203,7 @@ export type Content = {
   products: Product[];
   ventures: Venture[];
   workbench: { title: string; intro: string; items: Tool[] };
+  moons: Moon[];
   ui: Ui;
   /** Numéros « Fig. » en une seule suite du haut au bas de la page (décidé le 30/10). */
   figures: Figures;
@@ -326,6 +334,14 @@ export function getContent(): Content {
     items: tools.map((t, i) => ({ ...t, index: i + 1, total: tools.length, ref: `04.${i + 1}` })),
   };
 
+  // Lunes : une lune dont le parent n'est pas publié n'aurait rien autour de quoi tourner
+  const parents = new Set([...products, ...ventures].map((x) => x.slug));
+  const moonsRaw = fs.existsSync(path.join(ROOT, "moons.json"))
+    ? readJson<{ items: Moon[] }>("moons.json").items.filter((m) => isPublished(m, date))
+    : [];
+  const orphan = moonsRaw.find((m) => !parents.has(m.parent));
+  if (orphan) throw new Error(`moons.json : « ${orphan.slug} » tourne autour de « ${orphan.parent} », absent des produits et ventures`);
+
   const ui = readJson<Ui>("ui.json");
 
   cache = {
@@ -336,6 +352,7 @@ export function getContent(): Content {
     products,
     ventures,
     workbench,
+    moons: moonsRaw,
     ui,
     figures: buildFigures(products, ventures),
   };

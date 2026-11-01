@@ -1,0 +1,72 @@
+{
+  "slug": "outbound-agent",
+  "order": 6,
+  "status": "live",
+  "statusNote": "Password-protected",
+  "year": "2026",
+  "name": "Outbound agent",
+  "oneLiner": "Turns a week of raw prospects into the twenty accounts to call on Monday, and says why.",
+  "origin": {
+    "builtToGetHired": true,
+    "company": "Tamtam",
+    "role": "Forward Deployed Engineer",
+    "outcome": "Got the offer"
+  },
+  "problem": "A sales team receives hundreds of raw prospects every week and has to decide who to call on Monday. The signals that matter, timing and need, sit in different places, and reading them all by hand takes the week.",
+  "problemExcerpt": [
+    "who to call on Monday",
+    "takes the week"
+  ],
+  "built": [
+    "A 100-point score: timing 45, need 35, fit 20. The model reads and writes, the rules decide.",
+    "No prospect is thrown away: each one goes to prospecting, an account manager, nurturing, or out, with its reason.",
+    "A Monday brief: the top 20 with why now, the angle, who to call and the opening line.",
+    "A web app to rerun it every week and ask questions about the run."
+  ],
+  "proof": [
+    "About 466 raw prospects scored and routed",
+    "Built for the final round at Tamtam: got the offer"
+  ],
+  "figures": [
+    {
+      "value": "~466",
+      "label": "raw prospects scored"
+    }
+  ],
+  "proofInFigures": [
+    0
+  ],
+  "cardProof": "~466 raw prospects scored · Got the offer",
+  "stack": [
+    "Python",
+    "Claude (Sonnet)",
+    "FastAPI",
+    "Next.js",
+    "Vercel"
+  ],
+  "links": [],
+  "images": [
+    {
+      "src": "/images/products/outbound-agent-call-sheet.jpg",
+      "width": 1440,
+      "height": 900,
+      "alt": "Outbound agent, Monday call sheet: 466 raw rows, 463 accounts, 134 qualified, 6 to call first, then the top 20 with why now and who to call",
+      "caption": "Outbound agent, Monday call sheet"
+    },
+    {
+      "src": "/images/products/outbound-agent-rules.jpg",
+      "width": 1440,
+      "height": 900,
+      "alt": "Outbound agent, the rules the agent applies: a score out of 100, timing 45, need 35, fit 20",
+      "caption": "Outbound agent, scoring rules"
+    },
+    {
+      "src": "/images/products/outbound-agent-queues.jpg",
+      "width": 1440,
+      "height": 900,
+      "alt": "Outbound agent, other queues: accounts that are not for the SDR this week, each with an owner and a reason",
+      "caption": "Outbound agent, never thrown away"
+    }
+  ],
+  "imagesCaption": "Outbound agent, the app"
+}

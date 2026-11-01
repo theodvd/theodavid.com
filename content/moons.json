@@ -1,0 +1,26 @@
+{
+  "_note": "Lunes de /astres : un petit projet accroché à un corps de la scène (parent = slug d'un produit ou d'une venture). « href » : où mène « Read it on the page ».",
+  "items": [
+    {
+      "slug": "solen",
+      "name": "Solen",
+      "parent": "solvio",
+      "text": "My own investment tracker: stocks, ETFs and crypto from several brokers in one place. Solvio grew out of it.",
+      "href": "/#founder"
+    },
+    {
+      "slug": "growfin",
+      "name": "Growfin",
+      "parent": "newsletter-studio",
+      "text": "A French newsletter on fintech, growth and AI, out every Monday and Thursday at 7.",
+      "href": "/products/newsletter-studio"
+    },
+    {
+      "slug": "content-engine",
+      "name": "Content Engine",
+      "parent": "fact-checker",
+      "text": "One editorial standard built to be cited by AI assistants, and one article a day, approved by tax experts.",
+      "href": "/products/fact-checker"
+    }
+  ]
+}
