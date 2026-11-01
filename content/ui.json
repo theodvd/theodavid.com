@@ -63,6 +63,8 @@
     "versions": "Brand versions",
     "showVersion": "Show the {label} version",
     "version": "{label} version",
+    "screens": "Screens",
+    "showScreen": "Show {label}",
     "fig": "Fig. {n} · {caption}",
     "onThisPage": "On this page",
     "breadcrumb": "Breadcrumb",
