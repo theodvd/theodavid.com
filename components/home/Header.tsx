@@ -3,6 +3,7 @@ import type { Content } from "@/lib/content";
 import ExploreLink from "@/components/astres/ExploreLink";
 import { AppareilLarge, AppareilVertical } from "@/components/home/Appareil";
 import Commandes from "@/components/home/Commandes";
+import BarMail from "@/components/home/BarMail";
 
 /**
  * En-tête V6 « Panneau de commande » (préfixe hd-), hors de main.pg :
@@ -82,6 +83,7 @@ export default function Header({ c }: { c: Content }) {
               </a>
             ))}
           </nav>
+          <BarMail href={p.contact.primary.href} hint={h.mail.hint} copied={h.mail.copied} label={h.mail.label} short={h.mail.short} />
           <details className="hd-menu">
             <summary>{ui.nav.menu}</summary>
             <nav aria-label={h.navLabel} className="hd-panel">
@@ -91,6 +93,10 @@ export default function Header({ c }: { c: Content }) {
                   <span>{ui.sections[id]}</span>
                 </a>
               ))}
+              <a className="hd-pmail" href={p.contact.primary.href}>
+                <span className="hd-num" aria-hidden="true" />
+                <span>{p.contact.primary.label}</span>
+              </a>
               <ExploreLink href={p.explore3d.href} className="hd-panel3d">
                 <span>{p.explore3d.label}</span>
                 <span aria-hidden="true">↗</span>

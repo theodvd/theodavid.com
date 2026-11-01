@@ -26,3 +26,19 @@
 
 /* Lien profond (/#founder) : les apparitions de la section visée partent dès la première peinture, sans attendre JavaScript (td.css les met en pause jusqu'à .is-in). */
 html.js :target [data-reveal]:not(.is-in),html.js :target [data-reveal]:not(.is-in) *,html.js [data-reveal]:target:not(.is-in){animation-play-state:running !important}
+
+/* Contact au bout de la barre (choix 6A du 31/10/2026, BarMail.tsx) : adresse en mono derrière un filet, sans braise ; elle n'apparaît
+   qu'une fois l'en-tête sorti de l'écran (un cran), un clic la copie. Sans JavaScript, toujours visible (simple mailto). Ordinateur seulement. */
+.hd-bar .hd-links{margin-left:auto}
+.hd-mail{display:flex;align-items:stretch;border-left:1px solid var(--rule);transition:opacity .12s steps(2,end),visibility .12s steps(1,end)}
+html.js .hd-mail:not(.is-on){opacity:0;visibility:hidden}
+.hd-ml{display:flex;gap:8px;align-items:center;padding:16px;white-space:nowrap;text-decoration:none;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.04em;color:var(--ink)}
+.hd-mlk{font-size:.6rem;color:var(--ink-muted)}
+.hd-ml:hover .hd-mla,.hd-ml:focus-visible .hd-mla{text-decoration:underline;text-decoration-color:var(--signal);text-decoration-thickness:var(--stroke-nav-underline);text-underline-offset:5px}
+.hd-ml:focus-visible{outline:var(--stroke-focus) solid var(--signal);outline-offset:-3px}
+.hd-mls{display:none}
+@media (max-width:1100px){.hd-ml .hd-mla:not(.hd-mls){display:none}.hd-ml .hd-mls{display:inline}}
+/* sous 820 px, le nom passerait sur deux lignes : pas d'adresse dans la barre (le Menu du téléphone a sa ligne à partir de 760 px) */
+@media (max-width:819px){.hd-mail{display:none}}
+/* Menu du téléphone : « Write to me » avant « Explore in 3D », aligné sur les intitulés numérotés. */
+.hd-pmail .hd-num{display:inline-block;width:2ch}
