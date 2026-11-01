@@ -70,3 +70,13 @@
 }
 /* Renvoi « Explore in 3D » sur le dessin plafonné : son bout droit (69,9 %) est pris sur la largeur réelle du dessin pour rester accroché au bouton latéral ; son début garde la place libre à gauche. */
 @media (min-width:761px){.hd-3d-l{right:calc((100% - var(--hd-d)) / 2 + var(--hd-d) * .699)}}
+
+/* Premier écran sous 760 px (choix 2C du 31/10/2026, chantier expérience) : haut resserré et dessin vertical ramené à 306 px et centré,
+   pour que l'accroche et les touches tiennent dans le premier écran dès 390 × 844. Les notes au feutre passent à 12,8 px (dérogation à la règle des 15 px, acceptée par Théo).
+   Les commandes et le renvoi « Explore in 3D » sont placés en % de cette boîte et la suivent. */
+@media (max-width:760px){
+  .hd-main{padding-top:18px;gap:14px}
+  .hd-left{gap:12px}
+  .hd-right{gap:16px}
+  .hd-plot.td-small{width:min(100%,306px);margin-inline:auto}
+}
