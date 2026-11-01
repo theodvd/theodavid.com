@@ -371,3 +371,5 @@ details[open]>.td-sum .td-plus{transform:rotate(45deg)}
 
 /* Variantes AVIF (components/Pic.tsx) : le <picture> ne crée pas de boîte, les règles qui visent l'img restent valables. */
 picture{display:contents}
+/* Cibles au doigt de 24 px au moins pour les petits liens texte (16 px de haut avant) : zone de clic élargie, mise en page inchangée (chantier expérience, 31/10/2026). */
+.nw-ext a.td-link,.nw-a,.fo-link,#experience a.td-link,.as-back,.as-page a.td-link{padding-block:5px;margin-block:-5px}
