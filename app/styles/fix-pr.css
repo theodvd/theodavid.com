@@ -60,6 +60,8 @@
 .pr-s:has(.pr-r:focus-visible){outline:var(--stroke-focus) solid var(--signal);outline-offset:3px;z-index:5}
 .pr-s:has(.pr-r:not(:checked)){padding-top:14px;padding-bottom:14px;align-items:center}
 .pr-s:has(.pr-r:not(:checked)) .pr-open{display:block;position:absolute;inset:0;z-index:3;cursor:pointer}
+/* Carte repliée : le titre passe au-dessus de l'étiquette et ouvre la fiche (composition : « le titre mène toujours à la fiche complète ») ; sa zone se limite au titre, le reste de la ligne déplie la carte (31/10/2026, chantier expérience). */
+.pr-s:has(.pr-r:not(:checked)) .pr-t a{position:relative;z-index:4}
 .pr-s:has(.pr-r:not(:checked)) .pr-open .td-plus{position:absolute;right:20px;top:50%;margin-top:-5px}
 .pr-s:has(.pr-r:not(:checked)):hover .pr-open .td-plus{color:var(--ink)}
 .pr-s:has(.pr-r:not(:checked)) :is(.pr-sheet,.pr-oh,.pr-notebox,.pr-line,.pr-proof,.pr-lk,.pr-legal,.pr-stnote,.pr-nums,.pr-stamp,.pr-stack,.pr-tuck){display:none}
