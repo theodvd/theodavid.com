@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { track } from "@vercel/analytics";
-import type { AstresScene } from "./createAstresScene";
+import type { AstresKind, AstresScene } from "./createAstresScene";
 import {
   KEY_ARRIVAL,
   KEY_FROM,
@@ -17,27 +17,45 @@ import {
 } from "./pass";
 
 /**
- * /astres : l'interface autour de la scène (plateau Assemblage-Astres-3).
+ * /astres : l'interface autour de la scène (interface U3, décision du 01/11/2026).
  *
  * Toujours sombre. Barre fixe (« ← Back to the page », Échap ; le nom ;
- * « Write to me »), une phrase, puis l'index numéroté des produits : un seul
- * clic voyage jusqu'à la planète et ouvre la fiche.
+ * « Write to me »). Un cartouche sur le calque quadrillé porte la phrase et
+ * l'index groupé : les produits numérotés, puis une ligne par famille sous
+ * les titres de la nav (Founder, Workbench, Experience) et les lunes. Dans la
+ * scène, chaque corps porte son étiquette mono accrochée par un trait de
+ * rappel. Un clic (index, étiquette ou corps) voyage et ouvre la fiche ;
+ * l'objet d'arrivée se centre dans la partie libre (à gauche de la fiche,
+ * au-dessus du cartouche).
  *
  * Modes : « boot » (rendu serveur, identique au repli), « scene » (WebGL),
  * « weak » (appareil faible ou économie de données : 3D à la demande),
  * « nogl » (pas de WebGL, ou scène qui ne démarre pas en 8 s). Hors scène,
- * le rendu 3D mat est l'image et l'index renvoie aux fiches produit.
+ * le rendu 3D mat est l'image et l'index renvoie aux pages.
  */
 
-export type AstresProduct = {
-  slug: string;
+/** Un corps de la scène et ce que sa fiche affiche (construit par app/astres/page.tsx depuis content/). */
+export type AstresEntry = {
+  id: string;
+  kind: AstresKind;
+  /** Numéro affiché : « 01 » pour un produit, « 04.1 » pour un outil, vide sinon. */
   n: string;
   name: string;
-  status: "live" | "in-test" | "archived";
-  statusText: string;
-  oneLiner: string;
+  /** Lune : identifiant du corps autour duquel elle tourne. */
+  parent?: string;
+  state?: "closed" | "future";
+  /** Tête de la fiche : « Product sheet 01 », « Venture 3 », « Moon of Solvio »… */
+  head: string;
+  mark: "led" | "ring" | "square" | null;
+  statusText?: string;
+  /** Ligne mono au-dessus de la phrase (période et poste d'une expérience). */
+  meta?: string;
+  lead: string;
+  more?: string[];
   proof?: string;
   links: { label: string; href: string }[];
+  /** Où lire l'entrée sur le site : « Read it on the page », et lien du repli. */
+  page: string;
 };
 
 export type AstresLabels = {
@@ -58,26 +76,28 @@ export type AstresLabels = {
   loading: string;
   renderAlt: string;
   readOnPage: string;
-  sheet: string;
   close: string;
+  /** Titre de chaque ligne de l'index groupé. */
+  families: Record<Exclude<AstresKind, "product">, string>;
 };
 
 type Mode = "boot" | SceneMode;
 
-const sheetHref = (slug: string) => `/products/${slug}`;
+const FAMILIES = ["venture", "tool", "exp", "moon"] as const;
 
-function StatusMark({ status }: { status: AstresProduct["status"] }) {
-  const cls = status === "live" ? "td-blink as-a-led" : status === "in-test" ? "as-a-ring" : "as-a-sq";
+function StatusMark({ mark }: { mark: AstresEntry["mark"] }) {
+  if (!mark) return null;
+  const cls = mark === "led" ? "td-blink as-a-led" : mark === "ring" ? "as-a-ring" : "as-a-sq";
   return <span aria-hidden="true" className={cls} />;
 }
 
 export default function AstresApp({
-  products,
+  entries,
   labels,
   name,
   contact,
 }: {
-  products: AstresProduct[];
+  entries: AstresEntry[];
   labels: AstresLabels;
   name: string;
   contact: { label: string; href: string };
@@ -85,6 +105,7 @@ export default function AstresApp({
   const router = useRouter();
   const glRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<AstresScene | null>(null);
+  const sunId = useRef("sun");
   const itemRefs = useRef(new Map<string, HTMLElement | null>());
   const sheetTitle = useRef<HTMLHeadingElement>(null);
 
@@ -111,15 +132,12 @@ export default function AstresApp({
   }, [router]);
 
   /* ---- voyage et fiche ---- */
-  const open = useCallback(
-    (slug: string, focusSheet: boolean) => {
-      setActive(slug);
-      sceneRef.current?.focusBody(slug);
-      track("astres_travel", { slug });
-      if (focusSheet) window.setTimeout(() => sheetTitle.current?.focus(), 0);
-    },
-    [],
-  );
+  const open = useCallback((id: string, focusSheet: boolean) => {
+    setActive(id);
+    sceneRef.current?.focusBody(id);
+    track("astres_travel", { slug: id });
+    if (focusSheet) window.setTimeout(() => sheetTitle.current?.focus(), 0);
+  }, []);
 
   const close = useCallback(() => {
     setActive((cur) => {
@@ -142,10 +160,11 @@ export default function AstresApp({
 
     import("./createAstresScene").then(({ createAstresScene, SUN_ID }) => {
       if (cancelled) return;
+      sunId.current = SUN_ID;
       handle = createAstresScene(mount, {
         reducedMotion: reducedMotion(),
         timeScale: 10,
-        items: products.map((p) => ({ slug: p.slug, kind: "product" as const })),
+        items: entries.map((e) => ({ slug: e.id, kind: e.kind, parent: e.parent, state: e.state })),
         intro: arrival,
         onReady: () => {
           isReady = true;
@@ -169,6 +188,7 @@ export default function AstresApp({
       window.clearTimeout(slowTimer);
       window.clearTimeout(failTimer);
       sceneRef.current = null;
+      setReady(false);
       handle?.destroy();
     };
     // la scène se monte une fois par passage en mode « scene »
@@ -177,21 +197,35 @@ export default function AstresApp({
 
   // Fiche fermée : la caméra revient sur le soleil
   useEffect(() => {
-    if (active === null && sceneRef.current) {
-      import("./createAstresScene").then(({ SUN_ID }) => sceneRef.current?.focusBody(SUN_ID));
-    }
+    if (active === null) sceneRef.current?.focusBody(sunId.current);
   }, [active]);
 
-  // Fiche ouverte : la scène se recentre dans la partie que la fiche laisse visible.
-  // Fiche fermée sur ordinateur : le soleil glisse à droite de la phrase, comme le
-  // rendu de la maquette, pour que la phrase et l'index restent lisibles.
+  // Partie libre : sous la barre, à gauche de la fiche et au-dessus du
+  // cartouche (au téléphone, au-dessus de la fiche ou du cartouche). Fiche
+  // fermée sur ordinateur : le soleil glisse à droite de la phrase, pour que
+  // la phrase et l'index restent lisibles.
   useEffect(() => {
-    const el = document.querySelector<HTMLElement>(".as-a-sheet");
-    const r = el?.getBoundingClientRect();
-    const phone = window.innerWidth <= 760;
-    const lede = document.querySelector<HTMLElement>(".as-a-h")?.getBoundingClientRect();
-    const right = r ? (phone ? 0 : r.width) : !phone && lede ? -0.6 * lede.right : 0;
-    sceneRef.current?.setInset(right, r && phone ? r.height : 0);
+    const place = () => {
+      const rect = (sel: string) => document.querySelector<HTMLElement>(sel)?.getBoundingClientRect();
+      const sheet = rect(".as-a-sheet");
+      const card = rect(".as-a-intro");
+      const lede = rect(".as-a-h");
+      const top = rect(".as-a-bar")?.bottom ?? 0;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const phone = w <= 760;
+      if (!phone && !sheet) {
+        sceneRef.current?.setInset(lede ? -0.6 * lede.right : 0, 0);
+        return;
+      }
+      // le centre de l'image va au milieu du rectangle libre : décalages à droite et en bas
+      const right = sheet && !phone ? sheet.left : w;
+      const bottom = (phone ? (sheet ?? card)?.top : card?.top) ?? h;
+      sceneRef.current?.setInset(w - right, h - top - bottom);
+    };
+    place();
+    window.addEventListener("resize", place);
+    return () => window.removeEventListener("resize", place);
   }, [active, ready]);
 
   /* ---- Échap : ferme la fiche, sinon revient à la page ---- */
@@ -206,55 +240,101 @@ export default function AstresApp({
   }, [active, close, goBack]);
 
   const scene = mode === "scene";
-  const sheet = scene ? products.find((p) => p.slug === active) : undefined;
+  const sheet = scene ? entries.find((e) => e.id === active) : undefined;
   const modeClass = mode === "boot" ? "scene" : mode;
+  const products = entries.filter((e) => e.kind === "product");
+
+  // une entrée de l'index : bouton qui voyage dans la scène, sinon lien vers la page
+  const item = (e: AstresEntry, className: string, children: ReactNode) =>
+    scene ? (
+      <button
+        ref={(el) => {
+          itemRefs.current.set(e.id, el);
+        }}
+        className={className}
+        type="button"
+        aria-current={active === e.id ? "true" : undefined}
+        onClick={() => open(e.id, true)}
+      >
+        {children}
+      </button>
+    ) : (
+      <a className={className} href={e.page}>
+        {children}
+      </a>
+    );
 
   const index = (
-    <ol className="as-a-idx" aria-label={labels.index}>
-      {products.map((p) => {
-        const inner = (
-          <>
-            <span className="as-a-n">{p.n}</span>
-            <span className="as-a-nm">{p.name}</span>
-            <span className="as-a-st">{p.statusText}</span>
-          </>
-        );
-        return (
-          <li key={p.slug}>
-            {scene ? (
-              <button
-                ref={(el) => {
-                  itemRefs.current.set(p.slug, el);
-                }}
-                className="as-a-it"
-                type="button"
-                aria-current={active === p.slug ? "true" : undefined}
-                onClick={() => open(p.slug, true)}
-              >
-                {inner}
-              </button>
-            ) : (
-              <a className="as-a-it" href={sheetHref(p.slug)}>
-                {inner}
-              </a>
+    <>
+      <ol className="as-a-idx" aria-label={labels.index}>
+        {products.map((p) => (
+          <li key={p.id}>
+            {item(
+              p,
+              "as-a-it",
+              <>
+                <span className="as-a-n">{p.n}</span>
+                <span className="as-a-nm">{p.name}</span>
+                <span className="as-a-st">{p.statusText}</span>
+              </>,
             )}
           </li>
-        );
-      })}
-    </ol>
+        ))}
+      </ol>
+      <div className="as-a-fams">
+        {FAMILIES.map((k) => {
+          const list = entries.filter((e) => e.kind === k);
+          if (!list.length) return null;
+          return (
+            <div className="as-a-fam" key={k} role="group" aria-labelledby={`as-f-${k}`}>
+              <p className="as-a-famh" id={`as-f-${k}`}>
+                {labels.families[k]}
+              </p>
+              <p className="as-a-famv">
+                {list.map((e, i) => (
+                  <Fragment key={e.id}>
+                    {i > 0 && <span aria-hidden="true"> · </span>}
+                    {item(e, "as-a-fi", e.name)}
+                  </Fragment>
+                ))}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+    </>
   );
+
+  // étiquettes : le soleil et chaque corps, sauf les anneaux des expériences (nommés par l'index)
+  const marked = ready
+    ? [{ id: sunId.current, kind: "sun", n: "", name, state: undefined }, ...entries.filter((e) => e.kind !== "exp")]
+    : [];
 
   return (
     <div className={`as-a as-m-${modeClass}${arrival ? " is-arrival" : ""}`} data-theme="dark">
       <div className="as-a-scene" aria-hidden={scene ? true : undefined}>
-        <img
-          className="as-a-render"
-          src={RENDER_DARK}
-          alt={scene ? "" : labels.renderAlt}
-          width={1600}
-          height={1195}
-        />
+        <img className="as-a-render" src={RENDER_DARK} alt={scene ? "" : labels.renderAlt} width={1600} height={1195} />
         {scene && <div ref={glRef} className={`as-a-gl${ready ? " is-ready" : ""}`} />}
+        {scene && (
+          <div className="as-l-layer">
+            {marked.map((e) => (
+              <div
+                key={e.id}
+                className={`as-l as-l-${e.kind}${e.state ? ` is-${e.state}` : ""}`}
+                ref={(el) => sceneRef.current?.registerMarkerEl(e.id, el)}
+              >
+                <i />
+                <span className="as-l-box" data-box="" onClick={() => (e.kind === "sun" ? setActive(null) : open(e.id, false))}>
+                  <span className="as-l-g" />
+                  <span className="as-l-t">
+                    {e.kind === "product" && <b>{e.n}</b>}
+                    {e.name}
+                  </span>
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <header className="as-a-bar">
@@ -330,13 +410,13 @@ export default function AstresApp({
       {sheet && (
         <aside className="as-a-sheet" aria-labelledby="as-sh">
           <div className="as-a-shh">
-            <span>
-              {labels.sheet} {sheet.n}
-            </span>
-            <span className="as-a-live">
-              <StatusMark status={sheet.status} />
-              {sheet.statusText}
-            </span>
+            <span>{sheet.head}</span>
+            {sheet.statusText && (
+              <span className="as-a-live">
+                <StatusMark mark={sheet.mark} />
+                {sheet.statusText}
+              </span>
+            )}
             <button className="as-a-close" type="button" onClick={close}>
               {labels.close}{" "}
               <span className="as-a-hint td-hidesm" aria-hidden="true">
@@ -347,7 +427,13 @@ export default function AstresApp({
           <h2 className="as-a-sht" id="as-sh" ref={sheetTitle} tabIndex={-1}>
             {sheet.name}
           </h2>
-          <p className="as-a-shp">{sheet.oneLiner}</p>
+          {sheet.meta && <p className="as-a-meta">{sheet.meta}</p>}
+          <p className="as-a-shp">{sheet.lead}</p>
+          {sheet.more?.map((t) => (
+            <p className="as-a-more" key={t}>
+              {t}
+            </p>
+          ))}
           {sheet.proof && <p className="as-a-proof">{sheet.proof}</p>}
           <ul className="as-a-links">
             {sheet.links.map((l) => (
@@ -358,7 +444,7 @@ export default function AstresApp({
               </li>
             ))}
             <li>
-              <Link className="td-link" href={sheetHref(sheet.slug)}>
+              <Link className="td-link" href={sheet.page}>
                 {labels.readOnPage}
               </Link>
             </li>

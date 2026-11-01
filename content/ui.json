@@ -107,7 +107,7 @@
   },
   "astres": {
     "back": "Back to the page",
-    "intro": "Each planet is a product I built: click one to open it.",
+    "intro": "Everything I built, in one system: click a name to open it.",
     "load": "Load the 3D scene",
     "loading": "Loading the scene",
     "backHint": "[ esc ]",
@@ -117,12 +117,14 @@
     "index": "Products",
     "still": "Still image",
     "noGl": "The 3D view can’t run in this browser.",
-    "noGlHow": "Every product is on the page:",
-    "weakTitle": "Each planet is a product I built.",
+    "noGlHow": "Everything is on the page:",
+    "weakTitle": "Everything I built, in one system.",
     "weakNote": "The 3D scene stays off on this device to keep it fast.",
     "weakHow": "Or read them on the page:",
     "renderAlt": "Matte 3D render of the handheld device from the home page, on black, its wave glowing.",
-    "readOnPage": "Read it on the page"
+    "readOnPage": "Read it on the page",
+    "moons": "Moons",
+    "moonOf": "Moon of {name}"
   },
   "footer": {
     "nav": "Footer"

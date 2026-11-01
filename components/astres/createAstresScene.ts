@@ -755,9 +755,9 @@ export function createAstresScene(container: HTMLElement, opts: AstresSceneOptio
     return out.lerpVectors(tmpFrom, tmpTo, blend.v);
   }
 
-  // Le téléphone en portrait a un champ horizontal étroit : on recule.
+  // Le téléphone en portrait a un champ horizontal étroit, et le cartouche prend le bas de l'écran : on recule.
   const defaultDist = (b: Body) =>
-    b === sun ? (isMobile ? SUN_DIST * 1.55 : SUN_DIST) : b.kind === "exp" ? (isMobile ? 16 : 12) : Math.max(b.radius, 0.9) * (isMobile ? 8.5 : 7);
+    b === sun ? (isMobile ? SUN_DIST * 1.9 : SUN_DIST) : b.kind === "exp" ? (isMobile ? 16 : 12) : Math.max(b.radius, 0.9) * (isMobile ? 8.5 : 7);
 
   /** Corps choisi : son orbite ressort (la couleur ne change pas, l'étiquette passe à l'encre). */
   function highlight(id: string) {
@@ -928,7 +928,8 @@ export function createAstresScene(container: HTMLElement, opts: AstresSceneOptio
       return;
     }
     const b = byId.get(id);
-    if (b?.hue) el.style.color = b.hue.a; // l'étiquette prend la teinte de son orbite (Atlas of Moons)
+    // l'étiquette prend la teinte de son orbite (Atlas of Moons) ; en variable, pour que l'objet choisi repasse à l'encre en CSS
+    if (b?.hue) el.style.setProperty("--hue", b.hue.a);
     markers.set(id, { el, box: el.querySelector<HTMLElement>("[data-box]"), bw: 0, off: "", hide: "", on: "" });
   }
 

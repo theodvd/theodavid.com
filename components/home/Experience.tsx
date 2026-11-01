@@ -27,7 +27,7 @@ function month(ym: string, withYear = true) {
 }
 
 /** Période lisible : « Since Oct 2026 », « From Feb 2027 », « Apr to Aug 2026 ». */
-function period(e: Entry, t: Ui["experience"]) {
+export function period(e: Entry, t: Ui["experience"]) {
   const { start, end } = e.period;
   if (e.status === "upcoming") return `${t.from} ${month(start)}`;
   if (!end) return `${t.since} ${month(start)}`;
