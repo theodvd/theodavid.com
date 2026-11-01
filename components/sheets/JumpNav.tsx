@@ -33,6 +33,10 @@ export default function JumpNav({
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(update);
     };
+    // Arrivée par le lien « Read the case study » de la fiche (CaseLink recharge la page) : après un
+    // rechargement, Chrome ne suit pas l'ancre ; on amène la section à l'écran si la page est restée en haut.
+    const target = location.hash ? document.getElementById(location.hash.slice(1)) : null;
+    if (target && window.scrollY === 0) target.scrollIntoView({ block: "start" });
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
