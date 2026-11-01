@@ -25,7 +25,7 @@ export default function Now({ c }: { c: Content }) {
   return (
     <section className="nw-sec pg-sec" id="now" aria-label={ui.sections.now}>
       <div className="nw-in">
-        <header className="pg-head" data-reveal="0.85">
+        <header className="pg-head" data-reveal="1.15">
           <span className="pg-num">05</span>
           <h2 className="pg-h2">{ui.sections.now}</h2>
         </header>
@@ -47,7 +47,7 @@ export default function Now({ c }: { c: Content }) {
           ))}
         </dl>
 
-        <div className="nw-cta" data-reveal="0.6">
+        <div className="nw-cta" data-reveal="1.15">
           <h3 className="nw-lab">{ui.now.contact}</h3>
           <p className="nw-big">
             <span className="nw-thin">{profile.availability}.</span>

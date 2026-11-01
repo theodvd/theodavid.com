@@ -2,8 +2,8 @@
 
 /* l'intro est désormais le vrai texte de Théo (le plateau n'avait qu'un emplacement en pointillé) */
 .pr-intro{margin:-12px 0 0;border:0;padding:0;font-family:var(--font-display);font-size:1.12rem;line-height:1.45;font-weight:500;color:var(--ink);max-width:52ch}
-/* apparition à 80 % : la fiche monte de 12 px, puis sa capture sort de 20 px et rentre (backwards : le survol reprend la main ensuite) */
-.pr-s{animation:td-rise .5s var(--ease-draw) backwards}
+/* apparition (haut de la fiche à 115 % de l'écran) : la fiche monte de 8 px en 0,25 s (choix 4C du 31/10/2026), puis sa capture sort de 20 px et rentre (backwards : le survol reprend la main ensuite) */
+.pr-s{animation:td-rise .25s var(--ease-draw) backwards}
 .pr-tuck{animation:pr-peek .64s var(--ease-key) .4s backwards}
 @keyframes pr-peek{0%,100%{transform:rotate(3deg)}45%{transform:translateX(20px) rotate(3deg)}}
 /* le focus clavier sur le titre sort aussi la capture, comme le survol */

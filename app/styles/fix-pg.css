@@ -4,3 +4,6 @@
 @media (max-width:760px){
   .pg-head{position:sticky;top:0;z-index:6;background-color:var(--ground);padding-top:12px;margin-top:-12px}
 }
+
+/* En-tête de section : montée de 8 px en 0,25 s, déclenchée à 115 % de l'écran (choix 4C du 31/10/2026). */
+.pg-head{animation-duration:.25s}

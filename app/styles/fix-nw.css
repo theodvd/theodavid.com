@@ -15,10 +15,8 @@
 .nw-x:is(:hover,:focus-within) :is(.as-xs,.as-xp,.as-xc){transform:translate(-4px,-4px);filter:drop-shadow(4px 4px 0 var(--ink))}
 .nw-xa{-webkit-tap-highlight-color:transparent}
 .nw-x:focus-within .nw-xl{text-decoration:underline;text-decoration-color:var(--signal);text-decoration-thickness:2px;text-underline-offset:5px}
-/* apparition de l'appel (haut à 60 %) : l'adresse en trois crans, la touche et ses liens en dernier */
-.nw-big{animation:td-fade var(--dur-fade) var(--ease-fade) both}
-.nw-row{animation:td-fade var(--dur-fade) var(--ease-fade) var(--dur-fade) both}
-.nw-cta>.nw-meta{animation:td-fade var(--dur-fade) var(--ease-fade) var(--dur-fade) both}
+/* L'appel (adresse, touche et liens) est toujours affiché : plus d'apparition, pour ne jamais traverser un bloc contact vide (choix 4C du 31/10/2026, règle de Stripe : le texte clé n'est pas animé). */
+.nw-big,.nw-row,.nw-cta>.nw-meta{animation:none}
 @media (max-width:760px){
   /* au doigt, pas d'esquisse d'éclatement */
   .nw-x:hover :is(.as-xs,.as-xp,.as-xc){transform:none;filter:none}

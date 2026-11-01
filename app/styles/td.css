@@ -329,7 +329,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-d
 
 .td-hidelg{display:none}
 @media (max-width:760px){.td-hidelg{display:revert}}
-@keyframes td-rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes td-rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes td-scan{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
 /* Couleur des touches : prioritaire sur les « .section a { color:inherit } » des sections (sinon « Write to me » devient encre sur encre). Au build : même règle, spécificité au moins 0,2,0. */
 .td-key.td-key-primary{color:var(--on-ink)}

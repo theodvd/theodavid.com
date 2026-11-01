@@ -20,13 +20,13 @@ export default function Workbench({ c }: { c: Content }) {
   return (
     <section className="wb-sec pg-sec" id="workbench" aria-label={ui.sections.workbench}>
       <div className="wb-in">
-        <header className="pg-head" data-reveal="0.85">
+        <header className="pg-head" data-reveal="1.15">
           <span className="pg-num">04</span>
           <h2 className="pg-h2">{ui.sections.workbench}</h2>
         </header>
         <div className="wb-grid">
           <p className="wb-intro">{workbench.intro}</p>
-          <ul className="wb-cab" data-reveal="0.8">
+          <ul className="wb-cab" data-reveal="1.15">
             {items.map((t, i) => (
               <Drawer key={t.slug} t={t} i={i} c={c} />
             ))}

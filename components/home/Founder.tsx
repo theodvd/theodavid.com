@@ -240,7 +240,7 @@ export default function Founder({ c }: { c: Content }) {
   return (
     <section className="fo-sec pg-sec" id="founder" aria-label={ui.sections.founder}>
       <div className="fo-in">
-        <header className="pg-head" data-reveal="0.85">
+        <header className="pg-head" data-reveal="1.15">
           <span className="pg-num">03</span>
           <h2 className="pg-h2">{ui.sections.founder}</h2>
         </header>
@@ -257,7 +257,7 @@ export default function Founder({ c }: { c: Content }) {
               key={f}
               className={`fo-stairs${first ? "" : " is-cont"}`}
               style={{ "--fo-cols": cols } as CSSProperties}
-              data-reveal="0.75"
+              data-reveal="1.15"
             >
               {flight.map((v, i) => {
                 const n = v.index;

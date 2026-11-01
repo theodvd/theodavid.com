@@ -165,7 +165,7 @@ export default function Header({ c }: { c: Content }) {
           </div>
         </div>
 
-        <dl className="hd-dials" data-reveal="0.8">
+        <dl className="hd-dials" data-reveal="1.15">
           {p.counters.map((k, i) => (
             <div className="hd-dial" key={k.label}>
               <dt>{k.label}</dt>

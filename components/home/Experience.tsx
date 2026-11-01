@@ -234,11 +234,11 @@ export default function Experience({ c }: { c: Content }) {
   return (
     <section className="ex-sec pg-sec" id="experience" aria-label={c.ui.sections.experience}>
       <div className="ex-in">
-        <header className="pg-head" data-reveal="0.85">
+        <header className="pg-head" data-reveal="1.15">
           <span className="pg-num">01</span>
           <h2 className="pg-h2">{c.ui.sections.experience}</h2>
         </header>
-        <div className="ex-tabs" data-reveal="0.75">
+        <div className="ex-tabs" data-reveal="1.15">
           <ul className="ex-list" aria-label={t.companies}>
             {c.experience.map((e) => (
               <li key={e.slug}>

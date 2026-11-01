@@ -29,7 +29,7 @@ export default function About({ c }: { c: Content }) {
 
   return (
     <section className="ab" id="about" aria-labelledby={id}>
-      <div className="ab-in" data-reveal="0.8">
+      <div className="ab-in" data-reveal="1.15">
         <h2 className="ab-lab" id={id}>
           {ui.sections.about}
         </h2>

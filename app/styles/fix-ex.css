@@ -111,3 +111,7 @@
   .ex-hero{padding:14px 0}
   .ex-hd>summary{padding:9px 0}
 }
+
+/* Apparitions (choix 4C du 31/10/2026) : les intercalaires restent affichés (règle de Stripe : le texte clé n'est pas animé), le panneau monte de 8 px en 0,25 s. */
+.ex-list li{animation:none}
+.ex-panel{animation-duration:.25s}

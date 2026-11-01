@@ -26,7 +26,7 @@ export default function Products({ c }: { c: Content }) {
     <section id="products" className="pr pr-list pg-sec" aria-label={ui.sections.products}>
       <WearFilter />
       <div className="pr-in">
-        <header className="pg-head" data-reveal="0.85">
+        <header className="pg-head" data-reveal="1.15">
           <span className="pg-num">02</span>
           <h2 className="pg-h2">{ui.sections.products}</h2>
           <span className="pg-aside">{hired ? aside : aside.split(" · ")[0]}</span>
@@ -48,7 +48,7 @@ function Card({ p, c, name, open }: { p: Product; c: Content; name: string; open
   const list = shots(p);
   const figures = p.figures ?? [];
   return (
-    <article className={`pr-s pr-hov${list.length ? " has-tuck" : ""}`} data-reveal="0.8">
+    <article className={`pr-s pr-hov${list.length ? " has-tuck" : ""}`} data-reveal="1.15">
       <input className="pr-r" type="radio" name={name} id={`${name}-${p.slug}`} defaultChecked={open} aria-label={p.name} />
       <label className="pr-open" htmlFor={`${name}-${p.slug}`} aria-hidden="true">
         <span className="td-plus" />
