@@ -1,12 +1,10 @@
 /* Retouches de la section (préfixe hd-) par rapport à home.css, posées après elle. */
 
-/* Compteurs : chaque fenêtre porte un rouleau de chiffres (0 à 9 puis 0 à la valeur) ; il défile en steps() jusqu'à sa valeur quand la bande entre (data-reveal 0.8). */
+/* Compteurs : chaque fenêtre porte une case vide puis son chiffre ; quand la bande entre (data-reveal), le chiffre tombe en deux crans, fenêtre après fenêtre (60 ms d'écart).
+   Choix 3A du 31/10/2026 : jamais de chiffre faux lisible (l'ancien rouleau 0 à 9 passait par « ~121 h »). Mouvement réduit : chiffre posé (td.css coupe l'animation). */
 .hd-win{display:block;height:1em;overflow:hidden}
-.hd-reel{display:flex;flex-direction:column;align-items:center;transform:translateY(calc(var(--n) * -1em));animation:hd-roll .9s steps(var(--n),end) .15s both}
+.hd-reel{display:flex;flex-direction:column;align-items:center;transform:translateY(-1em);animation:hd-roll .24s steps(2,end) calc(.15s + var(--k,0) * 60ms) both}
 .hd-reel>span{display:block;height:1em;line-height:1}
-.hd-dial:nth-child(2) .hd-reel{animation-delay:.27s}
-.hd-dial:nth-child(3) .hd-reel{animation-delay:.39s}
-.hd-dial:nth-child(4) .hd-reel{animation-delay:.51s}
 @keyframes hd-roll{from{transform:translateY(0)}}
 /* le filet qui fend la fenêtre passe au-dessus du rouleau */
 .hd-cell::after{z-index:1}
@@ -70,3 +68,13 @@
 }
 /* Renvoi « Explore in 3D » sur le dessin plafonné : son bout droit (69,9 %) est pris sur la largeur réelle du dessin pour rester accroché au bouton latéral ; son début garde la place libre à gauche. */
 @media (min-width:761px){.hd-3d-l{right:calc((100% - var(--hd-d)) / 2 + var(--hd-d) * .699)}}
+
+/* Premier écran sous 760 px (choix 2C du 31/10/2026, chantier expérience) : haut resserré et dessin vertical ramené à 306 px et centré,
+   pour que l'accroche et les touches tiennent dans le premier écran dès 390 × 844. Les notes au feutre passent à 12,8 px (dérogation à la règle des 15 px, acceptée par Théo).
+   Les commandes et le renvoi « Explore in 3D » sont placés en % de cette boîte et la suivent. */
+@media (max-width:760px){
+  .hd-main{padding-top:18px;gap:14px}
+  .hd-left{gap:12px}
+  .hd-right{gap:16px}
+  .hd-plot.td-small{width:min(100%,306px);margin-inline:auto}
+}

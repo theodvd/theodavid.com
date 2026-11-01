@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import type { Metadata, Viewport } from "next";
 import AstresApp, { type AstresLabels, type AstresProduct } from "@/components/astres/AstresApp";
 import { getContent } from "@/lib/content";
@@ -10,9 +12,17 @@ import { getContent } from "@/lib/content";
 
 export function generateMetadata(): Metadata {
   const { profile, ui } = getContent();
+  const title = `${profile.explore3d.label} · ${profile.name}`;
+  // partage propre à /astres (il reprenait le titre et la phrase de la home) ; l'image reste celle du site,
+  // redonnée ici parce qu'un bloc openGraph propre à la route ne reprend pas celle de app/opengraph-image.jpg
+  const alt = readFileSync(join(process.cwd(), "app/opengraph-image.alt.txt"), "utf8").trim();
+  const images = [{ url: "/opengraph-image.jpg", width: 1200, height: 630, alt }];
   return {
-    title: `${profile.explore3d.label} · ${profile.name}`,
+    title,
     description: ui.astres.intro,
+    alternates: { canonical: "/astres" },
+    openGraph: { title, description: ui.astres.intro, url: "https://theodavid.com/astres", siteName: profile.name, type: "website", images },
+    twitter: { card: "summary_large_image", title, description: ui.astres.intro, images },
   };
 }
 

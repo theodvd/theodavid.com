@@ -8,9 +8,9 @@
 .wb-dr:not(.is-empty):focus-within{transform:translate(-3px,-3px);box-shadow:var(--shadow-card-hover);z-index:1}
 /* jamais de vignette sans souris ni au téléphone ; Open reste visible sans souris */
 @media (hover:none){.wb-peek{display:none}.wb-oh{opacity:1}}
-/* apparition à 80 % : les tiroirs un à un en steps() (backwards : le survol reprend la main ensuite) */
+/* apparition (casier à 115 % de l'écran) : les tiroirs, déjà lisibles, se calent un à un en steps() de 6 px (choix 4C du 31/10/2026 : jamais de casier vide ; backwards : le survol reprend la main ensuite) */
 .wb-dr{animation:wb-in .3s steps(3,end) calc(var(--i,0) * 110ms) backwards}
-@keyframes wb-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes wb-in{from{transform:translateY(6px)}to{transform:none}}
 @media (max-width:760px){
   .wb-peek{display:none}
   .wb-dr:not(.is-empty):focus-within{transform:none;box-shadow:none}

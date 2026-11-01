@@ -1,7 +1,7 @@
 "use client";
-/* eslint-disable @next/next/no-img-element -- captures servies telles quelles, à leur format */
 
 import { useState } from "react";
+import Pic from "@/components/Pic";
 import { dims, fill, ratioVars, type Shot } from "./lib";
 
 /**
@@ -33,13 +33,13 @@ export default function Viewer({
   const caption = multi ? `${name}, ${fill(labels.version, { label: s.label })}` : (s.caption ?? name);
   const img = (
     <span className="v6-glass">
-      <img
+      <Pic
         src={s.src}
         alt={s.alt}
         width={s.width}
         height={s.height}
         loading={eager ? "eager" : "lazy"}
-        decoding="async"
+        sizes="(max-width: 760px) 100vw, 720px"
       />
       <span aria-hidden="true" className="v6-corner v6-c1" />
       <span aria-hidden="true" className="v6-corner v6-c2" />
@@ -70,7 +70,7 @@ export default function Viewer({
               onClick={() => setK(j)}
             >
               <span className="v6-glass v6-glass-sm" style={ratioVars(t)}>
-                <img src={t.src} alt="" width={t.width} height={t.height} loading="lazy" decoding="async" />
+                <Pic src={t.src} alt="" width={t.width} height={t.height} sizes="120px" />
               </span>
               <span className="v7-thl">{t.label}</span>
             </button>

@@ -1,6 +1,6 @@
-/* eslint-disable @next/next/no-img-element -- capture servie telle quelle, à son format */
 import Link from "next/link";
 import type { Content, Tool } from "@/lib/content";
+import Pic from "@/components/Pic";
 import SheetDialog, { CloseButton } from "./SheetDialog";
 import { dims, fill, ratioVars } from "./lib";
 import { toolTitle } from "./meta";
@@ -23,6 +23,8 @@ export default function ToolSheet({ c, t, prev, next, mode }: Props) {
   const overlay = mode === "overlay";
   const titleId = overlay ? `w6-t-${t.slug}` : "w6-t";
   const Title = overlay ? "h2" : "h1";
+  // sous-titres un rang sous le titre : pas de saut de niveau en page pleine
+  const K = overlay ? "h3" : "h2";
   const im = t.image;
   const href = (x: Tool) => `/workbench/${x.slug}`;
   const Step = ({ x, dir }: { x: Tool; dir: "prev" | "next" }) => {
@@ -76,13 +78,13 @@ export default function ToolSheet({ c, t, prev, next, mode }: Props) {
           </div>
           {t.howItWorks && (
             <section className="w6-sec">
-              <h3 className="w6-k">{w.howItWorks}</h3>
+              <K className="w6-k">{w.howItWorks}</K>
               <p className="w6-p">{t.howItWorks}</p>
             </section>
           )}
           {t.stack && t.stack.length > 0 && (
             <section className="w6-sec">
-              <h3 className="w6-k">{w.stack}</h3>
+              <K className="w6-k">{w.stack}</K>
               <ul className="w6-stack">
                 {t.stack.map((s) => (
                   <li key={s}>{s}</li>
@@ -94,7 +96,7 @@ export default function ToolSheet({ c, t, prev, next, mode }: Props) {
         {im && (
           <figure className="w6-view">
             <div className="w6-stage">
-              <img
+              <Pic
                 className="w6-shot"
                 style={ratioVars(im)}
                 src={im.src}
@@ -102,7 +104,7 @@ export default function ToolSheet({ c, t, prev, next, mode }: Props) {
                 width={im.width}
                 height={im.height}
                 loading={overlay ? "lazy" : "eager"}
-                decoding="async"
+                sizes="(max-width: 760px) 100vw, 720px"
               />
             </div>
             <figcaption className="w6-cap">

@@ -2,7 +2,7 @@
   "name": "theodavid-fr",
   "version": "1.0.0",
   "private": true,
-  "description": "Personal portfolio of Théo David — growth, data & systems for fintech.",
+  "description": "Personal portfolio of Théo David · growth, data and systems.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -26,6 +26,7 @@
     "@types/three": "^0.169.0",
     "eslint": "^9.39.5",
     "eslint-config-next": "^15.5.28",
+    "sharp": "^0.35.5",
     "typescript": "^5.7.2"
   }
 }

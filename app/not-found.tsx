@@ -12,6 +12,8 @@ export default function NotFound() {
   const t = ui.notFound;
   return (
     <main className="nf">
+      {/* onglet « Not found · Théo David » (il reprenait le titre de la home) ; React le place dans le head */}
+      <title>{`${t.label} · ${profile.name}`}</title>
       <header className="nf-head">
         <span className="nf-num">{t.code}</span>
         <span className="nf-lab">{t.label}</span>

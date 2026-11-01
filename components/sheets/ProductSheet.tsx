@@ -1,7 +1,9 @@
 import Link from "next/link";
 import type { CaseBlock, Content, Product } from "@/lib/content";
+import Pic from "@/components/Pic";
 import SheetDialog, { CloseButton } from "./SheetDialog";
 import Viewer from "./Viewer";
+import CaseLink from "./CaseLink";
 import JumpNav from "./JumpNav";
 import { Note, Stamp, StatusMark, Underlined } from "./Marks";
 import { productTitle } from "./meta";
@@ -59,8 +61,7 @@ function CaseBlocks({ p, blocks, figLabel }: { p: Product; blocks: CaseBlock[]; 
                 return (
                   <figure className="as-cs-fig" key={im.src} style={ratioVars(im)}>
                     <span className="v6-glass">
-                      {/* eslint-disable-next-line @next/next/no-img-element -- capture servie telle quelle, à son format */}
-                      <img src={im.src} alt={im.alt} width={im.width} height={im.height} loading="lazy" decoding="async" />
+                      <Pic src={im.src} alt={im.alt} width={im.width} height={im.height} sizes="(max-width: 760px) 100vw, 480px" />
                       <span aria-hidden="true" className="v6-corner v6-c1" />
                       <span aria-hidden="true" className="v6-corner v6-c2" />
                     </span>
@@ -192,6 +193,30 @@ function LinkList({ p, className }: { p: Product; className: string }) {
   );
 }
 
+/* Fiche en surimpression : l'étude de cas ne vit que sur la page directe. Sous Proof,
+   ses parties titrées, puis un lien vers elle (chargement complet de la page, CaseLink). */
+function CaseTeaser({ p, blocks, u }: { p: Product; blocks: CaseBlock[]; u: Content["ui"]["products"] }) {
+  const parts = blocks.map((b) => b.title).filter((t): t is string => Boolean(t));
+  return (
+    <section className="v7-sec v7-case">
+      <h3 className="v7-k">{u.caseStudy}</h3>
+      {parts.length > 0 && (
+        <ol className="v7-built v7-parts">
+          {parts.map((t, i) => (
+            <li key={t}>
+              <span className="v7-bn">{two(i + 1)}</span>
+              <span>{t}</span>
+            </li>
+          ))}
+        </ol>
+      )}
+      <CaseLink className="td-link v7-cgo" href={`/products/${p.slug}#case`}>
+        {u.readCaseStudy} <span aria-hidden="true">→</span>
+      </CaseLink>
+    </section>
+  );
+}
+
 function viewerLabels(c: Content) {
   const u = c.ui.products;
   return { fig: u.fig, version: u.version, showVersion: u.showVersion, versions: u.versions };
@@ -202,6 +227,7 @@ function viewerLabels(c: Content) {
 function Overlay({ c, p, prev, next }: Props) {
   const u = c.ui.products;
   const list = shots(p);
+  const cs = caseStudy(p);
   const titleId = `v7-t-${p.slug}`;
   const href = (x: Product) => `/products/${x.slug}`;
   return (
@@ -252,6 +278,7 @@ function Overlay({ c, p, prev, next }: Props) {
               <Figures p={p} />
               <Lines p={p} />
             </section>
+            {cs.length > 0 && <CaseTeaser p={p} blocks={cs} u={u} />}
           </div>
         </div>
         <nav className="v7-foot" aria-label={u.otherSheets}>

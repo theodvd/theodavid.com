@@ -12,8 +12,8 @@
 .fo-step:last-child:not(.is-next) .fo-tread{border-top-style:solid}
 /* les attributs width et height des images (contre le décalage au chargement) ne doivent pas fixer leur hauteur */
 .fo-photo img,.fo-shot img{height:auto}
-/* apparition : marches une à une de gauche à droite, 120 ms d'écart, la vide en dernier (escalier à 75 %) */
-.fo-step{animation:td-rise var(--dur-fade) var(--ease-draw) calc(var(--o, 0) * 120ms) both}
+/* apparition : marches une à une de gauche à droite, 120 ms d'écart, la vide en dernier (escalier à 115 % de l'écran, montée de 0,25 s : choix 4C du 31/10/2026) */
+.fo-step{animation:td-rise .25s var(--ease-draw) calc(var(--o, 0) * 120ms) both}
 @media (max-width:760px){
   .fo-stairs{grid-template-columns:minmax(0,1fr)}
   .fo-stairs.is-cont{margin-top:30px}

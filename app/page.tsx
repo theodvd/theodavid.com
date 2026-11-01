@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getContent } from "@/lib/content";
 import Header from "@/components/home/Header";
 import About from "@/components/home/About";
@@ -24,6 +25,9 @@ import "./styles/nav.css";
  * theodavid.com » (figé le 30/10/2026) : en-tête, À propos, puis les cinq
  * sections numérotées. Tout le texte vient de content/ via lib/content.ts.
  */
+/* Adresse canonique de la home (posée ici et non dans le layout, que les autres routes héritent). */
+export const metadata: Metadata = { alternates: { canonical: "/" } };
+
 export default function Home() {
   const c = getContent();
   return (

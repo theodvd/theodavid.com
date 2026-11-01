@@ -3,6 +3,7 @@ import type { Content } from "@/lib/content";
 import ExploreLink from "@/components/astres/ExploreLink";
 import { AppareilLarge, AppareilVertical } from "@/components/home/Appareil";
 import Commandes from "@/components/home/Commandes";
+import BarMail from "@/components/home/BarMail";
 
 /**
  * En-tête V6 « Panneau de commande » (préfixe hd-), hors de main.pg :
@@ -16,26 +17,30 @@ const NAV = ["experience", "products", "founder", "workbench", "now"] as const;
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
+/* Nombre de fenêtres (chiffres) des compteurs qui précèdent le compteur i. */
+const windowsBefore = (counters: { value: string }[], i: number) =>
+  counters.slice(0, i).reduce((n, c) => n + (c.value.match(/\d/g) || []).length, 0);
+
 /**
  * Découpe un compteur en fenêtres : un chiffre par fenêtre, l'espace devient
  * un blanc, tout le reste (unité, ~, →, virgule) reste hors fenêtre.
- * Chaque fenêtre porte un rouleau 0 à 9 puis 0 à la valeur : il défile en
- * steps() jusqu'au chiffre quand la bande entre (fix-hd.css).
+ * Chaque fenêtre porte une case vide puis son chiffre : le chiffre y tombe en
+ * deux crans quand la bande entre, de gauche à droite (--k = rang de la fenêtre
+ * sur toute la bande, fix-hd.css). Jamais d'autre chiffre que le vrai (choix 3A
+ * du 31/10/2026 : l'ancien rouleau 0 à 9 affichait « ~121 h » en passant).
  */
-function Drum({ value }: { value: string }) {
+function Drum({ value, start }: { value: string; start: number }) {
+  let k = start;
   return (
     <span className="hd-drum" aria-hidden="true">
       {Array.from(value).map((ch, i) => {
         if (/\d/.test(ch)) {
-          const d = Number(ch);
-          const reel = [...Array(10).keys(), ...Array(d + 1).keys()];
           return (
             <span className="hd-cell" key={i}>
               <span className="hd-win">
-                <span className="hd-reel" style={{ "--n": 10 + d } as CSSProperties}>
-                  {reel.map((k, j) => (
-                    <span key={j}>{k}</span>
-                  ))}
+                <span className="hd-reel" style={{ "--k": k++ } as CSSProperties}>
+                  <span>{" "}</span>
+                  <span>{ch}</span>
                 </span>
               </span>
             </span>
@@ -78,6 +83,7 @@ export default function Header({ c }: { c: Content }) {
               </a>
             ))}
           </nav>
+          <BarMail href={p.contact.primary.href} hint={h.mail.hint} copied={h.mail.copied} label={h.mail.label} short={h.mail.short} />
           <details className="hd-menu">
             <summary>{ui.nav.menu}</summary>
             <nav aria-label={h.navLabel} className="hd-panel">
@@ -87,6 +93,10 @@ export default function Header({ c }: { c: Content }) {
                   <span>{ui.sections[id]}</span>
                 </a>
               ))}
+              <a className="hd-pmail" href={p.contact.primary.href}>
+                <span className="hd-num" aria-hidden="true" />
+                <span>{p.contact.primary.label}</span>
+              </a>
               <ExploreLink href={p.explore3d.href} className="hd-panel3d">
                 <span>{p.explore3d.label}</span>
                 <span aria-hidden="true">↗</span>
@@ -161,13 +171,13 @@ export default function Header({ c }: { c: Content }) {
           </div>
         </div>
 
-        <dl className="hd-dials" data-reveal="0.8">
-          {p.counters.map((k) => (
+        <dl className="hd-dials" data-reveal="1.15">
+          {p.counters.map((k, i) => (
             <div className="hd-dial" key={k.label}>
               <dt>{k.label}</dt>
               <dd>
                 <span className="hd-sr">{k.value}</span>
-                <Drum value={k.value} />
+                <Drum value={k.value} start={windowsBefore(p.counters, i)} />
               </dd>
             </div>
           ))}

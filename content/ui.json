@@ -43,6 +43,7 @@
     "year": "Year",
     "builtFor": "Built for",
     "caseStudy": "Case study",
+    "readCaseStudy": "Read the case study",
     "jumpTo": "Jump to",
     "back": "Products",
     "nextProduct": "Next product",
@@ -132,6 +133,12 @@
     "roleFrom": "from",
     "hintPrimary": "[ ↵ ]",
     "hintSecondary": "[ 30' ]",
+    "mail": {
+      "hint": "[ copy ]",
+      "copied": "Copied",
+      "label": "Copy the email address",
+      "short": "Email"
+    },
     "drawing": {
       "aria": "Technical drawing of a handheld device. Its screen shows stacked signal lines, one of them spikes. Handwritten notes: customers on the left, pointing at the customers dial; the spike is circled, what breaks in the field; an arrow from the SHIP button to product, ship the tool that fixes it.",
       "fig": "FIG. 1",

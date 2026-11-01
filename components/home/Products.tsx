@@ -1,7 +1,7 @@
-/* eslint-disable @next/next/no-img-element -- captures servies telles quelles, à leur taille, comme dans la maquette */
 import { useId } from "react";
 import Link from "next/link";
 import type { Content, Product } from "@/lib/content";
+import Pic from "@/components/Pic";
 import { fill, figNo, shots, stampSub, statusText, two } from "@/components/sheets/lib";
 import { Note, Stamp, StatusMark, Underlined, WearFilter } from "@/components/sheets/Marks";
 
@@ -26,7 +26,7 @@ export default function Products({ c }: { c: Content }) {
     <section id="products" className="pr pr-list pg-sec" aria-label={ui.sections.products}>
       <WearFilter />
       <div className="pr-in">
-        <header className="pg-head" data-reveal="0.85">
+        <header className="pg-head" data-reveal="1.15">
           <span className="pg-num">02</span>
           <h2 className="pg-h2">{ui.sections.products}</h2>
           <span className="pg-aside">{hired ? aside : aside.split(" · ")[0]}</span>
@@ -48,7 +48,7 @@ function Card({ p, c, name, open }: { p: Product; c: Content; name: string; open
   const list = shots(p);
   const figures = p.figures ?? [];
   return (
-    <article className={`pr-s pr-hov${list.length ? " has-tuck" : ""}`} data-reveal="0.8">
+    <article className={`pr-s pr-hov${list.length ? " has-tuck" : ""}`} data-reveal="1.15">
       <input className="pr-r" type="radio" name={name} id={`${name}-${p.slug}`} defaultChecked={open} aria-label={p.name} />
       <label className="pr-open" htmlFor={`${name}-${p.slug}`} aria-hidden="true">
         <span className="td-plus" />
@@ -120,7 +120,7 @@ function Tuck({ p, fig }: { p: Product; fig: string }) {
           const inner = (
             <>
               <span className="pr-glass pr-glass-sm">
-                <img src={s.src} alt={s.alt} width={s.width} height={s.height} loading="lazy" decoding="async" />
+                <Pic src={s.src} alt={s.alt} width={s.width} height={s.height} sizes="(max-width: 760px) 100vw, 480px" />
                 <span aria-hidden="true" className="pr-corner pr-c1" />
                 <span aria-hidden="true" className="pr-corner pr-c2" />
               </span>
@@ -147,7 +147,7 @@ function Tuck({ p, fig }: { p: Product; fig: string }) {
   return (
     <div className="pr-tuck">
       <span className="pr-glass">
-        <img src={s.src} alt={s.alt} width={s.width} height={s.height} loading="lazy" decoding="async" />
+        <Pic src={s.src} alt={s.alt} width={s.width} height={s.height} sizes="(max-width: 760px) 100vw, 480px" />
         <span aria-hidden="true" className="pr-corner pr-c1" />
         <span aria-hidden="true" className="pr-corner pr-c2" />
       </span>

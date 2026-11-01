@@ -371,3 +371,8 @@ html.td-sheet-open{overflow:hidden}
   .v7-title{font-size:clamp(1.9rem,9.6vw,2.5rem)}
   .as-title{font-size:clamp(2rem,10.4vw,2.9rem)}
 }
+/* Fiche en surimpression : renvoi vers l'étude de cas, sous Proof (choix 1A du 31/10/2026). Mêmes lignes que Built ; au téléphone, juste après Proof. */
+.v7-case{gap:14px}
+.v7-parts li{font-size:.92rem;padding:8px 0}
+.v7-cgo{align-self:flex-start;color:var(--ink);font-weight:600;padding-block:3px}
+@media (max-width:760px){.v7-case{order:2}}
