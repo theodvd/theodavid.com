@@ -1,0 +1,90 @@
+{
+  "slug": "pigment",
+  "order": 7,
+  "status": "archived",
+  "year": "2026",
+  "name": "SDR lead agent",
+  "oneLiner": "Turns every reply and engagement signal into one decision for the SDR: call now, triangulate, auto-reply or watch.",
+  "origin": {
+    "builtToGetHired": true,
+    "company": "Pigment",
+    "role": "Growth Manager Intern",
+    "outcome": "Final round · no offer"
+  },
+  "disclaimer": "Not affiliated with Pigment.",
+  "problem": "Campaigns and events bring in replies faster than a small sales team can work them. The signals that say who to call sit in different tools, and by the time someone reads them, the interest has gone cold.",
+  "problemExcerpt": [
+    "faster than a small sales team",
+    "gone cold"
+  ],
+  "built": [
+    "Two n8n workflows that find US retail accounts running Anaplan from public signals (its customer page, LinkedIn job posts) and verify each one live in Apollo.",
+    "Contact mapping in Hunter: economic buyer, champion, power user and influencer for each account.",
+    "A 24-node lead agent: ownership gate, an LLM that sorts free text into six outcomes, fit and intent scores, four lanes under a capacity cap, and a brief for the SDR.",
+    "A four-touch sequence built around the contract renewal window, co-designed with the BDRs.",
+    "A third proposal, Boomerang, with its kill rule written before the first line of code."
+  ],
+  "proof": [
+    "About 185 companies found per run",
+    "In a burst of 8 replies, 2 went to the SDR and 6 were routed with their reason",
+    "A 24-node agent, published",
+    "Presented in the final round at Pigment"
+  ],
+  "figures": [
+    {
+      "value": "~185",
+      "label": "companies found per run"
+    },
+    {
+      "value": "8 → 2",
+      "label": "replies in a burst, 2 sent to the SDR"
+    },
+    {
+      "value": "24",
+      "label": "node agent, published"
+    }
+  ],
+  "proofInFigures": [
+    0,
+    1,
+    2
+  ],
+  "stack": [
+    "n8n",
+    "Apollo",
+    "Hunter",
+    "OpenAI (GPT-5.5)",
+    "Google Sheets",
+    "Python"
+  ],
+  "links": [
+    {
+      "label": "Read the deck",
+      "href": "/files/pigment-case-study.pdf"
+    }
+  ],
+  "images": [
+    {
+      "src": "/images/products/pigment-workflow.jpg",
+      "width": 1600,
+      "height": 900,
+      "alt": "Case deck, One signal in, one decision out: the seven stages of the lead agent and its six classification outcomes",
+      "caption": "SDR lead agent, the workflow"
+    },
+    {
+      "src": "/images/products/pigment-lanes.jpg",
+      "width": 1600,
+      "height": 900,
+      "alt": "Case deck, Two scores, four lanes, one cap: call now, triangulate, auto-reply or watch, and what the code and the model each decide",
+      "caption": "SDR lead agent, four lanes"
+    },
+    {
+      "src": "/images/products/pigment-renewal.jpg",
+      "width": 1600,
+      "height": 900,
+      "alt": "Case deck, The Renewal Window: from 2 public sources to 185 companies, 25 checked live and 2 to 4 Tier A accounts",
+      "caption": "SDR lead agent, account discovery"
+    }
+  ],
+  "imagesCaption": "SDR lead agent, the case deck"
+}

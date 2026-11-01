@@ -9,6 +9,7 @@ Source unique du texte du site : les pages lisent ces fichiers, jamais de texte 
 | `products/*.json` | Produits construits, triés par `order` |
 | `ventures/*.json` | Côté fondateur |
 | `workbench.json` | Atelier : outils perso, une ligne chacun |
+| `moons.json` | Lunes de /astres : petit projet accroché à un produit ou une venture (`parent`), une phrase, la page où le lire |
 
 Champs communs :
 - `publishAfter` (AAAA-MM-JJ) : l'entrée ou la ligne reste masquée avant cette date. Aucune entrée datée pour l’instant (Harmattan visible depuis le 30/10/2026).
