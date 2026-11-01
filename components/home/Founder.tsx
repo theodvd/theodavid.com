@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import type { Content, Image, Venture } from "@/lib/content";
+import Pic from "@/components/Pic";
 
 /**
  * 03 Founder · Fondateur V5 « Escalier » (préfixe fo-).
@@ -70,7 +71,7 @@ function Shot({ img, fig, ui, dims }: { img: Image; fig: number; ui: Ui; dims: b
   return (
     <figure className="fo-fig-w">
       <div className="fo-shot">
-        <img src={img.src} alt={img.alt} width={img.width} height={img.height} loading="lazy" />
+        <Pic src={img.src} alt={img.alt} width={img.width} height={img.height} sizes="(max-width: 760px) 100vw, 320px" />
         <span className="fo-cor is-a" aria-hidden="true" />
         <span className="fo-cor is-b" aria-hidden="true" />
       </div>
@@ -112,7 +113,7 @@ function FirstSheet({ v, ui, fig0 }: { v: Venture; ui: Ui; fig0: number }) {
         {photo && (
           <figure className="fo-print">
             <div className="fo-photo">
-              <img src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} loading="lazy" />
+              <Pic src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} sizes="(max-width: 760px) 100vw, 320px" />
             </div>
             <figcaption className="fo-cap">
               <span>

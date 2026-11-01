@@ -1,7 +1,7 @@
-/* eslint-disable @next/next/no-img-element -- captures servies telles quelles, à leur taille, comme dans la maquette */
 import { useId } from "react";
 import Link from "next/link";
 import type { Content, Product } from "@/lib/content";
+import Pic from "@/components/Pic";
 import { fill, figNo, shots, stampSub, statusText, two } from "@/components/sheets/lib";
 import { Note, Stamp, StatusMark, Underlined, WearFilter } from "@/components/sheets/Marks";
 
@@ -120,7 +120,7 @@ function Tuck({ p, fig }: { p: Product; fig: string }) {
           const inner = (
             <>
               <span className="pr-glass pr-glass-sm">
-                <img src={s.src} alt={s.alt} width={s.width} height={s.height} loading="lazy" decoding="async" />
+                <Pic src={s.src} alt={s.alt} width={s.width} height={s.height} sizes="(max-width: 760px) 100vw, 480px" />
                 <span aria-hidden="true" className="pr-corner pr-c1" />
                 <span aria-hidden="true" className="pr-corner pr-c2" />
               </span>
@@ -147,7 +147,7 @@ function Tuck({ p, fig }: { p: Product; fig: string }) {
   return (
     <div className="pr-tuck">
       <span className="pr-glass">
-        <img src={s.src} alt={s.alt} width={s.width} height={s.height} loading="lazy" decoding="async" />
+        <Pic src={s.src} alt={s.alt} width={s.width} height={s.height} sizes="(max-width: 760px) 100vw, 480px" />
         <span aria-hidden="true" className="pr-corner pr-c1" />
         <span aria-hidden="true" className="pr-corner pr-c2" />
       </span>

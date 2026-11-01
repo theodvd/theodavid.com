@@ -1,7 +1,7 @@
-/* eslint-disable @next/next/no-img-element -- vignette servie telle quelle, à son format */
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import type { Content, Tool } from "@/lib/content";
+import Pic from "@/components/Pic";
 
 /** Boîte de la vignette qui sort du tiroir au survol (Atelier V6) : l'image y garde son format. */
 const PEEK = { w: 200, h: 120 };
@@ -58,13 +58,13 @@ function Drawer({ t, i, c }: { t: Tool; i: number; c: Content }) {
     <li className="wb-dr" style={{ ["--i" as string]: i } as CSSProperties}>
       {im && (
         <span className="wb-peek" aria-hidden="true">
-          <img
+          <Pic
             src={im.src}
             alt=""
             width={Math.round(im.width * scale)}
             height={Math.round(im.height * scale)}
-            loading="lazy"
-            decoding="async"
+            natural={im.width}
+            sizes="200px"
           />
         </span>
       )}

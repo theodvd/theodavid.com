@@ -1,6 +1,6 @@
-/* eslint-disable @next/next/no-img-element -- capture servie telle quelle, à son format */
 import Link from "next/link";
 import type { Content, Tool } from "@/lib/content";
+import Pic from "@/components/Pic";
 import SheetDialog, { CloseButton } from "./SheetDialog";
 import { dims, fill, ratioVars } from "./lib";
 import { toolTitle } from "./meta";
@@ -94,7 +94,7 @@ export default function ToolSheet({ c, t, prev, next, mode }: Props) {
         {im && (
           <figure className="w6-view">
             <div className="w6-stage">
-              <img
+              <Pic
                 className="w6-shot"
                 style={ratioVars(im)}
                 src={im.src}
@@ -102,7 +102,7 @@ export default function ToolSheet({ c, t, prev, next, mode }: Props) {
                 width={im.width}
                 height={im.height}
                 loading={overlay ? "lazy" : "eager"}
-                decoding="async"
+                sizes="(max-width: 760px) 100vw, 720px"
               />
             </div>
             <figcaption className="w6-cap">

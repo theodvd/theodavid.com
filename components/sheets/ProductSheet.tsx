@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { CaseBlock, Content, Product } from "@/lib/content";
+import Pic from "@/components/Pic";
 import SheetDialog, { CloseButton } from "./SheetDialog";
 import Viewer from "./Viewer";
 import JumpNav from "./JumpNav";
@@ -59,8 +60,7 @@ function CaseBlocks({ p, blocks, figLabel }: { p: Product; blocks: CaseBlock[]; 
                 return (
                   <figure className="as-cs-fig" key={im.src} style={ratioVars(im)}>
                     <span className="v6-glass">
-                      {/* eslint-disable-next-line @next/next/no-img-element -- capture servie telle quelle, à son format */}
-                      <img src={im.src} alt={im.alt} width={im.width} height={im.height} loading="lazy" decoding="async" />
+                      <Pic src={im.src} alt={im.alt} width={im.width} height={im.height} sizes="(max-width: 760px) 100vw, 480px" />
                       <span aria-hidden="true" className="v6-corner v6-c1" />
                       <span aria-hidden="true" className="v6-corner v6-c2" />
                     </span>

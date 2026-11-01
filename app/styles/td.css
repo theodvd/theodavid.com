@@ -368,3 +368,6 @@ html.js [data-reveal]:not(.is-in),html.js [data-reveal]:not(.is-in) *{animation-
 .td-plus{flex:none;display:inline-block;width:11px;height:11px;color:var(--ink-muted);background:linear-gradient(currentColor,currentColor) center/100% 1.5px no-repeat,linear-gradient(currentColor,currentColor) center/1.5px 100% no-repeat;transition:transform var(--dur-key) var(--ease-key)}
 details[open]>.td-sum .td-plus{transform:rotate(45deg)}
 .td-sum:hover .td-plus{color:var(--ink)}
+
+/* Variantes AVIF (components/Pic.tsx) : le <picture> ne crée pas de boîte, les règles qui visent l'img restent valables. */
+picture{display:contents}
