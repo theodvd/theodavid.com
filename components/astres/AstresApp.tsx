@@ -145,7 +145,7 @@ export default function AstresApp({
       handle = createAstresScene(mount, {
         reducedMotion: reducedMotion(),
         timeScale: 10,
-        items: products.map((p) => ({ slug: p.slug, n: p.n, name: p.name })),
+        items: products.map((p) => ({ slug: p.slug, kind: "product" as const })),
         intro: arrival,
         onReady: () => {
           isReady = true;
